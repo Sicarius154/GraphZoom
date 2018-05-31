@@ -6,10 +6,15 @@ class Relation:
         self.stable = False #will be set to True after being generated
         self.setx = None
         self.sety = None
+
     def addNode(self, x):
         self.vertices.append(x)
+
     def addEdge(self, nodex, nodey):
         self.vertices.append((nodex, nodey))
+
+    #This will generate a relation using two sets, which could
+    #be the same or distinct. This will use the entire cart. product for the relation
     def generateFromTwoSets(self, setx, sety):
         self.setx = setx
         self.sety = sety
@@ -18,7 +23,7 @@ class Relation:
         #distinct tuple
         for element in itertools.product(setx, sety):
             self.edges.append(element)
-        self.stable = isStable()
+
     def isStableWith(self, otherR):
         #TODO: Create the function to check a relation is stable
         vertices = []
@@ -30,8 +35,8 @@ class Relation:
              if v not in vertices:
                  vertices.append(v)
 
-        #Grab sets of 4 unique elements, create unique 2-tuples of them and ensure
-        #that the relation satisfies the rules for a stable relation
+        #Grab combinations of 4 elements, then check that the logic for a stable relation holds
+        #TODO: Improve the efficiency of the nested if statements
         uniqueVertices = itertools.combinations(vertices, 4)
         for group in uniqueVertices:
             if (group[0], group[1]) in self.edges:

@@ -5,7 +5,7 @@ class Graph:
     def __init__(self):
         self.nodes = []
         self.edges = []
-        self.graphObj = nx.path_graph(2)
+        self.graphObj = nx.MultiGraph()
 
     def dilate(self):
         pass
