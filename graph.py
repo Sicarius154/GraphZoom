@@ -11,15 +11,17 @@ class Graph:
 
     def dilate(self):
         pass
+
     def erode(self):
         pass
+
     def draw(self):
         '''Used to draw the graph'''
         #add nodes and edges
         for v in self.nodes:
-            self.graphObj.add_node(v)
-        for v in self.edges:
-            self.graphObj.add_edge(*v)
+            self.graphObj.add_node(v[0], pos = (v[1], v[2]))
+        for e in self.edges:
+            self.graphObj.add_edge(e[3], e[4], pos=(e[1], e[2]))
 
         # draw graph
         pos = nx.path_graph(self.graphObj)
@@ -33,24 +35,27 @@ class Graph:
            vertex: takes a tuple: (id, x-cord, y-cord)
         '''
         self.nodes.append(vertex)
+
     def addEdge(self, edge):
         '''Add an edge to the graph
            edge: takes a tuple: (id, x-cord, y-cord, endPoint1, endPoint2)
         '''
-         self.edges.append(edge)
+        self.edges.append(edge)
 
     def addFromPoset(self, poset):
-        edges = poset.getEdges()
-        vertices = poset.getVertices()
+        for e in poset.getEdges():
+            self.addEdge(e)
+        for v in poset.getVertices():
+            self.addVertex(v)
 
 p = Poset()
 
 for i in range(10):
-    p.addObject(0, i, i + 1, 2)
+    p.addObject((0, i, i + 1, 2))
 for i in range(5):
-    p.addObject(1, i+10, i + 11, 5)
+    p.addObject((1, i+10, i + 11, 5, i + 1, i + 2))
 
-print(p.getEdges())
-print(p.getVertices())
+g = Graph()
+g.addFromPoset(p)
 
-#g.draw(posVerts)
+g.draw()
