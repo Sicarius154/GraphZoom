@@ -3,6 +3,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import uiMainWindow
 import relation
 
+
+
+
+
+
+
+
 '''
 #Start the application
 if __name__ == '__main__':
