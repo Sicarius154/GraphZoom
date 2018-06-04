@@ -1,21 +1,13 @@
-from graph import Graph
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-import uiMainWindow
-import relation
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route('/')
+def root():
+    return render_template("index.html")
 
 
 
-
-
-
-
-
-'''
 #Start the application
 if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv  )
-    window = uiMainWindow.MainWindow()
-    window.show()
-    sys.exit(app.exec_())
-'''
+    app.run()
