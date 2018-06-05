@@ -1,9 +1,11 @@
-//TODO: Generate function to create unique ID's
 //TODO: Fix the select/unselect logic of nodes
-//TODO: Failiate creation of loops
 //TODO: Create functionality for multiedges
 //TODO: Update the information panel with more meaningful data
 //TODO:
+
+//these two values will be integers that store the next value to be used as an ID
+var nextNodeId = 0;
+var nextEdgeId = 0;
 
 var cy = null;
 
@@ -34,7 +36,7 @@ function selectNode(node){
   Adds a node to the graph with a random ID number. It then selects the new node
 */
 function addNode(){
-  var node = {data:{id: 'n' + Math.floor(Math.random() * 10000) + 1000}, posiiton:{x:0, y:0}};
+  var node = {data:{id: 'n' + nextNodeId}, posiiton:{x:0, y:0}};
   cy.add(node);
 
   //for(e in cy.$(':selected')){
@@ -43,6 +45,7 @@ function addNode(){
 
   //Select the new node
   cy.getElementById(node.data.id).select();
+  nextNodeId++;
 }
 
 /*
@@ -59,9 +62,9 @@ function addEdge(){
   console.log("Target for edge: " + selectedNodes[1].id());
 
 
-  cy.add({data:{id: 'e' + Math.floor(Math.random() * 10000) + 1000, source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
+  cy.add({data:{id: 'e' + nextEdgeId, source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
   console.log("Added edge");
-
+  nextEdgeId++;
 }
 
 /*
@@ -71,7 +74,9 @@ function addEdge(){
 
 */
 
-//event handler, called when a node is selected
+/*
+  Called when a node is tapped/clicked. This will select the node and unselect any previous nodes that were selected.
+*/
 function nodeSelectedEvt(evt){
   node = cy.getElementById(evt.target.data().id);
   selectNode(node);
