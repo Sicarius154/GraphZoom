@@ -2,8 +2,13 @@
 var nextNodeId = 0;
 var nextEdgeId = 0;
 
+//The graph object
 var cy = null;
 
+/*
+  Called once the <body> of the index.html loads. Sets up the graph object and assigns
+  event handlers
+*/
 function start(){
   //create the cytoscape objct and set the div with the corresponding ID to be the display area for the graph
   cy = cytoscape({container: document.getElementById('graph-display-area'), style: [{selector: 'edge', style:{'curve-style': 'bezier'}}]});
@@ -31,11 +36,12 @@ function selectNode(node){
   Adds a node to the graph with a random ID number. It then selects the new node
 */
 function addNode(){
-  var node = {data:{id: 'n' + nextNodeId}, posiiton:{x:0, y:0}};
+  var node = {data:{id: 'n' + nextNodeId}, position:{x:0, y:0}};
   cy.add(node);
 
-  //Select the new node
+  //Select the new node and increment the next ID available
   cy.getElementById(node.data.id).select();
+  console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y);
   nextNodeId++;
 }
 
@@ -43,28 +49,27 @@ function addNode(){
   Adds an edge between the first two elements in the selected nodes of the graph
 */
 function addEdge(){
+  //get the collection of all selected nodes, only the first two will be used
   selectedNodes = cy.$('node:selected');
 
   //if the second index is null assume that this is intended to be a loop
   if(typeof selectedNodes[1] == 'undefined' && typeof selectedNodes[0] != 'undefined'){
     selectedNodes[1] = selectedNodes[0];
   }
-  console.log("Source for edge: " + selectedNodes[0].id());
-  console.log("Target for edge: " + selectedNodes[1].id());
 
-
+  //add the edge to the graph and log this in the console; increment the next id
   cy.add({data:{id: 'e' + nextEdgeId, source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
-  console.log("Added edge");
+  console.log("Added edge " + 'e' + nextEdgeId + " with source: " + selectedNodes[0].id() + " and target: " + selectedNodes[1].id());
   nextEdgeId++;
 }
 
 /*
-
-  Event handlers. These functions should only be called by the cytoscape event handler
-  They act as a wrapper to call the proper functions defined above and simply handle the event paramater passed
-
+  This will delete any selected element(s), edge or node.
 */
-
+function deleteElement(){
+  selectedElements = cy.$(':selected');
+  cy.remove(selectedElements);
+}
 /*
   Called when a node is tapped/clicked. This will select the node and unselect any previous nodes that were selected.
 */
