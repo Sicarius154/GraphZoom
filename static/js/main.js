@@ -19,17 +19,16 @@ function start(){
 
 
 /*
-  selects a node and logs the relevant info to the console, will then update the information area
-  node: a JSON object matching the representation of nodes for cytoscape
+  This is called once a node has been selected. It displays the information of the most
+  recently selected node
 */
-function selectNode(node){
-  //push node into the list of selected nodes
-  cy.getElementById(node.id).select();
-
+function showSelectedNodeData(){
+  selectedNodes = cy.$('node:selected');
+  node = selectedNodes[0];
   //Update the information part of the information panel
   document.getElementById("InformationArea").innerHTML =
-  "Node ID: " + node.data.id + "<br>" + "Is connected to: ";
-  console.log("Node selected with ID: " + node.data.id);
+  "Node ID: " + node.id() + "<br>" + "Is connected to: ";
+  console.log("Node selected with ID: " + node.id());
 }
 
 /*
@@ -70,9 +69,10 @@ function deleteElement(){
   selectedElements = cy.$(':selected');
   cy.remove(selectedElements);
 }
+
 /*
   Called when a node is tapped/clicked. This will select the node and unselect any previous nodes that were selected.
 */
 function nodeSelectedEvt(evt){
-  selectNode(evt.target);
+//  showSelectedNodeData();
 }
