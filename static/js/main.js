@@ -1,8 +1,3 @@
-//TODO: Fix the select/unselect logic of nodes
-//TODO: Create functionality for multiedges
-//TODO: Update the information panel with more meaningful data
-//TODO:
-
 //these two values will be integers that store the next value to be used as an ID
 var nextNodeId = 0;
 var nextEdgeId = 0;
@@ -11,7 +6,7 @@ var cy = null;
 
 function start(){
   //create the cytoscape objct and set the div with the corresponding ID to be the display area for the graph
-  cy = cytoscape({container: document.getElementById('graph-display-area')});
+  cy = cytoscape({container: document.getElementById('graph-display-area'), style: [{selector: 'edge', style:{'curve-style': 'bezier'}}]});
 
   //Set a function to handle when a node is selected
   cy.on('tap', 'node', nodeSelectedEvt);
@@ -38,10 +33,6 @@ function selectNode(node){
 function addNode(){
   var node = {data:{id: 'n' + nextNodeId}, posiiton:{x:0, y:0}};
   cy.add(node);
-
-  //for(e in cy.$(':selected')){
-  //  cy.$(e.id).unselect();
-  //}
 
   //Select the new node
   cy.getElementById(node.data.id).select();
@@ -78,6 +69,5 @@ function addEdge(){
   Called when a node is tapped/clicked. This will select the node and unselect any previous nodes that were selected.
 */
 function nodeSelectedEvt(evt){
-  node = cy.getElementById(evt.target.data().id);
-  selectNode(node);
+  selectNode(evt.target);
 }
