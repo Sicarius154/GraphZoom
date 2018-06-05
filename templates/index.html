@@ -52,17 +52,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
-  <script type="text/javascript" src="{{url_for('static', filename='js/graphDrawing.js')}}"></script>
   <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script> </script>
   <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/cytoscape.js')}}"></script>
+  <script src="{{url_for('static', filename='js/main.js')}}"></script>
 </head>
-<body style="height: 100%;">
+
+<body style="height: 100%;" onload="start()">
 
   <div id="top-menu-bar" class="container-fluid bg-1 text-center">
-    <button type="button" class="btn" onclick="start();">Test</button>
-    <button type="button" class="btn">Add Node</button>
-    <button type="button" class="btn">Add edge</button>
+    <button type="button" class="btn" onclick="addNode()">Add Node</button>
+    <button type="button" class="btn" onclick="addEdge()">Add edge</button>
     <button type="button" class="btn">Dilate</button>
     <button type="button" class="btn">Erode</button>
     <button type="button" class="btn">Open</button>
