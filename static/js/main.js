@@ -11,7 +11,7 @@ var cy = null;
 */
 function start(){
   //create the cytoscape objct and set the div with the corresponding ID to be the display area for the graph
-  cy = cytoscape({container: document.getElementById('graph-display-area'), style: [{selector: 'edge', style:{'curve-style': 'bezier'}}]});
+  cy = cytoscape({container: document.getElementById('graph-display-area'), style: [{selector: 'node', style :{"text-valign": "center","text-halign": "center", "label": "data(id)"}}, {selector: 'edge', style:{'curve-style': 'bezier'}}]});
 
   //Set a function to handle when a node is selected
   cy.on('tap', 'node', nodeSelectedEvt);
@@ -68,6 +68,30 @@ function addEdge(){
 function deleteElement(){
   selectedElements = cy.$(':selected');
   cy.remove(selectedElements);
+}
+
+/*
+  Called when an ID of a node or edge is changed to ensure no other element has the same ID
+*/
+function isIdUnique(id){
+  for(element in cy.$('node')){
+    if(element.data.id == id){
+      return false;
+    }
+  }
+  for(element in cy.$('edge')){
+    if(element.data.id == id){
+      return false;
+    }
+  }
+  return true;
+}
+
+/*
+  Assigns a new ID to the element
+*/
+function assignId(currentID, newID){
+  cy.getElementById(currentID).data.id = newID;
 }
 
 /*
