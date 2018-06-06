@@ -92,6 +92,24 @@ function assignLabel(id, newLabel){
 }
 
 /*
+  Draw a hypergraph node, the first element in the array should be the edge value; all other elements are presumed to be nodes
+*/
+function drawHyperGraphNode(edgeNode, nodes){
+  var node = {data:{id: 'n' + nextNodeId, label: "No Label", parent: 'n1'}, position:{x:0, y:0}};
+
+  //draw the edge node on the graph
+  cy.add(edgeNode);
+
+  //add all of the children/inner nodes
+  for(node in nodes){
+    cy.add({data:{id: 'n' + nextNodeId, label: "No Label", parent: edgeNode.data.id}, position:{x:0, y:0}});
+  }
+  console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y + " with parent " + edgeNode.data.id);
+  nextNodeId++;
+
+}
+
+/*
   Called when a node is tapped/clicked. This will select the node
 */
 function nodeSelectedEvt(evt){
@@ -115,5 +133,4 @@ function labelAreaChangedEvt(){
   var label = document.getElementById("labelInputArea").value;
   console.log("Label found: " + label);
   assignLabel(id, label);
-
 }
