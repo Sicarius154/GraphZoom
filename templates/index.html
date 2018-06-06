@@ -68,14 +68,29 @@
     <button type="button" class="btn">Open</button>
     <button type="button" class="btn">Close</button>
     <button type="button" class="btn" onclick="deleteElement()">Delete</button>
-
   </div>
   <div class="container-fluid" style="height:100%">
     <div class="row">
       <div id="left-control-panel" class="col-sm-3 bg-2 no-float">
-        <p id="InformationArea" style="color: white">N/A</p>
+        <div class="container-fluid">
+          <div class="row">
+            <p id="elementId" class="col-sm-7 no-float" style="color: white">Element ID:</p>
+            <p id="idArea" class="col-sm-5 no-float"  style="color: white; height: 30px; width: 100px;"></p>
+          </div>
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <p id="elementLabel" class="col-sm-5 no-float" style="color: white">Label:</p>
+            <textarea id="labelInputArea" class="col-sm-7 no-float" onchange="labelAreaChangedEvt()" style="height: 30px; width: 100px;"></textarea>
+        </div>
       </div>
-
+      <div class="container-fluid">
+        <div class="row">
+          <p class="col-sm-4 no-float" style="color: white"></p>
+          <button id="changeLblButton" type="button" class="btn text-center" class="col-sm-8 no-float" onclick="labelAreaChangedEvt()" style="height: 30px; width: 100px;">Change Lbl</button>
+      </div>
+    </div>
+    </div>
       <div id="graph-display-area" class="col-sm-9 bg-3 no-float">
 
       </div>
