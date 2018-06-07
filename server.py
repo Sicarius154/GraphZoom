@@ -11,6 +11,11 @@ app.config['SECRET_KEY'] = 'key123'
 socketio = SocketIO(app)
 graph = Graph() #this will be the graph object for this session
 
+graph.addVertex(('n1', 1, 1, "hi"))
+graph.addVertex(('n2', 10, 1, "hi"))
+graph.addVertex(('n4', 20, 1, "hi"))
+graph.addEdge(('e1','n1', 'n2', "edge1"))
+
 '''
     Routes a user to the correct html page
 '''
@@ -40,11 +45,6 @@ def getGraphData():
 @socketio.on('connect')
 def connect():
     print("Client connected to the server!")
-    graph.addVertex(('n1', 1, 1, "hi"))
-    graph.addVertex(('n2', 10, 1, "hi"))
-    graph.addVertex(('n4', 20, 1, "hi"))
-    graph.addEdge(('e1','n1', 'n2', "edge1"))
-    getGraphData()
 
 '''
     This shows that the client-side has now connected to the server; once this happens

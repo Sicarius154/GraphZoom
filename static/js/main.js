@@ -1,8 +1,13 @@
+/*
+  This file contains all logic that involves interacting with the elements of the page,
+  displaying data and so forth.
+*/
+
 //these two values will be integers that store the next value to be used as an ID
 var nextNodeId = 0;
 var nextEdgeId = 0;
 //User to communicate with the Python server
-var io = require("socket.io")(80);
+//var io = require("socket.io")(80);
 var socket = null;
 //The graph object
 var cy = null;
@@ -12,9 +17,10 @@ var cy = null;
   event handlers
 */
 function start(){
-  //Before we do anything else we need to connect to the python server
+  //Before we do anything else we need to connect to the python server; this function returns the socket object we need
   connectToServer()
-  //create the cytoscape objct and set the div with the corresponding ID to be the display area for the graph
+
+  //create the cytoscape objct and set the styling requirements
   cy = cytoscape(
     {
       container: document.getElementById('graph-display-area'),
@@ -43,22 +49,6 @@ function start(){
   cy.on('tap', 'edge', edgeSelectedEvt);
   var area = document.getElementById("labelInputArea").addEventListener('input', labelAreaChangedEvt, false);
 }
-
-/*
-  Connects to the python server
-*/
-function connectToServer(){
-  socket = io.connect('http://' + document.domain + ':' + location.port);
-  socket.on('connect', function(){
-    alert("connected to server");
-  });
-  socket.emit('connect');
-  json = socket.emit('GetGraphData')
-  socket.on('NewGraphData', function(json){
-    console.log(json);
-  });
-}
-
 
 /*
   This is called once a node has been selected. It displays the information of the most
@@ -204,4 +194,46 @@ function labelAreaChangedEvt(){
   var label = document.getElementById("labelInputArea").value;
   console.log("Label found: " + label);
   assignLabel(id, label);
+}
+
+/*
+  Connects to the python server
+*/
+function connectToServer(){
+  socket = io.connect('http://' + document.domain + ':' + location.port);
+  socket.on('connect', function(){
+    console.log("Connected to the main server");
+  });
+  //Now lets set all of the event handlers
+  socket.on('NewGraphData', setGraphReceivedFromServer);
+}
+
+/*
+  Request graph data to be sent to the client
+*/
+function getGraphFromServer(){
+  socket.emit('GetGraphData');
+  console.log("Requesting graph from the server");
+}
+
+/*
+  This is called when the server send the graph data to the client
+*/
+//TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
+function setGraphReceivedFromServer(json){
+  console.log("Server has sent new graph data");
+
+  //Delete all graph elements
+  cy.$('*').select();
+  deleteElement();
+  console.log(json);
+  //Add all of the new elements
+  for(jsonElement in json){
+    console.log("Adding " + jsonElement[0]);
+    cy.add(jsonElement);
+  }
+}
+
+function testF(){
+  getGraphFromServer();
 }

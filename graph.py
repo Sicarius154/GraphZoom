@@ -33,7 +33,7 @@ class Graph:
             position['y'] = node[2]
             jsonNode['data'] = data
             jsonNode['position'] = position
-            jsonNode = json.dumps(data)
+            jsonNode = json.dumps(jsonNode)
             nodes.append(jsonNode)
         #convert all of the edges in the graph to a json representation that the UI framework can deal with
         for edge in self.edges:
@@ -46,7 +46,8 @@ class Graph:
             jsonNode['data'] = data
             jsonNode = json.dumps(jsonNode)
             edges.append(jsonNode)
-        return (nodes, edges)
+        #returns a string of nodes and edges, Cytoscape infers which are edges and ndoes based on their data values
+        return nodes + edges
     def addVertex(self, vertex):
         '''Add a node to the graph
            vertex: takes a tuple: (id, x-cord, y-cord, lbl)

@@ -52,11 +52,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
+  <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script> </script>
   <script src="{{url_for('static', filename='js/cytoscape.js')}}"></script>
   <script src="{{url_for('static', filename='js/socket.io.js')}}"></script>
-  <script src="{{url_for('static', filename='js/require.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script> </script>
+  <script src="{{url_for('static', filename='js/require.js')}}"></script>
   <script src="{{url_for('static', filename='js/main.js')}}"></script>
 </head>
 
@@ -65,7 +65,7 @@
     <button type="button" class="btn" onclick="addNode()">Add Node</button>
     <button type="button" class="btn" onclick="addEdge()">Add edge</button>
     <button type="button" class="btn" onclick="">Dilate</button>
-    <button type="button" class="btn">Erode</button>
+    <button type="button" class="btn" onclick="testF()">Erode</button>
     <button type="button" class="btn">Open</button>
     <button type="button" class="btn">Close</button>
     <button type="button" class="btn" onclick="deleteElement()">Delete</button>
