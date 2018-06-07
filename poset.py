@@ -5,8 +5,8 @@ class Poset:
 
     def addObject(self, obj):
         '''Add an object to the Poset
-           obj for vertex: a tuple (typeofObject, id, x-cord, y-cord)
-           obj for edge: a tuple (typeofObject, id, x-cord, y-cord, endPoint1, endPoint2)
+           obj for vertex: a tuple (0, id, x-cord, y-cord)
+           obj for edge: a tuple (1, id, x-cord, y-cord, endPoint1, endPoint2)
         '''
 
         self.objects.append(obj)

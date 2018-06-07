@@ -1,0 +1,20 @@
+{
+  container: document.getElementById('graph-display-area'),
+  style: [
+    {
+      selector: "node",
+      style :
+      {
+        "text-valign": "center",
+        "text-halign": "center",
+        "label": "data(label)"}
+      },
+      {
+        selector: "edge",
+        style:
+        {
+          "curve-style": "bezier"
+        }
+      }
+    ]
+  }

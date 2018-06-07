@@ -1,7 +1,9 @@
 //these two values will be integers that store the next value to be used as an ID
 var nextNodeId = 0;
 var nextEdgeId = 0;
-
+//User to communicate with the Python server
+var io = require("socket.io")(80);
+var socket = null;
 //The graph object
 var cy = null;
 
@@ -10,13 +12,47 @@ var cy = null;
   event handlers
 */
 function start(){
+  //Before we do anything else we need to connect to the python server
+  connectToServer()
   //create the cytoscape objct and set the div with the corresponding ID to be the display area for the graph
-  cy = cytoscape({container: document.getElementById('graph-display-area'), style: [{selector: 'node', style :{"text-valign": "center","text-halign": "center", "label": "data(label)"}}, {selector: 'edge', style:{'curve-style': 'bezier'}}]});
+  cy = cytoscape(
+    {
+      container: document.getElementById('graph-display-area'),
+      style: [
+        {
+          selector: "node",
+          style :
+          {"text-valign": "center",
+          "text-halign": "center",
+          "label": "data(label)"
+        }
+      },
+      {
+        selector: "edge",
+        style:
+        {
+          "curve-style": "bezier"
+        }
+      }
+    ]
+  }
+);
 
   //Add event handlers
   cy.on('tap', 'node', nodeSelectedEvt);
   cy.on('tap', 'edge', edgeSelectedEvt);
   var area = document.getElementById("labelInputArea").addEventListener('input', labelAreaChangedEvt, false);
+}
+
+/*
+  Connects to the python server
+*/
+function connectToServer(){
+  socket = io.connect('http://' + document.domain + ':' + location.port);
+  socket.on('connect', function(){
+    alert("connected to server");
+  });
+  socket.emit('TestEvent');
 }
 
 
@@ -29,8 +65,6 @@ function showSelectedNodeData(node){
   document.getElementById("idArea").innerHTML = node.id();
   document.getElementById("labelInputArea").value =  node.data.label;
   console.log("Displaying element data with label " + node.data.label);
-  console.log(node);
-
 }
 
 /*
@@ -48,7 +82,18 @@ function showSelectedEdgeData(edge){
   Adds a node to the graph with a random ID number. It then selects the new node
 */
 function addNode(){
-  var node = {data:{id: 'n' + nextNodeId, label: "No Label"}, position:{x:0, y:0}};
+  var node = {
+    data:
+    {
+      id: "n" + nextNodeId,
+      label: "No Label"
+    },
+    position:
+    {
+      x:0,
+      y:0
+    }
+  };
   cy.add(node);
 
   //Select the new node and increment the next ID available
@@ -70,7 +115,7 @@ function addEdge(){
   }
 
   //add the edge to the graph and log this in the console; increment the next id
-  cy.add({data:{id: 'e' + nextEdgeId, source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
+  cy.add({data:{id: "e" + nextEdgeId, source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
   console.log("Added edge " + 'e' + nextEdgeId + " with source: " + selectedNodes[0].id() + " and target: " + selectedNodes[1].id());
   nextEdgeId++;
 }
@@ -88,14 +133,27 @@ function deleteElement(){
 */
 function assignLabel(id, newLabel){
   cy.$('#' + id).data.label = newLabel;
-  console.log("New label assigned for element with ID: " + id + cy.$('#' + id).data.label);
+  cy.$('#' + id).select();
+  console.dir(cy.$('#' + id));
 }
 
 /*
   Draw a hypergraph node, the first element in the array should be the edge value; all other elements are presumed to be nodes
 */
 function drawHyperGraphNode(edgeNode, nodes){
-  var node = {data:{id: 'n' + nextNodeId, label: "No Label", parent: 'n1'}, position:{x:0, y:0}};
+  var node = {
+    data:
+    {
+      id: 'n' + nextNodeId,
+      label: "No Label",
+      parent: 'n1'
+    },
+    position:
+    {
+      x:0,
+      y:0
+    }
+  };
 
   //draw the edge node on the graph
   cy.add(edgeNode);
@@ -106,7 +164,16 @@ function drawHyperGraphNode(edgeNode, nodes){
   }
   console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y + " with parent " + edgeNode.data.id);
   nextNodeId++;
+}
 
+function drawPoset(nodes, edges){
+  for(element in nodes){
+    cy.add({data:{id: element[0]}, position:{x:element[1], y:element[2]}});
+  }
+
+  for(edge in edges){
+    cy.add({data:{id: edge[0], source: edge[1], target: edge[2]}});
+  }
 }
 
 /*
