@@ -52,7 +52,11 @@ function connectToServer(){
   socket.on('connect', function(){
     alert("connected to server");
   });
-  socket.emit('TestEvent');
+  socket.emit('connect');
+  json = socket.emit('GetGraphData')
+  socket.on('NewGraphData', function(json){
+    console.log(json);
+  });
 }
 
 
