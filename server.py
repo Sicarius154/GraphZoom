@@ -8,6 +8,8 @@ from flask_socketio import SocketIO
 from graph import Graph
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'key123'
+app.config['DEBUG'] = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 socketio = SocketIO(app)
 graph = Graph() #this will be the graph object for this session
 
@@ -58,6 +60,8 @@ def disconnect():
 #Start the application
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.config['DEBUG'] = True
-    socketio.run(app)
+    app.config.update(DEBUG=True, TEMPLATES_AUTO_RELOAD=True)
+    from werkzeug.debug import DebuggedApplication
+    app.wsgi_app = DebuggedApplication(app.wsgi_app, True)
+    env.cache = None
+    socketio.run(app, TEMPLATES_AUTO_RELOAD=True, DEBUG=True)

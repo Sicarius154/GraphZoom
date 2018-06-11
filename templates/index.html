@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- These styles are only used by cytoscape for altering the appearance of the graph -->
+  <style>
+    .nolabel{
+      content:"";
+    }
+  </style>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap Cheat Sheet</title>
+  <title>Graph Zoom</title>
   <!-- Bootstrap -->
   <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
 
@@ -22,7 +28,7 @@
   }
   </style>
 </head>
-<body style="height:100vh;">
+<body style="height:100vh;" onload="start();">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -36,10 +42,10 @@
             File
           </a>
           <div class="dropdown-menu" aria-labelledby="menuDropdown">
-            <a class="dropdown-item" href="#">Save graph</a>
-            <a class="dropdown-item" href="#">Load graph</a>
+            <a class="dropdown-item" href="#" onclick="alert("Not yet implemented!");">Save graph</a>
+            <a class="dropdown-item" href="#" onclick="alert("Not yet implemented!");">Load graph</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">New graph</a>
+            <a class="dropdown-item" href="#" onclick="alert("Not yet implemented!");">New graph</a>
           </div>
         </li>
         <!-- Elements dropdown menu -->
@@ -48,10 +54,10 @@
             Elements
           </a>
           <div class="dropdown-menu" aria-labelledby="elementsDropdown">
-            <a class="dropdown-item" href="#">Add node</a>
-            <a class="dropdown-item" href="#">Add edge</a>
+            <a class="dropdown-item" href="#" onclick="addNode();">Add node</a>
+            <a class="dropdown-item" href="#" onclick="addEdge();">Add edge</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Delete selected elements</a>
+            <a class="dropdown-item" href="#" onclick="deleteElement()">Delete selected elements</a>
           </div>
         </li>
         <!-- Operations dropdown menu -->
@@ -68,12 +74,57 @@
             <a class="dropdown-item" href="#">Create relation</a>
           </div>
         </li>
+        <!-- Options dropdown menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="optionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Options
+          </a>
+          <div class="dropdown-menu" aria-labelledby="optionsDropdown">
+            <div class="form-check">
+              <label>
+                <input id="optionsShowNodeLabelsCheckbox"type="checkbox" value="" onchange="changeNodeLabelSettings();"> Node labels
+              </label>
+              <label>
+                <input id="optionsShowEdgeLabelsCheckbox" type="checkbox" value="" onchange="changeEdgeLabelSettings();"> Edge labels
+              </label>
+            </div>
+            <div class="form-check">
+              <div class="dropdown-divider"></div>
+              <label>
+                <input type="checkbox" value=""> Autosave
+              </label>
+            </div>
+          </div>
+        </li>
+        <!-- Help dropdown menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="helpDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Help
+          </a>
+          <div class="dropdown-menu" aria-labelledby="menuDropdown">
+
+           <a class="dropdown-item" href="#">User guide</a></a>
+           <a class="dropdown-item" href="#">Keyboard shortcuts</a>
+           <a class="dropdown-item" href="#" onclick="testFunc();">Test Function</a>
+         </div>
+        </li>
+        <!-- About dropdown menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            About
+          </a>
+          <div class="dropdown-menu" aria-labelledby="menuDropdown">
+
+          <a class="dropdown-item" href="https://github.com/Sicarius154/GraphZoom">Repository</a></a>
+          <a class="dropdown-item" href="#">Contact</a>
+        </div>
+        </li><!--
         <li class="nav-item">
           <a class="nav-link" href="#">Btn</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Btn</a>
-        </li>
+        </li>-->
       </ul>
     </div>
   </nav>
@@ -82,8 +133,46 @@
     <div class="row" style="height:100vh;">
       <!-- The hex value is the same color as the nav bar, don't edit it -->
       <div id="left-hand-panel" class="col-sm-3 col-md-3 col-bg-3 no-float" style="background-color: #212529;">
+        <br/>
+        <!-- The ID area of each element, contains a label and a form input for the value -->
+        <p class="text-center" style="color: white">Information Area</p>
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Element ID</span>
+          </div>
+          <input id ="idInputTextArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        </div>
+
+        <!-- This shows the elements this element is connected to, shows edges for nodes and nodes for edges-->
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">End Points</span>
+          </div>
+          <input id ="isConnectedToTextInputArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        </div>
+
+        <br />
+        <div id="findElementSearchArea" class="text-center">
+          <p class="text-center" style="color: white">Search For An Element</p>
+
+        <!-- Used to find an element that matches all criteria input-->
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Element ID</span>
+          </div>
+          <input id ="findElementIdTextArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Element Label</span>
+          </div>
+          <input id ="findElementlabelTextArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <button id="findElementSearchButton" onclick="FindElement();" class="btn btn-primary">Search</button>
 
       </div>
+      </div>
+      <!-- This is the area that the graph will be drawn in, do not alter this -->
       <div id="graph-area" class="col-sm-9 col-md-9 col-bg-9 no-float" style="background-color: white;">
 
       </div>

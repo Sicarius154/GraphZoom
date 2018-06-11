@@ -26,7 +26,7 @@ function start(){
   //create the cytoscape objct and set the styling requirements
   cy = cytoscape(
     {
-      container: document.getElementById('graph-display-area'),
+      container: document.getElementById('graph-area'),
       style: [
         {
           selector: "node",
@@ -40,7 +40,8 @@ function start(){
         selector: "edge",
         style:
         {
-          "curve-style": "bezier"
+          "curve-style": "bezier",
+          "label": "data(label)"
         }
       }
     ]
@@ -50,7 +51,9 @@ function start(){
   //Add event handlers
   cy.on('tap', 'node', nodeSelectedEvt);
   cy.on('tap', 'edge', edgeSelectedEvt);
-  var area = document.getElementById("labelInputArea").addEventListener('input', labelAreaChangedEvt, false);
+
+  //Manipulate the UI to set it up as we expect it to be
+  document.getElementById("optionsShowNodeLabelsCheckbox").checked = true; //this needs to be checked by default
 }
 
 /*
@@ -59,8 +62,8 @@ function start(){
 */
 function showSelectedNodeData(node){
   //Update the information part of the information panel
-  document.getElementById("idArea").innerHTML = node.id();
-  document.getElementById("labelInputArea").value =  node.data.label;
+  document.getElementById("idInputTextArea").value = node.id();
+  //document.getElementById("labelInputArea").value =  node.data.label;
   console.log("Displaying element data with label " + node.data.label);
 }
 
@@ -70,9 +73,31 @@ function showSelectedNodeData(node){
 */
 function showSelectedEdgeData(edge){
   //Update the information part of the information panel
-  document.getElementById("idArea").innerHTML = edge.id();
-  document.getElementById("labelInputArea").value =  edge.data.label;
+  document.getElementById("idInputTextArea").value = edge.id();
+  //document.getElementById("labelInputArea").value =  edge.data.label;
   console.log("Displaying element data with label " + edge.data.label);
+}
+
+/*
+  Changes wether labels are drawn on nodes or not depending on the user input
+*/
+function changeNodeLabelSettings(){
+  if(document.getElementById("optionsShowNodeLabelsCheckbox").checked){
+    cy.style().selector('node').style({"label": ""}).update();
+  }else{
+    cy.style().selector('node').style({"label": "data(label)"}).update();
+  }
+}
+
+/*
+  Changes wether labels are drawn on edges or not depending on the user input
+*/
+function changeEdgeLabelSettings(){
+  if(document.getElementById("optionsShowNodeLabelsCheckbox").checked){
+    cy.style().selector('edge').style({"label": ""}).update();
+  }else{
+    cy.style().selector('edge').style({"label": "data(label)"}).update();
+  }
 }
 
 /*
@@ -170,6 +195,7 @@ function drawPoset(nodes, edges){
 
   for(edge in edges){
     cy.add({data:{id: edge[0], source: edge[1], target: edge[2]}});
+    console.log("drawing conncection with id " + edge[0] + " " + edge[1] + " " + edge[2]);
   }
 }
 
@@ -237,6 +263,28 @@ function setGraphReceivedFromServer(json){
   }
 }
 
-function testF(){
-  getGraphFromServer();
+function testFunc(){
+  //getGraphFromServer();
+/*  var node = {
+    data:
+    {
+      id: "n" + nextNodeId,
+      parent: 'n1 , n2',
+      label: "No Label"
+    },
+    position:
+    {
+      x:0,
+      y:0
+    }
+  };
+  cy.add(node);
+
+  //Select the new node and increment the next ID available
+  cy.getElementById(node.data.id).select();
+  console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y);
+  nextNodeId++;*/
+  nodes = [['n1', 1, 3], ['n2', 3, 3], ['e1', 1, 1]];
+  edges = [['c1', 'n1', 'e1'], ['c2', 'n2', 'e1']];
+  drawPoset(nodes, edges);
 }
