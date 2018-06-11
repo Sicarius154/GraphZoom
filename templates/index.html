@@ -1,102 +1,94 @@
 <!DOCTYPE html>
-<html lang="en" style="height: 100%;">
+<html lang="en">
 <head>
-  <style>
-  html,body,.container {
-    height:100%;
-  }
-  .container {
-    display:table;
-    width: 100%;
-    margin-top: -50px;
-    padding: 50px 0 0 0; /*set left/right padding according to needs*/
-    box-sizing: border-box;
-  }
-
-  .row {
-    height: 100%;
-    display: table-row;
-  }
-
-  .row .no-float {
-    display: table-cell;
-    float: none;
-  }
-  #left-control-panel{
-  }
-  #graph-display-area{
-
-  }
-  #top-menu-bar{
-    padding-left: 20%;
-  }
-  .bg-1{
-    background-color: rgb(70, 70, 70);
-    color: #ffffff;
-  }
-
-  .bg-2{
-    background-color: rgb(25, 30, 30)
-  }
-
-  .bg-3{
-    background-color: white;;
-  }
-
-  .container-fluid{
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-  </style>
-  <title>Graph Display</title>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap Cheat Sheet</title>
+  <!-- Bootstrap -->
   <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
+
+  <!-- Load all of the scripts needed -->
   <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script> </script>
+  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/cytoscape.js')}}"></script>
   <script src="{{url_for('static', filename='js/socket.io.js')}}"></script>
-  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/require.js')}}"></script>
   <script src="{{url_for('static', filename='js/main.js')}}"></script>
+  <style>
+  .navbar{
+    margin-bottom:0;
+    border-radius:0;
+  }
+  </style>
 </head>
+<body style="height:100vh;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-<body style="height: 100%;" onload="start()">
-  <div id="top-menu-bar" class="container-fluid bg-1 text-center">
-    <button type="button" class="btn" onclick="addNode()">Add Node</button>
-    <button type="button" class="btn" onclick="addEdge()">Add edge</button>
-    <button type="button" class="btn" onclick="">Dilate</button>
-    <button type="button" class="btn" onclick="testF()">Erode</button>
-    <button type="button" class="btn">Open</button>
-    <button type="button" class="btn">Close</button>
-    <button type="button" class="btn" onclick="deleteElement()">Delete</button>
-  </div>
-  <div class="container-fluid" style="height:100%">
-    <div class="row">
-      <div id="left-control-panel" class="col-sm-3 bg-2 no-float">
-        <div class="container-fluid">
-          <div class="row">
-            <p id="elementId" class="col-sm-7 no-float" style="color: white">Element ID:</p>
-            <p id="idArea" class="col-sm-5 no-float"  style="color: white; height: 30px; width: 100px;"></p>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <!-- File dropdown menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="menuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            File
+          </a>
+          <div class="dropdown-menu" aria-labelledby="menuDropdown">
+            <a class="dropdown-item" href="#">Save graph</a>
+            <a class="dropdown-item" href="#">Load graph</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">New graph</a>
           </div>
-        </div>
-        <div class="container-fluid">
-          <div class="row">
-            <p id="elementLabel" class="col-sm-5 no-float" style="color: white">Label:</p>
-            <textarea id="labelInputArea" class="col-sm-7 no-float" onchange="labelAreaChangedEvt()" style="height: 30px; width: 100px;"></textarea>
-        </div>
-      </div>
-      <div class="container-fluid">
-        <div class="row">
-          <p class="col-sm-4 no-float" style="color: white"></p>
-          <button id="changeLblButton" type="button" class="btn text-center" class="col-sm-8 no-float" onclick="labelAreaChangedEvt()" style="height: 30px; width: 100px;">Change Lbl</button>
-      </div>
+        </li>
+        <!-- Elements dropdown menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="elementsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Elements
+          </a>
+          <div class="dropdown-menu" aria-labelledby="elementsDropdown">
+            <a class="dropdown-item" href="#">Add node</a>
+            <a class="dropdown-item" href="#">Add edge</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Delete selected elements</a>
+          </div>
+        </li>
+        <!-- Operations dropdown menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="operationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Operations
+          </a>
+          <div class="dropdown-menu" aria-labelledby="operationsDropdown">
+            <a class="dropdown-item" href="#">Dilate</a>
+            <a class="dropdown-item" href="#">Erode</a>
+            <a class="dropdown-item" href="#">Open</a>
+            <a class="dropdown-item" href="#">Close</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Create relation</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Btn</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Btn</a>
+        </li>
+      </ul>
     </div>
-    </div>
-      <div id="graph-display-area" class="col-sm-9 bg-3 no-float">
+  </nav>
+  <!-- The area below the navbar, this will contain the left-hand panel and the graph area -->
+  <div class="container-fluid" style="height:100vh;">
+    <div class="row" style="height:100vh;">
+      <!-- The hex value is the same color as the nav bar, don't edit it -->
+      <div id="left-hand-panel" class="col-sm-3 col-md-3 col-bg-3 no-float" style="background-color: #212529;">
+
+      </div>
+      <div id="graph-area" class="col-sm-9 col-md-9 col-bg-9 no-float" style="background-color: white;">
 
       </div>
     </div>
-
   </div>
+
 </body>
 </html>

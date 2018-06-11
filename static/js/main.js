@@ -1,6 +1,9 @@
 /*
   This file contains all logic that involves interacting with the elements of the page,
   displaying data and so forth.
+  todolist:
+  //TODO: Store the JSON objects used to construct elements and settings for cytoscape in JSON files
+  //TODO: Move some logic to a new file, specifically the logic needed for interacting with the server
 */
 
 //these two values will be integers that store the next value to be used as an ID
