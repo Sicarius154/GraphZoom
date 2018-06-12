@@ -46,6 +46,8 @@
             <a class="dropdown-item" href="#" onclick="alert("Not yet implemented!");">Load graph</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" onclick="alert("Not yet implemented!");">New graph</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" onclick="alert("Not yet implemented!");">Quit</a>
           </div>
         </li>
         <!-- Elements dropdown menu -->
@@ -142,7 +144,13 @@
           </div>
           <input id ="idInputTextArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
         </div>
-
+        <!-- This shows the label on the element -->
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Label</span>
+          </div>
+          <input id ="labelTextInputArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        </div>
         <!-- This shows the elements this element is connected to, shows edges for nodes and nodes for edges-->
         <div class="input-group input-group-sm mb-3">
           <div class="input-group-prepend">
@@ -171,6 +179,28 @@
         <button id="findElementSearchButton" onclick="FindElement();" class="btn btn-primary">Search</button>
 
       </div>
+
+      <br />
+      <div id="createRelationArea" class="text-center">
+        <p class="text-center" style="color: white">Create a relation</p>
+
+      <!-- Used to create relations-->
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Relation Name</span>
+        </div>
+        <input id ="relationNameTextArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+      </div>
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Pairs</span>
+        </div>
+        <input id ="relationPairsTextArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+      </div>
+      <button id="findElementSearchButton" onclick="addPairToRelationData();" class="btn btn-primary">Add</button>
+      <button id="findElementSearchButton" onclick="FindElement();" class="btn btn-primary">Save</button>
+
+    </div>
       </div>
       <!-- This is the area that the graph will be drawn in, do not alter this -->
       <div id="graph-area" class="col-sm-9 col-md-9 col-bg-9 no-float" style="background-color: white;">

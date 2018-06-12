@@ -15,6 +15,8 @@ var socket = null;
 //The graph object
 var cy = null;
 
+//this will be used to store the elements of a relation whilst it is being created
+var relationData = [];
 /*
   Called once the <body> of the index.html loads. Sets up the graph object and assigns
   event handlers
@@ -47,7 +49,6 @@ function start(){
     ]
   }
 );
-
   //Add event handlers
   cy.on('tap', 'node', nodeSelectedEvt);
   cy.on('tap', 'edge', edgeSelectedEvt);
@@ -225,23 +226,12 @@ function drawHyperGraphNode(edgeNode, nodes){
   INCLUDING the nodes that represent an array. It then takes a list of edges that show a connection between the nodes and edges
 */
 function drawPoset(nodes, edges){
-  console.log(nodes);
-  console.log(edges);
-
   nodes.forEach(function(node){
     addNode(node);
   });
   edges.forEach(function(edge){
     addEdge(edge);
   });
-
-  /*for(element in nodes){
-    addNode(element[0], element[1], element[2], element[3]);
-  }
-
-  for(edge in edges){
-    addEdge(edge[0], edge[1], edge[2], edge[3]);
-  }*/
 }
 
 /*
@@ -308,33 +298,32 @@ function setGraphReceivedFromServer(json){
   }
 }
 
+/*
+  Adds the 2 most recently clicked elements to relation data
+*/
+function addPairToRelationData(){
+  var selected = cy.$(':selected');
+  var pair = [selected[0].id(), selected[1].id()];
+  relationData.push(pair);
+  console.log(relationData);
+  document.getElementById("relationPairsTextArea").value = relationData;
+}
+/*
+  Just for testing purposes
+*/
 function testFunc(){
-  //getGraphFromServer();
-/*  var node = {
-    data:
-    {
-      id: "n" + nextNodeId,
-      parent: 'n1 , n2',
-      label: "No Label"
-    },
-    position:
-    {
-      x:0,
-      y:0
-    }
-  };
-  cy.add(node);
-
-  //Select the new node and increment the next ID available
-  cy.getElementById(node.data.id).select();
-  console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y);
-  nextNodeId++;*/
   nodes = [];
   edges = [];
   nodes.push(["n1", 100, 300, "None"]);
   nodes.push(["n2", 300, 300, "None"]);
-  nodes.push(["e1", 100, 100, "None"]);
+  nodes.push(["n31", 500, 300, "None"]);
+  nodes.push(["e1", 300, 100, "None"]);
+  nodes.push(["e2", 500, 100, "None"]);
+  nodes.push(["e4", 700, 100, "None"]);
   edges.push(["c1", "n1", "e1", "None"]);
-  edges.push(["c2", "n2", "e1", "None"]);
+  edges.push(["c2", "n31", "e1", "None"]);
+  edges.push(["c3", "n31", "e4", "None"]);
+  edges.push(["c4", "n1", "e2", "None"]);
+  edges.push(["c5", "n2", "e1", "None"]);
   drawPoset(nodes, edges);
 }
