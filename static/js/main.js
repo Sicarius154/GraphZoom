@@ -99,16 +99,48 @@ function changeEdgeLabelSettings(){
     cy.style().selector('edge').style({"label": "data(label)"}).update();
   }
 }
+/*
+  Adds a node to the graph that has already been assigned all of the needed data. The param should be a subscriptable object with 4 values
+*/
+function addNode(node){
+  cy.add({
+    data:{
+      id: node[0],
+      label: node[3]
+    },
+    position:
+    {
+      x:node[1],
+      y:node[2]
+    }
+  });
+  console.log("Node added with ID: " + node[0] + " Label: " + node[3] + " Position x:" + node[1] + " y:" + node[2]);
+}
 
 /*
-  Adds a node to the graph with a random ID number. It then selects the new node
+  Adds an edge to the graph that has already been assigned all of the needed data. The param should be a subscriptable object with 4 values
 */
-function addNode(){
+function addEdge(edge){
+  cy.add({
+    data:{
+      id: edge[0],
+      label: edge[3],
+      source: edge[1],
+      target: edge[2]
+    }
+  });
+  console.log("Edge added with ID: " + edge[0] + " Source: " + edge[1] + " Target: " + edge[2] + " Label:" + edge[3]);
+}
+
+/*
+  Adds a new node to the graph with a random ID number. It then selects the new node
+*/
+function addNewNode(){
   var node = {
     data:
     {
       id: "n" + nextNodeId,
-      label: "No Label"
+      label: ""
     },
     position:
     {
@@ -125,9 +157,9 @@ function addNode(){
 }
 
 /*
-  Adds an edge between the first two elements in the selected nodes of the graph
+  Adds a new edge between the first two elements in the selected nodes of the graph
 */
-function addEdge(){
+function addNewEdge(){
   //get the collection of all selected nodes, only the first two will be used
   selectedNodes = cy.$('node:selected');
 
@@ -188,15 +220,28 @@ function drawHyperGraphNode(edgeNode, nodes){
   nextNodeId++;
 }
 
+/*
+  This will draw a poset. It takes two lists/arrays. The first should be all of the nodes,
+  INCLUDING the nodes that represent an array. It then takes a list of edges that show a connection between the nodes and edges
+*/
 function drawPoset(nodes, edges){
-  for(element in nodes){
-    cy.add({data:{id: element[0]}, position:{x:element[1], y:element[2]}});
+  console.log(nodes);
+  console.log(edges);
+
+  nodes.forEach(function(node){
+    addNode(node);
+  });
+  edges.forEach(function(edge){
+    addEdge(edge);
+  });
+
+  /*for(element in nodes){
+    addNode(element[0], element[1], element[2], element[3]);
   }
 
   for(edge in edges){
-    cy.add({data:{id: edge[0], source: edge[1], target: edge[2]}});
-    console.log("drawing conncection with id " + edge[0] + " " + edge[1] + " " + edge[2]);
-  }
+    addEdge(edge[0], edge[1], edge[2], edge[3]);
+  }*/
 }
 
 /*
@@ -284,7 +329,12 @@ function testFunc(){
   cy.getElementById(node.data.id).select();
   console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y);
   nextNodeId++;*/
-  nodes = [['n1', 1, 3], ['n2', 3, 3], ['e1', 1, 1]];
-  edges = [['c1', 'n1', 'e1'], ['c2', 'n2', 'e1']];
+  nodes = [];
+  edges = [];
+  nodes.push(["n1", 100, 300, "None"]);
+  nodes.push(["n2", 300, 300, "None"]);
+  nodes.push(["e1", 100, 100, "None"]);
+  edges.push(["c1", "n1", "e1", "None"]);
+  edges.push(["c2", "n2", "e1", "None"]);
   drawPoset(nodes, edges);
 }
