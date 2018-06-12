@@ -45,6 +45,22 @@ function start(){
           "curve-style": "bezier",
           "label": "data(label)"
         }
+      },
+      {
+        selector: ".relationEdge",
+        style:
+        {
+            "line-color": "red",
+            "target-arrow-color": "#ccc",
+            "target-arrow-shape": "triangle",
+        }
+      },
+        {
+          selector: ".relationNode",
+          style:
+          {
+              "background-color": "red",
+          }
       }
     ]
   }
@@ -307,6 +323,13 @@ function addPairToRelationData(){
   relationData.push(pair);
   console.log(relationData);
   document.getElementById("relationPairsTextArea").value = relationData;
+
+  //Make the node red
+  cy.$('#'+selected[0].id()).addClass("relationNode");
+  cy.$('#'+selected[1].id()).addClass("relationNode");
+
+  //Now draw an arrow between the elements
+  cy.add({data:{id: selected[0].id() + selected[1].id(), source: selected[0].id(), target: selected[1].id()}, classes: 'relationEdge'});
 }
 /*
   Just for testing purposes
@@ -314,16 +337,16 @@ function addPairToRelationData(){
 function testFunc(){
   nodes = [];
   edges = [];
-  nodes.push(["n1", 100, 300, "None"]);
-  nodes.push(["n2", 300, 300, "None"]);
-  nodes.push(["n31", 500, 300, "None"]);
-  nodes.push(["e1", 300, 100, "None"]);
-  nodes.push(["e2", 500, 100, "None"]);
-  nodes.push(["e4", 700, 100, "None"]);
-  edges.push(["c1", "n1", "e1", "None"]);
-  edges.push(["c2", "n31", "e1", "None"]);
-  edges.push(["c3", "n31", "e4", "None"]);
-  edges.push(["c4", "n1", "e2", "None"]);
-  edges.push(["c5", "n2", "e1", "None"]);
+  nodes.push(["n1", 100, 300, "Node 1"]);
+  nodes.push(["n2", 300, 300, "Node 2"]);
+  nodes.push(["n3", 500, 300, "Node 3"]);
+  nodes.push(["e1", 100, 100, "Edge 1"]);
+  nodes.push(["e2", 300, 100, "Edge 2"]);
+  nodes.push(["e3", 500, 100, "Edge 3"]);
+  edges.push(["c1", "n1", "e1", "Connection 1"]);
+  edges.push(["c3", "n3", "e3", "Connection 3"]);
+  edges.push(["c4", "n1", "e2", "Connection 4"]);
+  edges.push(["c5", "n2", "e1", "Connection 5"]);
+  edges.push(["c6", "n3", "e1", "Connection 6"]);
   drawPoset(nodes, edges);
 }
