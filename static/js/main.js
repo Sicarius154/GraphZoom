@@ -68,9 +68,6 @@ function start(){
   //Add event handlers
   cy.on('tap', 'node', nodeSelectedEvt);
   cy.on('tap', 'edge', edgeSelectedEvt);
-
-  //Manipulate the UI to set it up as we expect it to be
-  document.getElementById("optionsShowNodeLabelsCheckbox").checked = true; //this needs to be checked by default
 }
 
 /*
@@ -110,7 +107,7 @@ function changeNodeLabelSettings(){
   Changes wether labels are drawn on edges or not depending on the user input
 */
 function changeEdgeLabelSettings(){
-  if(document.getElementById("optionsShowNodeLabelsCheckbox").checked){
+  if(document.getElementById("optionsShowEdgeLabelsCheckbox").checked){
     cy.style().selector('edge').style({"label": ""}).update();
   }else{
     cy.style().selector('edge').style({"label": "data(label)"}).update();
@@ -298,8 +295,8 @@ function getGraphFromServer(){
 
 /*
   This is called when the server send the graph data to the client
+  //TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
 */
-//TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
 function setGraphReceivedFromServer(json){
   console.log("Server has sent new graph data");
 
@@ -315,7 +312,8 @@ function setGraphReceivedFromServer(json){
 }
 
 /*
-  Adds the 2 most recently clicked elements to relation data
+  Adds the 2 most recently clicked elements to relation data once the add button is clicked.
+  //TODO: Fix the order that the elements are grabbed
 */
 function addPairToRelationData(){
   var selected = cy.$(':selected');
@@ -324,13 +322,22 @@ function addPairToRelationData(){
   console.log(relationData);
   document.getElementById("relationPairsTextArea").value = relationData;
 
-  //Make the node red
+  //Make the node red by setting this edge as an edge that signifies a relation
   cy.$('#'+selected[0].id()).addClass("relationNode");
   cy.$('#'+selected[1].id()).addClass("relationNode");
 
   //Now draw an arrow between the elements
   cy.add({data:{id: selected[0].id() + selected[1].id(), source: selected[0].id(), target: selected[1].id()}, classes: 'relationEdge'});
 }
+
+/*
+  This takes all of the pairs currently in the relationData, the name given and then saves the relation with a name to the Server
+  The user can then recall this relation from the server. The relation is saved along with the graph data.
+*/
+function saveRelationData(){
+
+}
+
 /*
   Just for testing purposes
 */
