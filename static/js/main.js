@@ -14,6 +14,10 @@ var nextEdgeId = 0;
 var socket = null;
 //The graph object
 var cy = null;
+//Determines if the graph is a poset
+var isPoset = true;
+var posetNodeYCord = 100;
+var posetEdgeYCord = 400;
 
 //this will be used to store the elements of a relation whilst it is being created
 var relationData = [];
@@ -71,15 +75,15 @@ function start(){
   cy.layout({
     name: 'grid',
     fit: true,
-
     rows: 2
   }).start();
-  cy.snapToGrid({strokeStyle: "black", lineWidth: .5, lineDash: [10, 0]});
+  cy.snapToGrid({strokeStyle: "black", gridSpacing: 200, lineWidth: .5, lineDash: [10, 0], rows: 2});
   cy.snapToGrid("gridOn");
 
   //Add event handlers
   cy.on('tap', 'node', nodeSelectedEvt);
   cy.on('tap', 'edge', edgeSelectedEvt);
+  cy.on('position', 'node', nodePositionChangedEvt);
 }
 
 /*
@@ -265,6 +269,25 @@ Called when a node is tapped/clicked. This will select the node
 function nodeSelectedEvt(evt){
   console.log("Tapped on " + evt.target.id());
   showSelectedNodeData(cy.$('#' + evt.target.id()));
+}
+
+/*
+  Called when a node changes position in the graph; if the graph is
+  supposedly representing a poset then ensure the node is on one of two rows by snapping it to one of
+  they Y co-ordinates
+  //TODO: The function is called hundreds of times per node, need to check if this is a big of mine or a library quirk
+*/
+function nodePositionChangedEvt(evt){
+  var node = cy.$('#' + evt.target.id());
+  if(isPoset == true){
+    if(node.position.y >= posetNodeYCord){
+      cy.$('#' + node.id()).position("y", posetNodeYCord);
+
+    }
+    else{
+      cy.$('#' + node.id()).position("y", posetEdgeYCord);
+    }
+  }
 }
 
 /*
