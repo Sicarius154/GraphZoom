@@ -1,9 +1,9 @@
 /*
-  This file contains all logic that involves interacting with the elements of the page,
-  displaying data and so forth.
-  todolist:
-  //TODO: Store the JSON objects used to construct elements and settings for cytoscape in JSON files
-  //TODO: Move some logic to a new file, specifically the logic needed for interacting with the server
+This file contains all logic that involves interacting with the elements of the page,
+displaying data and so forth.
+todolist:
+//TODO: Store the JSON objects used to construct elements and settings for cytoscape in JSON files
+//TODO: Move some logic to a new file, specifically the logic needed for interacting with the server
 */
 
 //these two values will be integers that store the next value to be used as an ID
@@ -17,9 +17,10 @@ var cy = null;
 
 //this will be used to store the elements of a relation whilst it is being created
 var relationData = [];
+
 /*
-  Called once the <body> of the index.html loads. Sets up the graph object and assigns
-  event handlers
+Called once the <body> of the index.html loads. Sets up the graph object and assigns
+event handlers
 */
 function start(){
   //Before we do anything else we need to connect to the python server; this function returns the socket object we need
@@ -27,52 +28,63 @@ function start(){
 
   //create the cytoscape objct and set the styling requirements
   cy = cytoscape(
-    {
-      container: document.getElementById('graph-area'),
-      style: [
-        {
-          selector: "node",
-          style :
-          {"text-valign": "center",
-          "text-halign": "center",
-          "label": "data(label)"
-        }
-      },
       {
-        selector: "edge",
-        style:
+        container: document.getElementById('graph-area'),
+        style: [
+          {
+            selector: "node",
+            style :
+            {"text-valign": "center",
+            "text-halign": "center",
+            "label": "data(label)"
+          }
+        },
         {
-          "curve-style": "bezier",
-          "label": "data(label)"
-        }
-      },
-      {
-        selector: ".relationEdge",
-        style:
+          selector: "edge",
+          style:
+          {
+            "curve-style": "bezier",
+            "label": "data(label)"
+          }
+        },
         {
-            "line-color": "red",
+          selector: ".relationEdge",
+          style:
+          {
+            "line-color": "green",
             "target-arrow-color": "#ccc",
             "target-arrow-shape": "triangle",
-        }
-      },
+          }
+        },
         {
           selector: ".relationNode",
           style:
           {
-              "background-color": "red",
+            "background-color": "red",
           }
-      }
-    ]
-  }
-);
+        }
+      ]
+    }
+  );
+
+  //set up the grid layout and enable snap-to-grid plugin
+  cy.layout({
+    name: 'grid',
+    fit: true,
+
+    rows: 2
+  }).start();
+  cy.snapToGrid({strokeStyle: "black", lineWidth: .5, lineDash: [10, 0]});
+  cy.snapToGrid("gridOn");
+
   //Add event handlers
   cy.on('tap', 'node', nodeSelectedEvt);
   cy.on('tap', 'edge', edgeSelectedEvt);
 }
 
 /*
-  This is called once a node has been selected. It displays the information of the most
-  recently selected node
+This is called once a node has been selected. It displays the information of the most
+recently selected node
 */
 function showSelectedNodeData(node){
   //Update the information part of the information panel
@@ -82,8 +94,8 @@ function showSelectedNodeData(node){
 }
 
 /*
-  This is called once an edge has been selected. It displays the information of the most
-  recently selected edge
+This is called once an edge has been selected. It displays the information of the most
+recently selected edge
 */
 function showSelectedEdgeData(edge){
   //Update the information part of the information panel
@@ -93,7 +105,7 @@ function showSelectedEdgeData(edge){
 }
 
 /*
-  Changes wether labels are drawn on nodes or not depending on the user input
+Changes wether labels are drawn on nodes or not depending on the user input
 */
 function changeNodeLabelSettings(){
   if(document.getElementById("optionsShowNodeLabelsCheckbox").checked){
@@ -104,7 +116,7 @@ function changeNodeLabelSettings(){
 }
 
 /*
-  Changes wether labels are drawn on edges or not depending on the user input
+Changes wether labels are drawn on edges or not depending on the user input
 */
 function changeEdgeLabelSettings(){
   if(document.getElementById("optionsShowEdgeLabelsCheckbox").checked){
@@ -114,7 +126,7 @@ function changeEdgeLabelSettings(){
   }
 }
 /*
-  Adds a node to the graph that has already been assigned all of the needed data. The param should be a subscriptable object with 4 values
+Adds a node to the graph that has already been assigned all of the needed data. The param should be a subscriptable object with 4 values
 */
 function addNode(node){
   cy.add({
@@ -132,7 +144,7 @@ function addNode(node){
 }
 
 /*
-  Adds an edge to the graph that has already been assigned all of the needed data. The param should be a subscriptable object with 4 values
+Adds an edge to the graph that has already been assigned all of the needed data. The param should be a subscriptable object with 4 values
 */
 function addEdge(edge){
   cy.add({
@@ -147,7 +159,7 @@ function addEdge(edge){
 }
 
 /*
-  Adds a new node to the graph with a random ID number. It then selects the new node
+Adds a new node to the graph with a random ID number. It then selects the new node
 */
 function addNewNode(){
   var node = {
@@ -171,7 +183,7 @@ function addNewNode(){
 }
 
 /*
-  Adds a new edge between the first two elements in the selected nodes of the graph
+Adds a new edge between the first two elements in the selected nodes of the graph
 */
 function addNewEdge(){
   //get the collection of all selected nodes, only the first two will be used
@@ -189,7 +201,7 @@ function addNewEdge(){
 }
 
 /*
-  This will delete any selected element(s), edge or node.
+This will delete any selected element(s), edge or node.
 */
 function deleteElement(){
   selectedElements = cy.$(':selected');
@@ -197,7 +209,7 @@ function deleteElement(){
 }
 
 /*
-  Assigns a new ID to the element
+Assigns a new ID to the element
 */
 function assignLabel(id, newLabel){
   cy.$('#' + id).data.label = newLabel;
@@ -206,7 +218,7 @@ function assignLabel(id, newLabel){
 }
 
 /*
-  Draw a hypergraph node, the first element in the array should be the edge value; all other elements are presumed to be nodes
+Draw a hypergraph node, the first element in the array should be the edge value; all other elements are presumed to be nodes
 */
 function drawHyperGraphNode(edgeNode, nodes){
   var node = {
@@ -235,8 +247,8 @@ function drawHyperGraphNode(edgeNode, nodes){
 }
 
 /*
-  This will draw a poset. It takes two lists/arrays. The first should be all of the nodes,
-  INCLUDING the nodes that represent an array. It then takes a list of edges that show a connection between the nodes and edges
+This will draw a poset. It takes two lists/arrays. The first should be all of the nodes,
+INCLUDING the nodes that represent an array. It then takes a list of edges that show a connection between the nodes and edges
 */
 function drawPoset(nodes, edges){
   nodes.forEach(function(node){
@@ -248,7 +260,7 @@ function drawPoset(nodes, edges){
 }
 
 /*
-  Called when a node is tapped/clicked. This will select the node
+Called when a node is tapped/clicked. This will select the node
 */
 function nodeSelectedEvt(evt){
   console.log("Tapped on " + evt.target.id());
@@ -256,7 +268,7 @@ function nodeSelectedEvt(evt){
 }
 
 /*
-  Called when a edge is tapped/clicked. This will select the edge
+Called when a edge is tapped/clicked. This will select the edge
 */
 function edgeSelectedEvt(evt){
   console.log("Tapped on " + evt.target.id());
@@ -264,7 +276,7 @@ function edgeSelectedEvt(evt){
 }
 
 /*
-  Called when the textarea showing label information has its value changed
+Called when the textarea showing label information has its value changed
 */
 function labelAreaChangedEvt(){
   var id = document.getElementById("idArea").innerHTML;
@@ -274,7 +286,7 @@ function labelAreaChangedEvt(){
 }
 
 /*
-  Connects to the python server
+Connects to the python server
 */
 function connectToServer(){
   socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -286,7 +298,7 @@ function connectToServer(){
 }
 
 /*
-  Request graph data to be sent to the client
+Request graph data to be sent to the client
 */
 function getGraphFromServer(){
   socket.emit('GetGraphData');
@@ -294,8 +306,8 @@ function getGraphFromServer(){
 }
 
 /*
-  This is called when the server send the graph data to the client
-  //TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
+This is called when the server send the graph data to the client
+//TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
 */
 function setGraphReceivedFromServer(json){
   console.log("Server has sent new graph data");
@@ -312,8 +324,8 @@ function setGraphReceivedFromServer(json){
 }
 
 /*
-  Adds the 2 most recently clicked elements to relation data once the add button is clicked.
-  //TODO: Fix the order that the elements are grabbed
+Adds the 2 most recently clicked elements to relation data once the add button is clicked.
+//TODO: Fix the order that the elements are grabbed
 */
 function addPairToRelationData(){
   var selected = cy.$(':selected');
@@ -331,15 +343,15 @@ function addPairToRelationData(){
 }
 
 /*
-  This takes all of the pairs currently in the relationData, the name given and then saves the relation with a name to the Server
-  The user can then recall this relation from the server. The relation is saved along with the graph data.
+This takes all of the pairs currently in the relationData, the name given and then saves the relation with a name to the Server
+The user can then recall this relation from the server. The relation is saved along with the graph data.
 */
 function saveRelationData(){
 
 }
 
 /*
-  Just for testing purposes
+Just for testing purposes
 */
 function testFunc(){
   nodes = [];
