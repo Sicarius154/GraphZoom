@@ -15,7 +15,7 @@ var socket = null;
 //The graph object
 var cy = null;
 //Determines if the graph is a poset
-var isPoset = true;
+var isPoset = false;
 var posetNodeYCord = 100;
 var posetEdgeYCord = 400;
 
@@ -289,6 +289,7 @@ function nodeFreeEvt(evt){
       cy.$('#' + node.id()).position("y", posetEdgeYCord);
     }
   }
+  return;
 }
 
 /*
@@ -309,8 +310,19 @@ function labelAreaChangedEvt(){
   assignLabel(id, label);
 }
 
+/*
+  Called when one of the radio buttons that determine the type of graph we are dealing with is changed
+  This will either enable/disable poset mode
+*/
 function graphRadioChanged(){
+  if(document.getElementById("isPosetRadio").checked == true){
+    isPoset = true;
+    cy.snapToGrid('snapOn');
+  }else{
+    isPoset = false;
+    cy.snapToGrid('snapOff');
 
+  }
 }
 
 /*
