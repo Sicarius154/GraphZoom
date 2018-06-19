@@ -4,18 +4,16 @@ class Relation:
         self.vertices = vertices
         self.edges = edges
         self.stable = False #will be set to True after being generated
-        self.setx = None
-        self.sety = None
 
-    def addNode(self, x):
+    def add_node(self, x):
         self.vertices.append(x)
 
-    def addEdge(self, nodex, nodey):
+    def add_edge(self, nodex, nodey):
         self.vertices.append((nodex, nodey))
 
     #This will generate a relation using two sets, which could
     #be the same or distinct. This will use the entire cart. product for the relation
-    def generateFromTwoSets(self, setx, sety):
+    def generate_from_two_sets(self, setx, sety):
         self.setx = setx
         self.sety = sety
 
@@ -24,7 +22,7 @@ class Relation:
         for element in itertools.product(setx, sety):
             self.edges.append(element)
 
-    def isStableWith(self, otherR):
+    def is_stable_with(self, otherR):
         #TODO: Create the function to check a relation is stable
         vertices = []
         if edges is None:
@@ -50,7 +48,7 @@ class Relation:
         self.isStable = False
         return False
 
-    def isEmpty(self):
+    def is_empty(self):
         #if there are no vertices in the relation then it is empty
         if self.vertices is None:
             return True

@@ -7,6 +7,12 @@ class Graph:
     def __init__(self):
         self.nodes = []
         self.edges = []
+        self.relations = []
+
+    def set_graph_from _json(json):
+        pass
+    def save_new_relation_from_json(json):
+        pass
 
     def dilate(self):
         pass
@@ -14,11 +20,10 @@ class Graph:
     def erode(self):
         pass
 
-    def getjJSONRepresentation(self):
         '''This method will return the entire graph as a JSON object.
-           This is the representation the front-end should seeself.
+            This is the representation the front-end should seeself.
         '''
-
+    def get_json_representation(self):
         nodes = []
         edges = []
 
@@ -48,25 +53,26 @@ class Graph:
             edges.append(jsonNode)
         #returns a string of nodes and edges, Cytoscape infers which are edges and ndoes based on their data values
         return nodes + edges
-    def addVertex(self, vertex):
+
+    def add_node(self, vertex):
         '''Add a node to the graph
            vertex: takes a tuple: (id, x-cord, y-cord, lbl)
         '''
         self.nodes.append(vertex)
 
-    def addEdge(self, edge):
+    def add_edge(self, edge):
         '''Add an edge to the graph
            edge: takes a tuple: (id, endPoint1, endPoint2, lbl)
         '''
         self.edges.append(edge)
 
-    def addFromPoset(self, poset):
+    def add_from_poset(self, poset):
         '''self will take a poset as input. The function the adds all vertices to the
            graph, creates vertices to represent edges and plots them, then grabs all of the
            Vertices connected to each edge and stores them in a dictionary'''
         print("Adding elements from a partially ordered set")
-        vertices = poset.getVertices()
-        edges = poset.getEdges()
+        vertices = poset.get_nodes()
+        edges = poset.get_edges()
         edgeConnections = {} #this will store the list of edges and the nodes they're connected to
 
         for edge in edges:
@@ -75,10 +81,10 @@ class Graph:
                 edgeConnections["e" + edge[0]] += edge[1]
             else:
                 edgeConnections["e" + edge[0]] = edge[1]
-            self.addVertex(("e" + edge[0], int(edge[0]) + 2, 4, edge[3]))
+            self.add_node(("e" + edge[0], int(edge[0]) + 2, 4, edge[3]))
         for vertexEdge in edgeConnections:
             for connectedVertex in edgeConnections[vertexEdge]:
-                self.addEdge((vertexEdge, "n" + connectedVertex))
+                self.add_edge((vertexEdge, "n" + connectedVertex))
 
         for vertex in vertices:
-            self.addVertex(("n" + vertex[0],vertex[1], vertex[2], vertex[3]))
+            self.add_node(("n" + vertex[0],vertex[1], vertex[2], vertex[3]))

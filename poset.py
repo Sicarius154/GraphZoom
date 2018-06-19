@@ -3,7 +3,7 @@ class Poset:
     def __init__(self):
         self.objects = []
 
-    def addObject(self, obj):
+    def add_object(self, obj):
         '''Add an object to the Poset
            obj for node: a tuple (0, id, x-cord, y-cord, lbl)
            obj for edge: a tuple (1, id, endPoint1, endPoint2, lbl)
@@ -11,7 +11,7 @@ class Poset:
 
         self.objects.append(obj)
 
-    def getEdges(self):
+    def get_edges(self):
         '''Returns a list of the edges in the poset
            Returns (id, [nodes connected to edge], lbl)'''
         values = {}
@@ -23,7 +23,7 @@ class Poset:
             if(e[0] == 1):
                 values.append((e[1], e[2])) #Return id and list of nodes the edge connects
         return values
-    def getVertices(self):
+    def get_nodes(self):
         '''Returns a list of the node in the poset
            Returns (id/label, xcord, ycord)'''
         values = []

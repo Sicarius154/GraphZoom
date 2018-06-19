@@ -13,11 +13,6 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 socketio = SocketIO(app)
 graph = Graph() #this will be the graph object for this session
 
-graph.addVertex(('n1', 1, 1, "hi"))
-graph.addVertex(('n2', 10, 1, "hi"))
-graph.addVertex(('n4', 20, 1, "hi"))
-graph.addEdge(('e1','n1', 'n2', "edge1"))
-
 '''
     Routes a user to the correct html page
 '''
@@ -31,7 +26,7 @@ def root():
 '''
 @socketio.on('SetGraphData')
 def setGraphData(json):
-    graph.setGraphFromJSON(json)
+    graph.set_graph_from_json(json)
 
 '''
     This should send a JSON object representing the entire graph to the client-side
@@ -56,6 +51,10 @@ def connect():
 def disconnect():
     print("Client disconnected to the server!")
     #TODO: Shut downt the server
+
+@socketio.on('saveNewRelation')
+def save_new_relation(json):
+    graph.add_relation_from_json(json)
 
 #Start the application
 if __name__ == '__main__':

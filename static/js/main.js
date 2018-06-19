@@ -281,9 +281,7 @@ function nodeFreeEvt(evt){
   var node = cy.$('#' + evt.target.id());
   if(isPoset == true){
     if(node.position('y') <= posetNodeYCord){
-      console.log(node.position('y'))
       cy.$('#' + node.id()).position("y", posetNodeYCord);
-
     }
     else{
       cy.$('#' + node.id()).position("y", posetEdgeYCord);
@@ -364,6 +362,25 @@ function setGraphReceivedFromServer(json){
 }
 
 /*
+  Creates a JSON representation of the graph and sends it to the server
+*/
+function sendGraphToServer(){
+  console.log("Sending graph data to the server");
+  var graph = {nodes: cy.$('node'), edges: cy.$('edge')};
+  socket.emit('SetGraphData', graph);
+}
+
+/*
+  Sends a JSON representation of the array containing the relation pairs.
+  This function first sends the graph data to the server to ensure both are up to date
+*/
+function sendRelationDataToServer(){
+  console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
+  sendGraphToServer(); //update the graph on the server side
+  socket.emit('saveNewRelation', JSON.stringify(relationData));
+}
+
+/*
 Adds the 2 most recently clicked elements to relation data once the add button is clicked.
 //TODO: Fix the order that the elements are grabbed
 */
@@ -371,7 +388,6 @@ function addPairToRelationData(){
   var selected = cy.$(':selected');
   var pair = [selected[0].id(), selected[1].id()];
   relationData.push(pair);
-  console.log(relationData);
   document.getElementById("relationPairsTextArea").value += "(" + pair +"),";
 
   //Make the node red by setting this edge as an edge that signifies a relation
