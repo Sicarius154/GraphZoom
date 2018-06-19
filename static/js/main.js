@@ -55,7 +55,7 @@ function start(){
           selector: ".relationEdge",
           style:
           {
-            "line-color": "green",
+            "line-color": "red",
             "target-arrow-color": "#ccc",
             "target-arrow-shape": "triangle",
           }
@@ -372,7 +372,7 @@ function addPairToRelationData(){
   var pair = [selected[0].id(), selected[1].id()];
   relationData.push(pair);
   console.log(relationData);
-  document.getElementById("relationPairsTextArea").value = relationData;
+  document.getElementById("relationPairsTextArea").value += "(" + pair +"),";
 
   //Make the node red by setting this edge as an edge that signifies a relation
   cy.$('#'+selected[0].id()).addClass("relationNode");
