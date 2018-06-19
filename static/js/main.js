@@ -77,13 +77,13 @@ function start(){
     fit: true,
     rows: 2
   }).start();
-  cy.snapToGrid({strokeStyle: "black", gridSpacing: 200, lineWidth: .5, lineDash: [10, 0], rows: 2});
+  cy.snapToGrid({strokeStyle: "white", gridSpacing: 200, lineWidth: .5, lineDash: [10, 0], rows: 2});
   cy.snapToGrid("gridOn");
 
   //Add event handlers
   cy.on('tap', 'node', nodeSelectedEvt);
   cy.on('tap', 'edge', edgeSelectedEvt);
-  cy.on('position', 'node', nodePositionChangedEvt);
+  cy.on('free', 'node', nodeFreeEvt);
 }
 
 /*
@@ -277,10 +277,11 @@ function nodeSelectedEvt(evt){
   they Y co-ordinates
   //TODO: The function is called hundreds of times per node, need to check if this is a big of mine or a library quirk
 */
-function nodePositionChangedEvt(evt){
+function nodeFreeEvt(evt){
   var node = cy.$('#' + evt.target.id());
   if(isPoset == true){
-    if(node.position.y >= posetNodeYCord){
+    if(node.position('y') <= posetNodeYCord){
+      console.log(node.position('y'))
       cy.$('#' + node.id()).position("y", posetNodeYCord);
 
     }
