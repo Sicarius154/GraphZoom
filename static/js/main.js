@@ -309,6 +309,10 @@ function labelAreaChangedEvt(){
   assignLabel(id, label);
 }
 
+function graphRadioChanged(){
+
+}
+
 /*
 Connects to the python server
 */

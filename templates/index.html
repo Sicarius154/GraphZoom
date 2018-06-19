@@ -137,9 +137,16 @@
       <!-- The hex value is the same color as the nav bar, don't edit it -->
       <div id="left-hand-panel" class="col-sm-3 col-md-3 col-bg-3 no-float" style="background-color: #212529;">
         <br/>
+        <!-- Allows the user to specify what type of graph this is so that the correct operations are performed -->
+        <p class="text-center" style="color: white">Graph Type</p>
+        <div class="form-group input-group input-group-sm mb-3">
+          <label onchange="graphRadioChanged();" style="width:50%;color:white;"><input name="graphRadios" id="isGraphRadio" type="radio" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">Graph</label>
+          <label onchange="graphRadioChanged();" style="width:50%;color:white;"><input name="graphRadios" id="isPosetRadio" type="radio" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">Poset</label>
+        </div>
+        <br />
         <!-- The ID area of each element, contains a label and a form input for the value -->
-        <p class="text-center" style="color: white">Information Area</p>
-        <div class="input-group input-group-sm mb-3">
+        <p class="text-center"style="color: white">Information Area</p>
+        <div class="input-group input-group-sm mb-3" role="group">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Element ID</span>
           </div>
