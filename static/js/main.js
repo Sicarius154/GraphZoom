@@ -293,12 +293,12 @@ function edgeSelectedEvt(evt){
 /*
 Called when a node changes position. Will check to see if the position is alreayd occupied by a node,
 If the position is already occcupied then color this node YELLOW to indicate this to the user
+//TODO: Fix this. It doesn't work.
 */
 function nodePositionChangeEvt(evt){
   var movedNode = cy.$('#' + evt.target.id());
-  var nodesInGraph = cy.nodes('*');
-  for(node in nodesInGraph){
-    console.log(node);
+  for(node in cy.nodes()){
+    console.log("PINT")
     if(movedNode.position() == node.position){
       console.log("Node " + evt.target.id() + "with position "+ movedNode.position() + " is overlapping with another node with position" + node.position()+"Highliting node yellow");
       movedNode.addClass('overlappingNode');
@@ -307,6 +307,15 @@ function nodePositionChangeEvt(evt){
       movedNode.removeClass('overlappingNode');
     }
   }
+}
+
+/*
+  Shows a graph in a new window. Ideal for showing results of operations on a graph without altering the
+  original
+*/
+function showGraphInNewWindow(graph){
+  var w = window.open('','', width=1000, height=1000);
+  w.open()
 }
 /*
 Called when the textarea showing label information has its value changed
@@ -443,7 +452,8 @@ function saveRelationData(){
 Just for testing purposes
 */
 function testFunc(){
-  nodes = [];
+  showGraphInNewWindow();
+/*  nodes = [];
   edges = [];
   nodes.push(["n1", 100, 300, "Node 1"]);
   nodes.push(["n2", 300, 300, "Node 2"]);
@@ -456,5 +466,5 @@ function testFunc(){
   edges.push(["c4", "n1", "e2", "Connection 4"]);
   edges.push(["c5", "n2", "e1", "Connection 5"]);
   edges.push(["c6", "n3", "e1", "Connection 6"]);
-  drawPoset(nodes, edges);
+  drawPoset(nodes, edges);*/
 }
