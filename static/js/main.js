@@ -32,58 +32,68 @@ function start(){
 
   //create the cytoscape objct and set the styling requirements
   cy = cytoscape(
-      {
-        container: document.getElementById('graph-area'),
-        style: [
-          {
-            selector: "node",
-            style :
-            {"text-valign": "center",
-            "text-halign": "center",
-            "label": "data(label)"
-          }
-        },
+    {
+      container: document.getElementById('graph-area'),
+      style: [
         {
-          selector: "edge",
-          style:
-          {
-            "curve-style": "bezier",
-            "label": "data(label)"
-          }
-        },
-        {
-          selector: ".relationEdge",
-          style:
-          {
-            "line-color": "red",
-            "target-arrow-color": "#ccc",
-            "target-arrow-shape": "triangle",
-          }
-        },
-        {
-          selector: ".relationNode",
-          style:
-          {
-            "background-color": "red",
-          }
+          selector: "node",
+          style :
+          {"text-valign": "center",
+          "text-halign": "center",
+          "label": "data(label)"
         }
-      ]
-    }
-  );
+      },
+      {
+        selector: "edge",
+        style:
+        {
+          "curve-style": "bezier",
+          "label": "data(label)"
+        }
+      },
+      {
+        selector: ".relationEdge",
+        style:
+        {
+          "line-color": "red",
+          "target-arrow-color": "#ccc",
+          "target-arrow-shape": "triangle",
+        }
+      },
+      {
+        selector: ".relationNode",
+        style:
+        {
+          "background-color": "red",
+        }
+      },
+      {
+        selector: ".overlappingNode",
+        style:
+        {
+          "background-color" : "yellow",
+        }
+      }
+    ]
+  }
+);
 
-  //set up the grid layout and enable snap-to-grid plugin
-  cy.layout({
-    name: 'grid',
-    fit: true,
-    rows: 2
-  }).start();
-  cy.snapToGrid({strokeStyle: "white", gridSpacing: 200, lineWidth: .5, lineDash: [10, 0], rows: 2});
-  cy.snapToGrid("gridOn");
+//set up the grid layout and enable snap-to-grid plugin
+cy.layout({
+  name: 'grid',
+  avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+  avoidOverlapPadding: 10, // extra spacing around nodes when avoidOverlap: true
+  fit: true,
+  rows: 2
+}).start();
+cy.snapToGrid({strokeStyle: "white", gridSpacing: 200, lineWidth: .5, lineDash: [10, 0], rows: 2});
+cy.snapToGrid("gridOn");
 
-  //Add event handlers
-  cy.on('tap', 'node', nodeSelectedEvt);
-  cy.on('tap', 'edge', edgeSelectedEvt);
-  cy.on('free', 'node', nodeFreeEvt);
+//Add event handlers
+cy.on('tap', 'node', nodeSelectedEvt);
+cy.on('tap', 'edge', edgeSelectedEvt);
+cy.on('free', 'node', nodeFreeEvt);
+cy.on('position', 'node', nodePositionChangeEvt)
 }
 
 /*
@@ -129,6 +139,7 @@ function changeEdgeLabelSettings(){
     cy.style().selector('edge').style({"label": "data(label)"}).update();
   }
 }
+
 /*
 Adds a node to the graph that has already been assigned all of the needed data. The param should be a subscriptable object with 4 values
 */
@@ -280,6 +291,24 @@ function edgeSelectedEvt(evt){
 }
 
 /*
+Called when a node changes position. Will check to see if the position is alreayd occupied by a node,
+If the position is already occcupied then color this node YELLOW to indicate this to the user
+*/
+function nodePositionChangeEvt(evt){
+  var movedNode = cy.$('#' + evt.target.id());
+  var nodesInGraph = cy.nodes('*');
+  for(node in nodesInGraph){
+    console.log(node);
+    if(movedNode.position() == node.position){
+      console.log("Node " + evt.target.id() + "with position "+ movedNode.position() + " is overlapping with another node with position" + node.position()+"Highliting node yellow");
+      movedNode.addClass('overlappingNode');
+      break;
+    }else{
+      movedNode.removeClass('overlappingNode');
+    }
+  }
+}
+/*
 Called when the textarea showing label information has its value changed
 */
 function labelAreaChangedEvt(){
@@ -309,9 +338,9 @@ function nodeFreeEvt(evt){
 }
 
 /*
-  Called when one of the radio buttons that determine the type of graph we are dealing with is changed
-  This will either enable/disable poset mode
-  //TODO: Need to ensure that two nodes don't snap ontop of each other
+Called when one of the radio buttons that determine the type of graph we are dealing with is changed
+This will either enable/disable poset mode
+//TODO: Need to ensure that two nodes don't snap ontop of each other
 */
 function graphRadioChanged(){
   if(document.getElementById("isPosetRadio").checked == true){
@@ -322,9 +351,9 @@ function graphRadioChanged(){
     cy.snapToGrid('snapOff');
   }
 
-  //Now we select every node on the graph and then unselect it,
-  //so this triggers the code to snap everything into place
-  cy.$('*').emit('free');
+  //Now we force the 'free' event to be triggered on every node in the graph,
+  //so this triggers the nodeFreeEvt() functions to snap everything into place
+  cy.$('node').emit('free');
 }
 
 /*
@@ -366,7 +395,7 @@ function setGraphReceivedFromServer(json){
 }
 
 /*
-  Creates a JSON representation of the graph and sends it to the server
+Creates a JSON representation of the graph and sends it to the server
 */
 function sendGraphToServer(){
   console.log("Sending graph data to the server");
@@ -375,8 +404,8 @@ function sendGraphToServer(){
 }
 
 /*
-  Sends a JSON representation of the array containing the relation pairs.
-  This function first sends the graph data to the server to ensure both are up to date
+Sends a JSON representation of the array containing the relation pairs.
+This function first sends the graph data to the server to ensure both are up to date
 */
 function sendRelationDataToServer(){
   console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
