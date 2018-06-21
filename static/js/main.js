@@ -15,7 +15,7 @@ var socket = null;
 //The graph object
 var cy = null;
 //Determines if the graph is a poset
-var isPoset = false;
+var isPoset = true;
 var posetNodeYCord = 100;
 var posetEdgeYCord = 400;
 
@@ -272,25 +272,6 @@ function nodeSelectedEvt(evt){
 }
 
 /*
-  Called when a node changes position in the graph; if the graph is
-  supposedly representing a poset then ensure the node is on one of two rows by snapping it to one of
-  they Y co-ordinates
-  //TODO: The function is called hundreds of times per node, need to check if this is a big of mine or a library quirk
-*/
-function nodeFreeEvt(evt){
-  var node = cy.$('#' + evt.target.id());
-  if(isPoset == true){
-    if(node.position('y') <= posetNodeYCord){
-      cy.$('#' + node.id()).position("y", posetNodeYCord);
-    }
-    else{
-      cy.$('#' + node.id()).position("y", posetEdgeYCord);
-    }
-  }
-  return;
-}
-
-/*
 Called when a edge is tapped/clicked. This will select the edge
 */
 function edgeSelectedEvt(evt){
@@ -309,8 +290,28 @@ function labelAreaChangedEvt(){
 }
 
 /*
+Called when a node changes position in the graph; if the graph is
+representing a poset then ensure the node is on one of two rows by snapping it to one of
+the Y co-ordinates
+//TODO: The function is called hundreds of times per node, need to check if this is a bug of mine or a library quirk
+*/
+function nodeFreeEvt(evt){
+  var node = cy.$('#' + evt.target.id());
+  if(isPoset == true){
+    if(node.position('y') <= posetNodeYCord){
+      cy.$('#' + node.id()).position("y", posetNodeYCord);
+    }
+    else{
+      cy.$('#' + node.id()).position("y", posetEdgeYCord);
+    }
+  }
+  return;
+}
+
+/*
   Called when one of the radio buttons that determine the type of graph we are dealing with is changed
   This will either enable/disable poset mode
+  //TODO: Need to ensure that two nodes don't snap ontop of each other
 */
 function graphRadioChanged(){
   if(document.getElementById("isPosetRadio").checked == true){
@@ -319,8 +320,11 @@ function graphRadioChanged(){
   }else{
     isPoset = false;
     cy.snapToGrid('snapOff');
-
   }
+
+  //Now we select every node on the graph and then unselect it,
+  //so this triggers the code to snap everything into place
+  cy.$('*').emit('free');
 }
 
 /*
@@ -367,7 +371,7 @@ function setGraphReceivedFromServer(json){
 function sendGraphToServer(){
   console.log("Sending graph data to the server");
   var graph = {nodes: cy.$('node'), edges: cy.$('edge')};
-  socket.emit('SetGraphData', graph);
+  socket.send('SetGraphData', graph);
 }
 
 /*
@@ -377,7 +381,7 @@ function sendGraphToServer(){
 function sendRelationDataToServer(){
   console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
   sendGraphToServer(); //update the graph on the server side
-  socket.emit('saveNewRelation', JSON.stringify(relationData));
+  socket.send('saveNewRelation', JSON.stringify(relationData));
 }
 
 /*

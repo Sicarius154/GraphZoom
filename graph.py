@@ -9,7 +9,7 @@ class Graph:
         self.edges = []
         self.relations = []
 
-    def set_graph_from _json(json):
+    def set_graph_from_json(json):
         pass
     def save_new_relation_from_json(json):
         pass

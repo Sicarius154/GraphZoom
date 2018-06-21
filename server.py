@@ -26,6 +26,7 @@ def root():
 '''
 @socketio.on('SetGraphData')
 def setGraphData(json):
+    print("New graph data received")
     graph.set_graph_from_json(json)
 
 '''
@@ -34,6 +35,7 @@ def setGraphData(json):
 '''
 @socketio.on('GetGraphData')
 def getGraphData():
+    print("Sending requested graph data")
     socketio.emit('NewGraphData', graph.getjJSONRepresentation(), json=True)
 
 '''
@@ -54,6 +56,7 @@ def disconnect():
 
 @socketio.on('saveNewRelation')
 def save_new_relation(json):
+    print("New relation data received from the front-end")
     graph.add_relation_from_json(json)
 
 #Start the application
