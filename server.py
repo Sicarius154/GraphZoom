@@ -60,10 +60,5 @@ def save_new_relation(json):
     graph.add_relation_from_json(json)
 
 #Start the application
-if __name__ == '__main__':
-    app.jinja_env.auto_reload = True
-    app.config.update(DEBUG=True, TEMPLATES_AUTO_RELOAD=True)
-    from werkzeug.debug import DebuggedApplication
-    app.wsgi_app = DebuggedApplication(app.wsgi_app, True)
-    env.cache = None
-    socketio.run(app, TEMPLATES_AUTO_RELOAD=True, DEBUG=True)
+if __name__ == "__main__":
+        socketio.run(app, TEMPLATES_AUTO_RELOAD=True, DEBUG=True)

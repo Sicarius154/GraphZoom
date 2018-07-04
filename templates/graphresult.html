@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- These styles are only used by cytoscape for altering the appearance of the graph -->
+  <style>
+    .nolabel{
+      content:"";
+    }
+  </style>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graph Zoom</title>
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
+
+  <!-- Load all of the scripts needed -->
+  <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script> </script>
+  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/cytoscape.js')}}"></script>
+  <script src="{{url_for('static', filename='js/cytoscape-grid-guide.js')}}"></script>
+</head>
+<body style="height:100vh;" onload="">
+  <div class="container-fluid" style="height:100vh;>
+    <div class="row" style="height:100vh;">
+      <!-- The graph will be displayed here. once the window has loaded the graph will be set by the main window. -->
+      <div id="graph-result-area" class="col-sm-9 col-md-9 col-bg-9 no-float" >
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

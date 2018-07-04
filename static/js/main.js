@@ -314,7 +314,8 @@ function nodePositionChangeEvt(evt){
   original
 */
 function showGraphInNewWindow(graph){
-  var w = window.open('','', width=1000, height=1000);
+  //create the window object, we assume a size of 800x800 is enough.
+  var w = window.open('graphresult.html','Graph results', width=800, height=800);
   w.open()
 }
 /*
