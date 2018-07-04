@@ -27,7 +27,8 @@ def root():
 @socketio.on('SetGraphData')
 def setGraphData(json):
     print("New graph data received")
-    graph.set_graph_from_json(json)
+    print(json)
+    #graph.set_graph_from_json(json)
 
 '''
     This should send a JSON object representing the entire graph to the client-side

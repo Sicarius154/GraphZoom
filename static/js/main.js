@@ -420,6 +420,7 @@ Creates a JSON representation of the graph and sends it to the server
 function sendGraphToServer(){
   console.log("Sending graph data to the server");
   var nodedata = cy.$("node").json();
+  console.log(nodedata);
   var edgedata = cy.$("edge").json();
   var graph = {nodes: nodedata, edges: edgedata};
   socket.emit('SetGraphData', JSON.stringify(graph));
