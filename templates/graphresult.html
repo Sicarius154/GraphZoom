@@ -3,9 +3,9 @@
 <head>
   <!-- These styles are only used by cytoscape for altering the appearance of the graph -->
   <style>
-    .nolabel{
-      content:"";
-    }
+  .nolabel{
+    content:"";
+  }
   </style>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,6 +19,43 @@
   <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/cytoscape.js')}}"></script>
   <script src="{{url_for('static', filename='js/cytoscape-grid-guide.js')}}"></script>
+  <script>
+  function start(){
+    //start the cytoscape object
+    cy = cytoscape(
+      {
+        container: document.getElementById('graph-result-area'),
+        style: [
+          {
+            selector: "node",
+            style :
+            {
+              "text-valign": "center",
+              "text-halign": "center",
+              "label": "data(label)"
+            }
+          },
+          {
+            selector: "edge",
+            style:
+            {
+              "curve-style": "bezier",
+              "label": "data(label)"
+            }
+          }
+        ]
+      }
+    );
+
+    //now lets grab the graph object from the called window. Then we set the elements from that graph onto this one
+    var graphData = window.opener.graphResults
+
+    graphData.foreach(function(element){
+      cy.add(element);
+    });
+    
+  }
+  </script>
 </head>
 <body style="height:100vh;" onload="">
   <div class="container-fluid" style="height:100vh;>

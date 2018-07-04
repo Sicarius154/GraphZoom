@@ -311,9 +311,10 @@ function nodePositionChangeEvt(evt){
 
 /*
   Shows a graph in a new window. Ideal for showing results of operations on a graph without altering the
-  original
+  original.
+  This takes a collection of the elements of a graph. NOT a graph object itself.
 */
-function showGraphInNewWindow(graph){
+function showGraphInNewWindow(graphResults){
   //create the window object, we assume a size of 800x800 is enough.
   var w = window.open('graphresult.html','Graph results', width=800, height=800);
   w.open()
@@ -453,8 +454,7 @@ function saveRelationData(){
 Just for testing purposes
 */
 function testFunc(){
-  showGraphInNewWindow();
-/*  nodes = [];
+  nodes = [];
   edges = [];
   nodes.push(["n1", 100, 300, "Node 1"]);
   nodes.push(["n2", 300, 300, "Node 2"]);
@@ -468,4 +468,5 @@ function testFunc(){
   edges.push(["c5", "n2", "e1", "Connection 5"]);
   edges.push(["c6", "n3", "e1", "Connection 6"]);
   drawPoset(nodes, edges);*/
+  showGraphInNewWindow(cy.$("*"));
 }
