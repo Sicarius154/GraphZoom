@@ -156,6 +156,7 @@ function addNode(node){
     }
   });
   console.log("Node added with ID: " + node[0] + " Label: " + node[3] + " Position x:" + node[1] + " y:" + node[2]);
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -171,6 +172,7 @@ function addEdge(edge){
     }
   });
   console.log("Edge added with ID: " + edge[0] + " Source: " + edge[1] + " Target: " + edge[2] + " Label:" + edge[3]);
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -195,6 +197,7 @@ function addNewNode(){
   cy.getElementById(node.data.id).select();
   console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y);
   nextNodeId++;
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -213,6 +216,7 @@ function addNewEdge(){
   cy.add({data:{id: "e" + nextEdgeId, source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
   console.log("Added edge " + 'e' + nextEdgeId + " with source: " + selectedNodes[0].id() + " and target: " + selectedNodes[1].id());
   nextEdgeId++;
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -221,6 +225,7 @@ This will delete any selected element(s), edge or node.
 function deleteElement(){
   selectedElements = cy.$(':selected');
   cy.remove(selectedElements);
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -230,6 +235,7 @@ function assignLabel(id, newLabel){
   cy.$('#' + id).data.label = newLabel;
   cy.$('#' + id).select();
   console.dir(cy.$('#' + id));
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -296,7 +302,8 @@ If the position is already occcupied then color this node YELLOW to indicate thi
 //TODO: Fix this. It doesn't work.
 */
 function nodePositionChangeEvt(evt){
-  var movedNode = cy.$('#' + evt.target.id());
+
+/*  var movedNode = cy.$('#' + evt.target.id());
   for(node in cy.nodes()){
     console.log("PINT")
     if(movedNode.position() == node.position){
@@ -306,18 +313,19 @@ function nodePositionChangeEvt(evt){
     }else{
       movedNode.removeClass('overlappingNode');
     }
-  }
+  }*/
 }
 
 /*
   Shows a graph in a new window. Ideal for showing results of operations on a graph without altering the
   original.
-  This takes a collection of the elements of a graph. NOT a graph object itself.
+  This takes a collection of the elements of a graph. NOT a graph object itself. The child window will then fetch this variable and itterate over it
 */
-function showGraphInNewWindow(graphResults){
+function ShowGraphInNewWindow(graphResults){
   //create the window object, we assume a size of 800x800 is enough.
-  var w = window.open('graphresult.html','Graph results', width=800, height=800);
-  w.open()
+  var w = window.open("",'Graph results', width=800, height=800);
+
+  w.graphData = graphResults;
 }
 /*
 Called when the textarea showing label information has its value changed
@@ -327,6 +335,7 @@ function labelAreaChangedEvt(){
   var label = document.getElementById("labelInputArea").value;
   console.log("Label found: " + label);
   assignLabel(id, label);
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -410,8 +419,10 @@ Creates a JSON representation of the graph and sends it to the server
 */
 function sendGraphToServer(){
   console.log("Sending graph data to the server");
-  var graph = {nodes: cy.$('node'), edges: cy.$('edge')};
-  socket.send('SetGraphData', graph);
+  var nodedata = cy.$("node").json();
+  var edgedata = cy.$("edge").json();
+  var graph = {nodes: nodedata, edges: edgedata};
+  socket.emit('SetGraphData', JSON.stringify(graph));
 }
 
 /*
@@ -421,7 +432,7 @@ This function first sends the graph data to the server to ensure both are up to 
 function sendRelationDataToServer(){
   console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
   sendGraphToServer(); //update the graph on the server side
-  socket.send('saveNewRelation', JSON.stringify(relationData));
+  socket.emit('saveNewRelation', JSON.stringify(relationData));
 }
 
 /*
@@ -440,6 +451,7 @@ function addPairToRelationData(){
 
   //Now draw an arrow between the elements
   cy.add({data:{id: selected[0].id() + selected[1].id(), source: selected[0].id(), target: selected[1].id()}, classes: 'relationEdge'});
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -447,14 +459,14 @@ This takes all of the pairs currently in the relationData, the name given and th
 The user can then recall this relation from the server. The relation is saved along with the graph data.
 */
 function saveRelationData(){
-
+  console.log("Updating the server and saving data")
 }
 
 /*
 Just for testing purposes
 */
 function testFunc(){
-  nodes = [];
+/*  nodes = [];
   edges = [];
   nodes.push(["n1", 100, 300, "Node 1"]);
   nodes.push(["n2", 300, 300, "Node 2"]);
@@ -468,5 +480,6 @@ function testFunc(){
   edges.push(["c5", "n2", "e1", "Connection 5"]);
   edges.push(["c6", "n3", "e1", "Connection 6"]);
   drawPoset(nodes, edges);*/
-  showGraphInNewWindow(cy.$("*"));
+  var eles = cy.$("*");
+  ShowGraphInNewWindow(eles);
 }
