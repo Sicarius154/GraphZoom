@@ -425,10 +425,9 @@ function sendGraphToServer(){
   var nodeData = [];
   var edgeData = [];
 
+  //TODO: Neither nodes or edges have their labels grabbed propperly, this needs to be fixed
   //Itterate over all of the graph elements and extract the data we care about
   rawNodeData.forEach(function(element){
-    console.log(element)
-    console.log([element.id(), element.position('x'), element.position('y'), element.label]);
     nodeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
   });
 

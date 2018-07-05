@@ -29,7 +29,7 @@ def setGraphData(json):
     '''
     print("New graph data received") #log to the console
     graph.set_graph_from_json(json)
-    print(json) #DEBUG
+    print("The nodes currently in the graph are ", graph.get_nodes()) #DEBUG
 
 @socketio.on('GetGraphData')
 def getGraphData():
@@ -58,6 +58,10 @@ def disconnect():
 
 @socketio.on('saveNewRelation')
 def save_new_relation(json):
+    '''
+        Set the relation data from a JSON string
+        :param json: The JSON string containing the relation data
+    '''
     print("New relation data received")
     graph.add_relation_from_json(json)
 

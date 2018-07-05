@@ -9,7 +9,7 @@ class Graph:
         self.edges = []
         self.relations = []
 
-    def set_graph_from_json(json):
+    def set_graph_from_json(self, json):
         ''' This method will set the entire graph from a JSON object.
             This is the representation the front-end should see.
             It's expected that nodes will be of the format:
@@ -73,6 +73,17 @@ class Graph:
         '''
         self.edges.append(edge)
 
+    def get_nodes(self):
+        '''
+            Returns the nodes in the graph
+        '''
+        return self.nodes
+
+    def get_edges(self):
+        '''
+            Returns the edges in the graph
+        '''
+        return self.edges
     def add_from_poset(self, poset):
         '''self will take a poset as input. The function the adds all vertices to the
            graph, creates vertices to represent edges and plots them, then grabs all of the
