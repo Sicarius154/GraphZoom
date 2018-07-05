@@ -9,7 +9,7 @@ class Graph:
         self.edges = []
         self.relations = []
 
-    def set_graph_from_json(self, json):
+    def set_graph_from_json(self, json_string):
         ''' This method will set the entire graph from a JSON object.
             This is the representation the front-end should see.
             It's expected that nodes will be of the format:
@@ -17,9 +17,20 @@ class Graph:
             and edges of the format:
             (id, source, target, label)
         '''
+        #TODO: Split this into two seperate functions that add edges and nodes independently
+        #we need to clear the current nodes and edges from the graph as they are all going to be set again
+        self.nodes = []
+        self.edges = []
+        json_string = json.loads(json_string) #convert the JSON string to a python dict
 
-        pass
-    def save_new_relation_from_json(json):
+        #itterate over the elements and add them to the graph
+        for node in json_string['nodes']:
+            self.add_node(node)
+
+        for edge in json_string['edges']:
+            self.add_edge(edge)
+
+    def save_new_relation_from_json(json_string):
         pass
 
     def dilate(self):
@@ -61,11 +72,11 @@ class Graph:
         #returns a string of nodes and edges, Cytoscape infers which are edges and ndoes based on their data values
         return nodes + edges
 
-    def add_node(self, vertex):
+    def add_node(self, node):
         '''Add a node to the graph
            vertex: takes a tuple: (id, x-cord, y-cord, lbl)
         '''
-        self.nodes.append(vertex)
+        self.nodes.append(node)
 
     def add_edge(self, edge):
         '''Add an edge to the graph
