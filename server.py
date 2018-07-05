@@ -13,51 +13,52 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 socketio = SocketIO(app)
 graph = Graph() #this will be the graph object for this session
 
-'''
-    Routes a user to the correct html page
-'''
 @app.route('/')
 def root():
+    '''
+        Routes a user to the correct html page
+    '''
     return render_template("index.html")
 
-'''
-    This will set the elements of the graph object to the new values from the UIself.
-    The param should be a JSON object in the agreed-upon construction
-'''
 @socketio.on('SetGraphData')
 def setGraphData(json):
-    print("New graph data received")
-    print(json)
-    #graph.set_graph_from_json(json)
+    '''
+        This will set the elements of the graph object to the new values from the UIself.
+        The param should be a JSON object in the agreed-upon construction
+        :param json: The JSON string containing all of the graph data
+    '''
+    print("New graph data received") #log to the console
+    graph.set_graph_from_json(json)
+    print(json) #DEBUG
 
-'''
-    This should send a JSON object representing the entire graph to the client-side
-    It should emit the correct event. After this has been sent the UI is free to display the graph
-'''
 @socketio.on('GetGraphData')
 def getGraphData():
+    '''
+        This should send a JSON object representing the entire graph to the client-side
+        It should emit the correct event. After this has been sent the UI is free to display the graph
+    '''
     print("Sending requested graph data")
     socketio.emit('NewGraphData', graph.getjJSONRepresentation(), json=True)
 
-'''
-    This shows that the client-side has now connected to the server
-'''
 @socketio.on('connect')
 def connect():
+    '''
+        This shows that the client-side has now connected to the server
+    '''
     print("Client connected to the server!")
 
-'''
-    This shows that the client-side has now connected to the server; once this happens
-    the server will shutdown
-'''
 @socketio.on('disconnect')
 def disconnect():
+    '''
+        This shows that the client-side has now connected to the server; once this happens
+        the server will shutdown
+    '''
     print("Client disconnected to the server!")
     #TODO: Shut downt the server
 
 @socketio.on('saveNewRelation')
 def save_new_relation(json):
-    print("New relation data received from the front-end")
+    print("New relation data received")
     graph.add_relation_from_json(json)
 
 #Start the application

@@ -419,10 +419,26 @@ Creates a JSON representation of the graph and sends it to the server
 */
 function sendGraphToServer(){
   console.log("Sending graph data to the server");
-  var nodedata = cy.$("node").json();
-  console.log(nodedata);
-  var edgedata = cy.$("edge").json();
-  var graph = {nodes: nodedata, edges: edgedata};
+  //grab the edge and node data from the graph
+  var rawNodeData = cy.nodes();
+  var rawEdgeData = cy.edges();
+  var nodeData = [];
+  var edgeData = [];
+
+  //Itterate over all of the graph elements and extract the data we care about
+  rawNodeData.forEach(function(element){
+    console.log(element)
+    console.log([element.id(), element.position('x'), element.position('y'), element.label]);
+    nodeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
+  });
+
+  //TODO: Stop relation edges from being sent as they hold no significance to the graph itself
+  rawEdgeData.forEach(function (element){
+    edgeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
+  });
+
+  //construct a JSON object and send it to the server
+  var graph = {nodes: nodeData, edges: edgeData};
   socket.emit('SetGraphData', JSON.stringify(graph));
 }
 
@@ -482,5 +498,12 @@ function testFunc(){
   edges.push(["c6", "n3", "e1", "Connection 6"]);
   drawPoset(nodes, edges);*/
   var eles = cy.$("*");
+  var elementsToShow = null;
+
+  //Itterate over all of the graph elements and extract the data we care about
+  eles.forEach(function(element){
+    elementsToShow.add([element.data.label, element.position.x, element.position.y, element.data.label]);
+  });
+  console.log(eles);
   ShowGraphInNewWindow(eles);
 }

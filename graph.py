@@ -10,6 +10,14 @@ class Graph:
         self.relations = []
 
     def set_graph_from_json(json):
+        ''' This method will set the entire graph from a JSON object.
+            This is the representation the front-end should see.
+            It's expected that nodes will be of the format:
+            (id, x, y, label)
+            and edges of the format:
+            (id, source, target, label)
+        '''
+
         pass
     def save_new_relation_from_json(json):
         pass
@@ -20,10 +28,9 @@ class Graph:
     def erode(self):
         pass
 
-        '''This method will return the entire graph as a JSON object.
-            This is the representation the front-end should seeself.
-        '''
     def get_json_representation(self):
+        ''' Returns the graph as a JSON object, as the front-end expects it
+        '''
         nodes = []
         edges = []
 
@@ -69,7 +76,9 @@ class Graph:
     def add_from_poset(self, poset):
         '''self will take a poset as input. The function the adds all vertices to the
            graph, creates vertices to represent edges and plots them, then grabs all of the
-           Vertices connected to each edge and stores them in a dictionary'''
+           Vertices connected to each edge and stores them in a dictionary
+           :param poset: The partially ordered set to be converted to a graph
+         '''
         print("Adding elements from a partially ordered set")
         vertices = poset.get_nodes()
         edges = poset.get_edges()
