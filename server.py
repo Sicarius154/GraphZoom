@@ -3,7 +3,7 @@
 
     This file is called by Flask and will serve as the main event manager for the UI
 '''
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from graph import Graph
 app = Flask(__name__)
@@ -29,7 +29,6 @@ def setGraphData(json):
     '''
     print("New graph data received") #log to the console
     graph.set_graph_from_json(json)
-    print("The nodes currently in the graph are ", graph.get_nodes()) #DEBUG
 
 @socketio.on('GetGraphData')
 def getGraphData():
@@ -50,11 +49,21 @@ def connect():
 @socketio.on('disconnect')
 def disconnect():
     '''
-        This shows that the client-side has now connected to the server; once this happens
-        the server will shutdown
+        A client terminated the connection
     '''
     print("Client disconnected to the server!")
-    #TODO: Shut downt the server
+
+@socketio.on('shutdown')
+def shutdown():
+    '''
+        Shut down the server, Save the current graph as an auto-save and terminate Flask
+    '''
+    print("Sutting down the server...")
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError("Not running wekzeug server")
+    func()
+
 
 @socketio.on('saveNewRelation')
 def save_new_relation(json):

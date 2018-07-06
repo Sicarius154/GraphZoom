@@ -378,6 +378,7 @@ function graphRadioChanged(){
 
 /*
 Connects to the python server
+//TODO: This function seems to throw an error at line 385 when first connecting for some reason
 */
 function connectToServer(){
   socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -476,6 +477,14 @@ The user can then recall this relation from the server. The relation is saved al
 */
 function saveRelationData(){
   console.log("Updating the server and saving data")
+}
+
+/*
+Shuts down the server. The server side will save all of the data that it already has as an autossave file. This will not overwrite any previously saved file
+*/
+function shutdownServer(){
+  socket.emit('shutdown');
+  window.close(); //shut the current tab as without the server working there is no use for the tab
 }
 
 /*

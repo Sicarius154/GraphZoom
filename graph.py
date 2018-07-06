@@ -3,7 +3,9 @@ import random
 import json
 
 class Graph:
-    '''The class that will hold all edges, vertices and other information pertaining to the drawing of a graph '''
+    '''
+        The class that will hold all edges, vertices and other information pertaining to the drawing of a graph
+    '''
     def __init__(self):
         self.nodes = []
         self.edges = []
@@ -40,7 +42,8 @@ class Graph:
         pass
 
     def get_json_representation(self):
-        ''' Returns the graph as a JSON object, as the front-end expects it
+        '''
+            Returns the graph as a JSON object, as the front-end expects it
         '''
         nodes = []
         edges = []
@@ -73,14 +76,15 @@ class Graph:
         return nodes + edges
 
     def add_node(self, node):
-        '''Add a node to the graph
-           vertex: takes a tuple: (id, x-cord, y-cord, lbl)
+        '''
+            Add a node to the graph
+            :param vertex: takes a tuple: (id, x-cord, y-cord, lbl)
         '''
         self.nodes.append(node)
 
     def add_edge(self, edge):
         '''Add an edge to the graph
-           edge: takes a tuple: (id, endPoint1, endPoint2, lbl)
+           :paran edge: takes a tuple: (id, endPoint1, endPoint2, lbl)
         '''
         self.edges.append(edge)
 
@@ -96,10 +100,11 @@ class Graph:
         '''
         return self.edges
     def add_from_poset(self, poset):
-        '''self will take a poset as input. The function the adds all vertices to the
-           graph, creates vertices to represent edges and plots them, then grabs all of the
-           Vertices connected to each edge and stores them in a dictionary
-           :param poset: The partially ordered set to be converted to a graph
+        '''
+            self will take a poset as input. The function the adds all vertices to the
+            graph, creates vertices to represent edges and plots them, then grabs all of the
+            Vertices connected to each edge and stores them in a dictionary
+            :param poset: The partially ordered set to be converted to a graph
          '''
         print("Adding elements from a partially ordered set")
         vertices = poset.get_nodes()
