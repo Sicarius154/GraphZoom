@@ -37,7 +37,7 @@ def getGraphData():
         It should emit the correct event. After this has been sent the UI is free to display the graph
     '''
     print("Sending requested graph data")
-    socketio.emit('NewGraphData', graph.getjJSONRepresentation(), json=True)
+    socketio.emit('NewGraphData', graph.getJSONRepresentation(), json=True)
 
 @socketio.on('connect')
 def connect():
@@ -59,10 +59,9 @@ def shutdown():
         Shut down the server, Save the current graph as an auto-save and terminate Flask
     '''
     print("Sutting down the server...")
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError("Not running wekzeug server")
-    func()
+    #TODO: Implement saving functionality
+    socketio.stop()
+    
 
 
 @socketio.on('saveNewRelation')
@@ -76,4 +75,4 @@ def save_new_relation(json):
 
 #Start the application
 if __name__ == "__main__":
-        socketio.run(app, TEMPLATES_AUTO_RELOAD=True, DEBUG=True)
+        socketio.run(app)

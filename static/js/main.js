@@ -393,7 +393,7 @@ function connectToServer(){
 Request graph data to be sent to the client
 */
 function getGraphFromServer(){
-  socket.emit('GetGraphData');
+  socket.emit('get_graph_data');
   console.log("Requesting graph from the server");
 }
 
@@ -439,7 +439,7 @@ function sendGraphToServer(){
 
   //construct a JSON object and send it to the server
   var graph = {nodes: nodeData, edges: edgeData};
-  socket.emit('SetGraphData', JSON.stringify(graph));
+  socket.emit('set_graph_data', JSON.stringify(graph));
 }
 
 /*
@@ -449,7 +449,7 @@ This function first sends the graph data to the server to ensure both are up to 
 function sendRelationDataToServer(){
   console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
   sendGraphToServer(); //update the graph on the server side
-  socket.emit('saveNewRelation', JSON.stringify(relationData));
+  socket.emit('save_new_relation', JSON.stringify(relationData));
 }
 
 /*
