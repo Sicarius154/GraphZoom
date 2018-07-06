@@ -484,6 +484,7 @@ Shuts down the server. The server side will save all of the data that it already
 */
 function shutdownServer(){
   socket.emit('shutdown');
+  socket.close();
   window.close(); //shut the current tab as without the server working there is no use for the tab
 }
 

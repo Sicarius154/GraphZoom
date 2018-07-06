@@ -5,6 +5,7 @@
 '''
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
+import os
 from graph import Graph
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'key123'
@@ -20,8 +21,8 @@ def root():
     '''
     return render_template("index.html")
 
-@socketio.on('SetGraphData')
-def setGraphData(json):
+@socketio.on('set_graph_data')
+def set_graph_data(json):
     '''
         This will set the elements of the graph object to the new values from the UIself.
         The param should be a JSON object in the agreed-upon construction
@@ -30,8 +31,8 @@ def setGraphData(json):
     print("New graph data received") #log to the console
     graph.set_graph_from_json(json)
 
-@socketio.on('GetGraphData')
-def getGraphData():
+@socketio.on('get_graph_data')
+def get_graph_data():
     '''
         This should send a JSON object representing the entire graph to the client-side
         It should emit the correct event. After this has been sent the UI is free to display the graph
@@ -60,11 +61,9 @@ def shutdown():
     '''
     print("Sutting down the server...")
     #TODO: Implement saving functionality
-    socketio.stop()
-    
+    os._exit(0)
 
-
-@socketio.on('saveNewRelation')
+@socketio.on('save_new_relation')
 def save_new_relation(json):
     '''
         Set the relation data from a JSON string
