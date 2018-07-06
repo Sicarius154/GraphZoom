@@ -432,9 +432,11 @@ function sendGraphToServer(){
     nodeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
   });
 
-  //TODO: Stop relation edges from being sent as they hold no significance to the graph itself
   rawEdgeData.forEach(function (element){
-    edgeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
+    //We only want to send edges that aren't relation edges
+    if(!element.hasClass("relationEdge")){
+      edgeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
+    }
   });
 
   //construct a JSON object and send it to the server

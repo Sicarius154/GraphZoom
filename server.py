@@ -18,6 +18,7 @@ graph = Graph() #this will be the graph object for this session
 def root():
     '''
         Routes a user to the correct html page
+        :returns: Renders the index template file
     '''
     return render_template("index.html")
 
