@@ -10,6 +10,7 @@ class Graph:
         self.nodes = []
         self.edges = []
         self.relations = []
+        sefl.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
 
     def set_graph_from_json(self, json_string):
         ''' This method will set the entire graph from a JSON object.
@@ -124,3 +125,9 @@ class Graph:
 
         for vertex in vertices:
             self.add_node(("n" + vertex[0],vertex[1], vertex[2], vertex[3]))
+    def get_operation_results_as_json(self):
+        '''
+            Returns the results of an operation such as dilation or erosion as JSON
+            :returns: JSON representation containing edges and nodes. 
+        '''
+        return self.operation_results

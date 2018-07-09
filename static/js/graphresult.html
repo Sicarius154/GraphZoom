@@ -19,9 +19,11 @@
   <script src="bootstrap.min.js"></script>
   <script src="cytoscape.js"></script>
   <script src="cytoscape-grid-guide.js"></script>
+  <script src="socket.io.js"></script>
+
   <script>
   //This will be initialized by the calling window with the graph data we need
-  var graphData = null
+  var resultsOfOperation = null
   function start(){
     //start the cytoscape object
     cy = cytoscape(
@@ -48,9 +50,23 @@
       }
     );
     console.log("Loaded CytoScape Object in the child window");
+    console.log("Requesting the operation results from the server...");
+    //Connect to the server
+    socket = io.connect('http://' + document.domain + ':' + location.port);
+    socket.on('connect', function(){
+      console.log("Connected to the main server");
+    });
 
+    //Set an event handler to receive the JSON data from the server, this will set it to the local variable
+    socket.on("received_results_of_operation", function(data){
+      resultsOfOperation = data;
+    });
 
-    graphData.foreach(function(element){
+    //Request the results
+    socket.emit("get_results_of_operation");
+
+    //Will itterate over all of the nodes, then all of the edges returned and add them to the graph area.
+    resultsOfOperation.foreach(function(element){
       cy.add(element);
     });
 

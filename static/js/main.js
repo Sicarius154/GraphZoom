@@ -23,6 +23,7 @@ var posetEdgeYCord = 400;
 var relationData = [];
 //Used to reference other files with absolute path
 var scriptFolder = null;
+
 /*
 Called once the <body> of the index.html loads. Sets up the graph object and assigns
 event handlers
@@ -322,14 +323,11 @@ function nodePositionChangeEvt(evt){
 /*
   Shows a graph in a new window. Ideal for showing results of operations on a graph without altering the
   original.
-  This takes a collection of the elements of a graph. NOT a graph object itself. The child window will then fetch this variable and itterate over it
+  The child window will grab the graphOperationResults variable declared at the top of this script. Ensure this has been updated before calling this function
 */
 function ShowGraphInNewWindow(graphResults){
   //create the window object, we assume a size of 800x800 is enough.
-  w.graphData = graphResults;
   var w = window.open(scriptFolder+"graphresult.html", "Graph results", height=500, width=800);
-
-  //we assign the graphResults data to the  the graphData variable inside the new window
 }
 
 /*
