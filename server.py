@@ -20,6 +20,7 @@ def root():
         Routes a user to the correct html page
         :returns: Renders the index template file
     '''
+    print("Main UI requested. Rendering...")
     return render_template("index.html")
 
 @socketio.on('set_graph_data')
@@ -31,6 +32,7 @@ def set_graph_data(json):
     '''
     print("New graph data received") #log to the console
     graph.set_graph_from_json(json)
+    print("Graph data sent to the front-end")
 
 @socketio.on('get_graph_data')
 def get_graph_data():
@@ -53,7 +55,7 @@ def disconnect():
     '''
         A client terminated the connection
     '''
-    print("Client disconnected to the server!")
+    print("Client disconnected from the server!")
 
 @socketio.on('shutdown')
 def shutdown():
@@ -72,13 +74,16 @@ def save_new_relation(json):
     '''
     print("New relation data received")
     graph.add_relation_from_json(json)
+    print("New relation set for the current graph")
 
 @socketio.on('get_results_of_operation')
 def get_results_of_operation():
         '''
             Returns a graph as JSON to the front end that is supposed to represent the results of an operation(dilation, erosion etc) on the main graph. This usualy involves the relation selected too
         '''
+        print("Front-end requested results of the previous operation to display (requested by new window displaying graphresult.html).")
         socket.emit("received_results_of_operation", graph.get_operation_results_as_json())
+        print("Data sent to the front-end")
 #Start the application
 if __name__ == "__main__":
         socketio.run(app)
