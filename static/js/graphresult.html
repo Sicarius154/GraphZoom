@@ -10,31 +10,32 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Graph Zoom</title>
+  <title>Graph Zoom Result</title>
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}" />
+  <link rel="stylesheet" href="../css/bootstrap.min.css" />
 
   <!-- Load all of the scripts needed -->
-  <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script> </script>
-  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/cytoscape.js')}}"></script>
-  <script src="{{url_for('static', filename='js/cytoscape-grid-guide.js')}}"></script>
+  <script src="jquery.min.js"></script> </script>
+  <script src="bootstrap.min.js"></script>
+  <script src="cytoscape.js"></script>
+  <script src="cytoscape-grid-guide.js"></script>
   <script>
+  //This will be initialized by the calling window with the graph data we need
+  var graphData = null
   function start(){
     //start the cytoscape object
     cy = cytoscape(
       {
         container: document.getElementById('graph-result-area'),
         style: [
-          {
-            selector: "node",
-            style :
             {
+              selector: "node",
+              style:{
               "text-valign": "center",
               "text-halign": "center",
               "label": "data(label)"
             }
-          },
+            },
           {
             selector: "edge",
             style:
@@ -46,19 +47,18 @@
         ]
       }
     );
+    console.log("Loaded CytoScape Object in the child window");
 
-    //now lets grab the graph object from the called window. Then we set the elements from that graph onto this one
-    var graphData = window.opener.graphResults
 
     graphData.foreach(function(element){
       cy.add(element);
     });
-    
+
   }
   </script>
 </head>
-<body style="height:100vh;" onload="">
-  <div class="container-fluid" style="height:100vh;>
+<body style="height:100vh;" onload="start();">
+  <div class="container-fluid" style="height:100vh;">
     <div class="row" style="height:100vh;">
       <!-- The graph will be displayed here. once the window has loaded the graph will be set by the main window. -->
       <div id="graph-result-area" class="col-sm-9 col-md-9 col-bg-9 no-float" >

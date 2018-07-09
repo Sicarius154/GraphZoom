@@ -21,12 +21,19 @@ var posetEdgeYCord = 400;
 
 //this will be used to store the elements of a relation whilst it is being created
 var relationData = [];
-
+//Used to reference other files with absolute path
+var scriptFolder = null;
 /*
 Called once the <body> of the index.html loads. Sets up the graph object and assigns
 event handlers
 */
 function start(){
+  //Get the folder path of the script for later use when opening a new window
+  var scriptEls = document.getElementsByTagName( 'script' );
+  var thisScriptEl = scriptEls[scriptEls.length - 1];
+  var scriptPath = thisScriptEl.src;
+  scriptFolder = scriptPath.substr(0, scriptPath.lastIndexOf( '/' )+1 );
+
   //Before we do anything else we need to connect to the python server; this function returns the socket object we need
   connectToServer()
 
@@ -81,6 +88,8 @@ function start(){
 //set up the grid layout and enable snap-to-grid plugin
 cy.layout({
   name: 'grid',
+  fit: true,
+  padding: 30,
   avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
   avoidOverlapPadding: 10, // extra spacing around nodes when avoidOverlap: true
   fit: true,
@@ -114,7 +123,6 @@ recently selected edge
 function showSelectedEdgeData(edge){
   //Update the information part of the information panel
   document.getElementById("idInputTextArea").value = edge.id();
-  //document.getElementById("labelInputArea").value =  edge.data.label;
   console.log("Displaying element data with label " + edge.data.label);
 }
 
@@ -184,18 +192,13 @@ function addNewNode(){
     {
       id: "n" + nextNodeId,
       label: ""
-    },
-    position:
-    {
-      x:0,
-      y:0
     }
   };
   cy.add(node);
 
   //Select the new node and increment the next ID available
   cy.getElementById(node.data.id).select();
-  console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y);
+//  console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y);
   nextNodeId++;
   sendGraphToServer(); //update the graph on the serverside
 }
@@ -302,10 +305,10 @@ If the position is already occcupied then color this node YELLOW to indicate thi
 //TODO: Fix this. It doesn't work.
 */
 function nodePositionChangeEvt(evt){
-
-/*  var movedNode = cy.$('#' + evt.target.id());
+/*
+  var movedNode = cy.$('#' + evt.target.id());
   for(node in cy.nodes()){
-    console.log("PINT")
+    console.log("POINT")
     if(movedNode.position() == node.position){
       console.log("Node " + evt.target.id() + "with position "+ movedNode.position() + " is overlapping with another node with position" + node.position()+"Highliting node yellow");
       movedNode.addClass('overlappingNode');
@@ -323,12 +326,15 @@ function nodePositionChangeEvt(evt){
 */
 function ShowGraphInNewWindow(graphResults){
   //create the window object, we assume a size of 800x800 is enough.
-  var w = window.open("",'Graph results', width=800, height=800);
-
   w.graphData = graphResults;
+  var w = window.open(scriptFolder+"graphresult.html", "Graph results", height=500, width=800);
+
+  //we assign the graphResults data to the  the graphData variable inside the new window
 }
+
 /*
 Called when the textarea showing label information has its value changed
+//TODO: Assigning labels does not work
 */
 function labelAreaChangedEvt(){
   var id = document.getElementById("idArea").innerHTML;
@@ -378,7 +384,6 @@ function graphRadioChanged(){
 
 /*
 Connects to the python server
-//TODO: This function seems to throw an error at line 385 when first connecting for some reason
 */
 function connectToServer(){
   socket = io.connect('http://' + document.domain + ':' + location.port);
