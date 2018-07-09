@@ -327,7 +327,7 @@ function nodePositionChangeEvt(evt){
 */
 function ShowGraphInNewWindow(graphResults){
   //create the window object, we assume a size of 800x800 is enough.
-  var w = window.open(scriptFolder+"graphresult.html", "Graph results", height=500, width=800);
+  var w = window.open(scriptFolder+"graphresult.html", "Graph results", "height=500, width=800");
 }
 
 /*
@@ -518,6 +518,5 @@ function testFunc(){
   eles.forEach(function(element){
     elementsToShow.add([element.data.label, element.position.x, element.position.y, element.data.label]);
   });
-  console.log(eles);
   ShowGraphInNewWindow(eles);
 }
