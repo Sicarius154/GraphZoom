@@ -82,7 +82,7 @@ def get_results_of_operation():
             Returns a graph as JSON to the front end that is supposed to represent the results of an operation(dilation, erosion etc) on the main graph. This usualy involves the relation selected too
         '''
         print("Front-end requested results of the previous operation to display (requested by new window displaying graphresult.html).")
-        socket.emit("received_results_of_operation", graph.get_operation_results_as_json())
+        socketio.emit("received_results_of_operation", graph.get_operation_results_as_json())
         print("Data sent to the front-end")
 #Start the application
 if __name__ == "__main__":
