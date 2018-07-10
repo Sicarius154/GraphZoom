@@ -24,7 +24,7 @@ var posetEdgeYCord = 400;
 
 //This is used to store the 2 most recently selected elements, in the order they were selected.
 //We use this and not the inbuilt CytoScape functions as they return the selected elements, but not in the order they were selected. Which we need for relations
-var selectedNodes = new Array();
+var selectedForPair = new Array();
 //this will be used to store the elements of a relation whilst it is being created
 var relationData = [];
 //Used to reference other files with absolute path
@@ -299,10 +299,10 @@ function nodeSelectedEvt(evt){
   showSelectedNodeData(cy.$('#' + evt.target.id()));
   var id = evt.target.id();
   //Now we want to keep track of the two most recently selected elements, so we add it to the array
-  selectedNodes.push(id)
+  selectedForPair.push(id)
   //if the number of nodes being tracked is greater than 2 then remove the oldest element
-  if(selectedNodes.length > 2){
-    selectedNodes.shift()
+  if(selectedForPair.length > 2){
+    selectedForPair.shift()
   }
 }
 
@@ -476,15 +476,15 @@ Adds the 2 most recently clicked elements to relation data once the add button i
 //TODO: Fix the order that the elements are grabbed
 */
 function addPairToRelationData(){
-  relationData.push(selectedNodes);
-  document.getElementById("relationPairsTextArea").value += "(" + selectedNodes +"),";
+  relationData.push(selectedForPair);
+  document.getElementById("relationPairsTextArea").value += "(" + selectedForPair +"),";
 
   //Make the node red by setting this edge as an edge that signifies a relation
-  cy.$('#'+selectedNodes[0]).addClass("relationNode");
-  cy.$('#'+selectedNodes[1]).addClass("relationNode");
+  cy.$('#'+selectedForPair[0]).addClass("relationNode");
+  cy.$('#'+selectedForPair[1]).addClass("relationNode");
 
   //Now draw an arrow between the elements
-  cy.add({data:{id: selectedNodes[0] + selectedNodes[1], source: selectedNodes[0], target: selectedNodes[1]}, classes: 'relationEdge'});
+  cy.add({data:{id: selectedForPair[0] + selectedForPair[1], source: selectedForPair[0], target: selectedForPair[1]}, classes: 'relationEdge'});
   sendGraphToServer(); //update the graph on the serverside
 }
 
