@@ -79,7 +79,7 @@ def save_new_relation(json):
 @socketio.on('get_results_of_operation')
 def get_results_of_operation():
         '''
-            Returns a graph as JSON to the front end that is supposed to represent the results of an operation(dilation, erosion etc) on the main graph. This usualy involves the relation selected too
+            Returns a graph as JSON to the front end that is supposed to represent the results of an operation(dilation, erosion etc) on the main graph.
         '''
         print("Front-end requested results of the previous operation to display (requested by new window displaying graphresult.html).")
         socketio.emit("received_results_of_operation", graph.get_operation_results_as_json())

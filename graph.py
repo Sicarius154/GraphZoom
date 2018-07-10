@@ -128,6 +128,6 @@ class Graph:
     def get_operation_results_as_json(self):
         '''
             Returns the results of an operation such as dilation or erosion as JSON
-            :returns: JSON representation containing edges and nodes.
+            :returns: JSON representation containing edges and nodes. {nodes: {(...),(...)}, edges:{(...),(...)}}
         '''
         return self.operation_results
