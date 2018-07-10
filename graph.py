@@ -22,9 +22,12 @@ class Graph:
             (id, source, target, label)
         '''
         #TODO: Split this into two seperate functions that add edges and nodes independently
-        #we need to clear the current nodes and edges from the graph as they are all going to be set again
+        #TODO: Perform integrity check on the relation data
+        #we need to clear the current data from the graph as they are all going to be set again
         self.nodes = []
         self.edges = []
+        self.relations = []
+        self.operation_results = []
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
         #itterate over the elements and add them to the graph
@@ -33,6 +36,8 @@ class Graph:
 
         for edge in json_string['edges']:
             self.add_edge(edge)
+
+        self.relations = json_string['relation']
 
     def save_new_relation_from_json(json_string):
         pass
