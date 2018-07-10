@@ -1,5 +1,6 @@
 from poset import Poset
 import random
+import datetime
 import json
 
 class Graph:
@@ -131,3 +132,35 @@ class Graph:
             :returns: JSON representation containing edges and nodes. {nodes: {(...),(...)}, edges:{(...),(...)}}
         '''
         return self.operation_results
+
+    def save_graph(self, path="/saved/{date:%Y-%m-%d %H:%M:%S}.graph".format(date=datetime.datetime.now())):
+        '''
+            Saves the current graph in its JSON representation, or as a Python object using pickle. If the file already exists it will be overwritten
+            :param path: Path in which to store the graph
+        '''
+        print("Saving graph as " + path)
+        #Ensure the filename has the correct file extension
+        if path[-6:] != ".graph":
+            path += ".graph"
+
+        with open(path, "w") as file:
+            if use_json:
+                graph_to_save = graph.get_json_representation()
+                file.write(graph_to_save)
+                print("Graph written to file.")
+
+    def load_graph(self, path):
+        '''
+            Reads the file in the directory given. Will read back as JSON and then set the graph to the graph loaded
+            :param path: Path of the file to load
+        '''
+        if filename[-6:] != ".graph":
+            raise ValueError("Invalid filename, must end in .graph")
+            pass
+
+        print("Loading graph from " + dir+filename)
+        graph_json = None
+        with open(path, "r") as file:
+            graph_json = file.read()
+            self.set_graph_from_json(graph_json)
+        print("Graph loaded...")

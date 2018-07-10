@@ -7,6 +7,8 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 import os
 from graph import Graph
+import datetime
+import pickle
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'key123'
 app.config['DEBUG'] = True
@@ -18,7 +20,7 @@ graph = Graph() #this will be the graph object for this session
 def root():
     '''
         Routes a user to the correct html page
-        :returns: Renders the index template file
+        :return: Renders the index template file
     '''
     print("Main UI requested. Rendering...")
     return render_template("index.html")
@@ -84,6 +86,7 @@ def get_results_of_operation():
         print("Front-end requested results of the previous operation to display (requested by new window displaying graphresult.html).")
         socketio.emit("received_results_of_operation", graph.get_operation_results_as_json())
         print("Data sent to the front-end")
+
 #Start the application
 if __name__ == "__main__":
         socketio.run(app)
