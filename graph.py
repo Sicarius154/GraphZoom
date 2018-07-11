@@ -11,7 +11,7 @@ class Graph:
         self.nodes = []
         self.edges = []
         self.relations = []
-        self.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
+        self.operation_results = [("n1", 100, 100, ""),("n2", 200, 200, ""),("n3", 300, 300, ""),("e1", "n1", "n2", ""),("e2", "n2", "n3", ""),("e3", "n1", "n3", "")] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
 
     def set_graph_from_json(self, json_string):
         ''' This method will set the entire graph from a JSON object.

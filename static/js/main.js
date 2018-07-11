@@ -340,7 +340,7 @@ function nodePositionChangeEvt(evt){
   original.
   The child window will grab the graphOperationResults variable declared at the top of this script. Ensure this has been updated before calling this function
 */
-function ShowGraphInNewWindow(graphResults){
+function ShowGraphInNewWindow(){
   //create the window object, we assume a size of 800x800 is enough.
   var w = window.open(scriptFolder+"graphresult.html", "Graph results", "height=500, width=800");
 }
@@ -349,7 +349,7 @@ function ShowGraphInNewWindow(graphResults){
 Called when the textarea showing label information has its value changed
 //TODO: Assigning labels does not work
 */
-function elementDetailsChanged(){
+function labelAreaChangedEvt(){
   var id = document.getElementById("idInputTextArea").value;
   var label = document.getElementById("labelTextInputArea").value;
   console.log("Assigning label to " + id);
@@ -393,6 +393,20 @@ function graphRadioChanged(){
   //Now we force the 'free' event to be triggered on every node in the graph,
   //so this triggers the nodeFreeEvt() functions to snap everything into place
   cy.$('node').emit('free');
+}
+
+/*
+When called from the UI this will take the ID and Label input by the user. It will then 'select' all of the elements matching said criteria.
+*/
+function searchForElements(){
+  var id  = document.getElementById("findElementIdTextArea").value;
+  var label = document.getElementById("findElementlabelTextArea").value;
+  if(id == "" || id == null) id = "*";
+  if(label == "" || label == null) label = "*";
+  console.log("Searching for elements with data:\
+  id: " + id +
+  "label: " + label);
+  cy.$id(id).filter("[label=\"" + label +"\"]").select();
 }
 
 /*
@@ -497,6 +511,16 @@ function saveRelationData(){
 }
 
 /*
+Save the graph to a file
+*/
+function saveGraph(){
+
+}
+
+function loadGraph(){
+
+}
+/*
 Shuts down the server. The server side will save all of the data that it already has as an autossave file. This will not overwrite any previously saved file
 */
 function shutdownServer(){
@@ -509,26 +533,5 @@ function shutdownServer(){
 Just for testing purposes
 */
 function testFunc(){
-/*  nodes = [];
-  edges = [];
-  nodes.push(["n1", 100, 300, "Node 1"]);
-  nodes.push(["n2", 300, 300, "Node 2"]);
-  nodes.push(["n3", 500, 300, "Node 3"]);
-  nodes.push(["e1", 100, 100, "Edge 1"]);
-  nodes.push(["e2", 300, 100, "Edge 2"]);
-  nodes.push(["e3", 500, 100, "Edge 3"]);
-  edges.push(["c1", "n1", "e1", "Connection 1"]);
-  edges.push(["c3", "n3", "e3", "Connection 3"]);
-  edges.push(["c4", "n1", "e2", "Connection 4"]);
-  edges.push(["c5", "n2", "e1", "Connection 5"]);
-  edges.push(["c6", "n3", "e1", "Connection 6"]);
-  drawPoset(nodes, edges);*/
-  var eles = cy.$("*");
-  var elementsToShow = null;
-
-  //Itterate over all of the graph elements and extract the data we care about
-  eles.forEach(function(element){
-    elementsToShow.add([element.data.label, element.position.x, element.position.y, element.data.label]);
-  });
-  ShowGraphInNewWindow(eles);
+  ShowGraphInNewWindow();
 }
