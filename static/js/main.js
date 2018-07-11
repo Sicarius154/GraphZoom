@@ -11,7 +11,6 @@ var nextNodeId = 0;
 var nextEdgeId = 0;
 
 //Used to communicate with the Python server
-//var io = require("socket.io")(80);
 var socket = null;
 
 //The graph object
@@ -26,7 +25,7 @@ var posetEdgeYCord = 400;
 //We use this and not the inbuilt CytoScape functions as they return the selected elements, but not in the order they were selected. Which we need for relations
 var selectedForPair = new Array();
 //this will be used to store the elements of a relation whilst it is being created
-var relationData = [];
+var relationData = {nodes:[], edges:[]};
 //Used to reference other files with absolute path
 var scriptFolder = null;
 
@@ -200,7 +199,7 @@ function addNewNode(){
     data:
     {
       id: "n" + nextNodeId,
-      label: "No Label Assigned"
+      label: ""
     }
   };
   cy.add(node);
@@ -248,35 +247,6 @@ function assignLabel(id, newLabel){
   var node = cy.$('#' + id);
   cy.$('#' + id).data('label', newLabel);
   sendGraphToServer(); //update the graph on the serverside
-}
-
-/*
-Draw a hypergraph node, the first element in the array should be the edge value; all other elements are presumed to be nodes
-*/
-function drawHyperGraphNode(edgeNode, nodes){
-  var node = {
-    data:
-    {
-      id: 'n' + nextNodeId,
-      label: "No Label",
-      parent: 'n1'
-    },
-    position:
-    {
-      x:0,
-      y:0
-    }
-  };
-
-  //draw the edge node on the graph
-  cy.add(edgeNode);
-
-  //add all of the children/inner nodes
-  for(node in nodes){
-    cy.add({data:{id: 'n' + nextNodeId, label: "No Label", parent: edgeNode.data.id}, position:{x:0, y:0}});
-  }
-  console.log("Added node " + 'n' + nextNodeId + " at position " + node.position.x + node.position.y + " with parent " + edgeNode.data.id);
-  nextNodeId++;
 }
 
 /*
@@ -407,6 +377,10 @@ function searchForElements(){
   id: " + id +
   "label: " + label);
   cy.$id(id).filter("[label=\"" + label +"\"]").select();
+
+  //Clear up the search area
+  document.getElementById("findElementlabelTextArea").value = "";
+  document.getElementById("findElementIdTextArea").value = "";
 }
 
 /*
@@ -472,7 +446,7 @@ function sendGraphToServer(){
   });
 
   //construct a JSON object and send it to the server
-  var graph = {nodes: nodeData, edges: edgeData};
+  var graph = {nodes: nodeData, edges: edgeData, relations: relationData};
   socket.emit('set_graph_data', JSON.stringify(graph));
 }
 
@@ -481,8 +455,14 @@ Sends a JSON representation of the array containing the relation pairs.
 This function first sends the graph data to the server to ensure both are up to date
 */
 function sendRelationDataToServer(){
-  console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
   sendGraphToServer(); //update the graph on the server side
+  console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
+  dataToSend = {nodes: [], edges:[]};
+  relationData.forEach(function(ele){
+    dataToSend.nodes.push(ele[0]);
+    dataToSend.nodes.push(ele[1]);
+    dataToSend.edges.push(ele[0]+ele[1]+"_connection", ele[0], ele[1], "");
+  });
   socket.emit('save_new_relation', JSON.stringify(relationData));
 }
 
@@ -490,7 +470,8 @@ function sendRelationDataToServer(){
 Adds the 2 most recently clicked elements to relation data once the add button is clicked.
 */
 function addPairToRelationData(){
-  relationData.push(selectedForPair);
+  relationData.nodes.push(selectedForPair);
+  relationData.edges.push([selectedForPair[0]+selectedForPair[1],selectedForPair[0],selectedForPair[1], ""]);//add the connection between the ordered pair
   document.getElementById("relationPairsTextArea").value += "(" + selectedForPair +"),";
 
   //Make the node red by setting this edge as an edge that signifies a relation
@@ -500,14 +481,6 @@ function addPairToRelationData(){
   //Now draw an arrow between the elements
   cy.add({data:{id: selectedForPair[0] + selectedForPair[1], source: selectedForPair[0], target: selectedForPair[1]}, classes: 'relationEdge'});
   sendGraphToServer(); //update the graph on the serverside
-}
-
-/*
-This takes all of the pairs currently in the relationData, the name given and then saves the relation with a name to the Server
-The user can then recall this relation from the server. The relation is saved along with the graph data.
-*/
-function saveRelationData(){
-  console.log("Updating the server and saving data")
 }
 
 /*

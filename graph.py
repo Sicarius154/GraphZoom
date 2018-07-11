@@ -10,8 +10,8 @@ class Graph:
     def __init__(self):
         self.nodes = []
         self.edges = []
-        self.relations = []
-        self.operation_results = [("n1", 100, 100, ""),("n2", 200, 200, ""),("n3", 300, 300, ""),("e1", "n1", "n2", ""),("e2", "n2", "n3", ""),("e3", "n1", "n3", "")] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
+        self.relations = {"nodes": [], "edges": []}
+        self.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
 
     def set_graph_from_json(self, json_string):
         ''' This method will set the entire graph from a JSON object.
@@ -26,8 +26,8 @@ class Graph:
         #we need to clear the current data from the graph as they are all going to be set again
         self.nodes = []
         self.edges = []
-        self.relations = []
-        self.operation_results = []
+        self.relations = {"nodes": [], "edges": []}
+        self.operation_results = {}
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
         #itterate over the elements and add them to the graph
@@ -39,9 +39,15 @@ class Graph:
 
         self.relations = json_string['relation']
 
-    def save_new_relation_from_json(json_string):
-        pass
+    def add_relation_from_json(self, json_string):
+        json_vals = json.loads(json_string)
+        relation = None
+        self.relations = {"nodes": [], "edges": []}
 
+        for element in json_vals['nodes']:
+            self.relations.add(element)
+        for element in json_vals['edges']:
+            self.relations.add(element)
     def dilate(self):
         pass
 
