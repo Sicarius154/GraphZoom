@@ -153,10 +153,12 @@
         <!-- This shows the label on the element -->
         <div class="input-group input-group-sm mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Label</span>
+            <span class="input-group-text" id="inputGroup-sizing-sm" onchange="labelAreaChangedEvt();">Label</span>
           </div>
           <input id ="labelTextInputArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
         </div>
+        <button id="updateElementDetailsButton" onclick="elementDetailsChanged();" class="btn btn-primary">Update</button>
+
         <!-- This shows the elements this element is connected to, shows edges for nodes and nodes for edges-->
         <div class="input-group input-group-sm mb-3">
           <div class="input-group-prepend">

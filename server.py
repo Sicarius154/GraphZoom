@@ -64,7 +64,7 @@ def shutdown():
     '''
         Shut down the server, Save the current graph as an auto-save and terminate Flask
     '''
-    print("Sutting down the server...")
+    print("Shutting down the server...")
     #TODO: Implement saving functionality
     os._exit(0)
 

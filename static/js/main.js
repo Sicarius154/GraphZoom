@@ -119,8 +119,9 @@ recently selected node
 function showSelectedNodeData(node){
   //Update the information part of the information panel
   document.getElementById("idInputTextArea").value = node.id();
+  document.getElementById("labelTextInputArea").value = node.data('label');
   //document.getElementById("labelInputArea").value =  node.data.label;
-  console.log("Displaying element data with label " + node.data.label);
+  console.log("Displaying element data with label " + node.data('label'));
 }
 
 /*
@@ -130,7 +131,8 @@ recently selected edge
 function showSelectedEdgeData(edge){
   //Update the information part of the information panel
   document.getElementById("idInputTextArea").value = edge.id();
-  console.log("Displaying element data with label " + edge.data.label);
+  document.getElementById("labelTextInputArea").value = edge.data('label');
+  console.log("Displaying element data with label " + edge.data('label'));
 }
 
 /*
@@ -198,7 +200,7 @@ function addNewNode(){
     data:
     {
       id: "n" + nextNodeId,
-      label: ""
+      label: "No Label Assigned"
     }
   };
   cy.add(node);
@@ -243,9 +245,8 @@ function deleteElement(){
 Assigns a new ID to the element
 */
 function assignLabel(id, newLabel){
-  cy.$('#' + id).data.label = newLabel;
-  cy.$('#' + id).select();
-  console.dir(cy.$('#' + id));
+  var node = cy.$('#' + id);
+  cy.$('#' + id).data('label', newLabel);
   sendGraphToServer(); //update the graph on the serverside
 }
 
@@ -348,10 +349,10 @@ function ShowGraphInNewWindow(graphResults){
 Called when the textarea showing label information has its value changed
 //TODO: Assigning labels does not work
 */
-function labelAreaChangedEvt(){
-  var id = document.getElementById("idArea").innerHTML;
-  var label = document.getElementById("labelInputArea").value;
-  console.log("Label found: " + label);
+function elementDetailsChanged(){
+  var id = document.getElementById("idInputTextArea").value;
+  var label = document.getElementById("labelTextInputArea").value;
+  console.log("Assigning label to " + id);
   assignLabel(id, label);
   sendGraphToServer(); //update the graph on the serverside
 }
@@ -473,7 +474,6 @@ function sendRelationDataToServer(){
 
 /*
 Adds the 2 most recently clicked elements to relation data once the add button is clicked.
-//TODO: Fix the order that the elements are grabbed
 */
 function addPairToRelationData(){
   relationData.push(selectedForPair);
