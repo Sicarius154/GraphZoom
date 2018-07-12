@@ -93,6 +93,10 @@ def get_results_of_operation():
 
 @socketio.on("save_graph")
 def save_graph():
+    '''
+        Saves the graph to the 'saved' folder in the same relative folder as this script.
+    '''
+    #TODO: Allow for custom paths
     print("Save requested")
     path="\\saved\\{date:%Y-%m-%d__%H_%M_%S}.graph".format(date=datetime.datetime.now())
     #Ensure the filename has the correct file extension
@@ -102,6 +106,9 @@ def save_graph():
     path = os.path.normpath(path)
     graph.save_graph(path)
 
+@socketio.on("load_graph")
+def load_graph():
+    pass
 #Start the application
 if __name__ == "__main__":
     socketio.run(app)

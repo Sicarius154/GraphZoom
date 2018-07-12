@@ -148,14 +148,13 @@ class Graph:
 
     def save_graph(self, path):
         '''
-            Saves the current graph in its JSON representation, or as a Python object using pickle. If the file already exists it will be overwritten
+            Saves the current graph in its JSON representation. If the file already exists it will be overwritten
             :param path: Path in which to store the graph
         '''
         with open(path, "w") as file:
             graph_to_save = self.get_json_representation()
-            print(graph_to_save)
             file.write(str(graph_to_save))
-            print("Graph written to file.")
+            print("Graph written to file. \"%s\"", path)
 
     def load_graph(self, path):
         '''
@@ -166,7 +165,7 @@ class Graph:
             raise ValueError("Invalid filename, must end in .graph")
             pass
 
-        print("Loading graph from " + dir+filename)
+        print("Loading graph from %s", path)
         graph_json = None
         with open(path, "r") as file:
             graph_json = file.read()
