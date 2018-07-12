@@ -172,7 +172,7 @@ function addNode(node){
     }
   });
   console.log("Node added with ID: " + node[0] + " Label: " + node[3] + " Position x:" + node[1] + " y:" + node[2]);
-  sendGraphToServer(); //update the graph on the serverside
+  aphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -440,7 +440,7 @@ function sendGraphToServer(){
   rawEdgeData.forEach(function (element){
     //We only want to send edges that aren't relation edges
     if(!element.hasClass("relationEdge")){
-      edgeData.push([element.id(), element.position('x'), element.position('y'), element.data('label')]);
+      edgeData.push([element.id(), element.data('source'), element.data('target'), element.data('label')]);
     }
   });
 

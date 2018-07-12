@@ -153,6 +153,7 @@ class Graph:
         '''
         with open(path, "w") as file:
             graph_to_save = self.get_json_representation()
+            print(graph_to_save)
             file.write(str(graph_to_save))
             print("Graph written to file.")
 
