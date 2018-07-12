@@ -26,7 +26,6 @@ def root():
         :return: Renders the index template file
     '''
     print("Main UI requested. Rendering...")
-    print("Current directory is " + script_dir)
     return render_template("index.html")
 
 @socketio.on('set_graph_data')
@@ -92,13 +91,13 @@ def get_results_of_operation():
         print("Data sent to the front-end")
 
 @socketio.on("save_graph")
-def save_graph():
+def save_graph(path):
     '''
         Saves the graph to the 'saved' folder in the same relative folder as this script.
     '''
     #TODO: Allow for custom paths
     print("Save requested")
-    path="\\saved\\{date:%Y-%m-%d__%H_%M_%S}.graph".format(date=datetime.datetime.now())
+    path = "\\saved\\" + path
     #Ensure the filename has the correct file extension
     if path[-6:] != ".graph":
         path += ".graph"
@@ -108,7 +107,14 @@ def save_graph():
 
 @socketio.on("load_graph")
 def load_graph():
-    pass
+    import tkinter as tk
+    from tkinter import filedialog
+
+    root = tk.Tk()
+    root.withdraw()
+
+    file_path = filedialog.askopenfilename()
+    graph.load_graph(os.path.normpath(script_dir+file_path))
 #Start the application
 if __name__ == "__main__":
     socketio.run(app)

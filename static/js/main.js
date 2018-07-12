@@ -486,11 +486,22 @@ function addPairToRelationData(){
 Save the graph to a file.
 */
 function saveGraph(){
-  socket.emit("save_graph");
+  console.log("Saving graph");
+  //get the filename desired
+  filename = prompt("Enter a name for the file. If the file already exists it WILL be over-written", "");
+  if(filename == ""){
+    console.log("Invalid filename input to save graph");
+    alert("Invalid filename. Graph not saved");
+  }else{
+    socket.emit("save_graph", filename);
+  }
 }
 
+/*
+Load a graph to a file.
+*/
 function loadGraph(){
-
+  socket.emit("load_graph");
 }
 
 /*
