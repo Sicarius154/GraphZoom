@@ -2,6 +2,8 @@ from poset import Poset
 import random
 import datetime
 import json
+import os
+import io
 
 class Graph:
     '''
@@ -37,7 +39,7 @@ class Graph:
         for edge in json_string['edges']:
             self.add_edge(edge)
 
-        self.relations = json_string['relation']
+        #self.relations = json_string['relation']
 
     def add_relation_from_json(self, json_string):
         json_vals = json.loads(json_string)
@@ -144,21 +146,15 @@ class Graph:
         '''
         return self.operation_results
 
-    def save_graph(self, path="/saved/{date:%Y-%m-%d %H:%M:%S}.graph".format(date=datetime.datetime.now())):
+    def save_graph(self, path):
         '''
             Saves the current graph in its JSON representation, or as a Python object using pickle. If the file already exists it will be overwritten
             :param path: Path in which to store the graph
         '''
-        print("Saving graph as " + path)
-        #Ensure the filename has the correct file extension
-        if path[-6:] != ".graph":
-            path += ".graph"
-
         with open(path, "w") as file:
-            if use_json:
-                graph_to_save = graph.get_json_representation()
-                file.write(graph_to_save)
-                print("Graph written to file.")
+            graph_to_save = self.get_json_representation()
+            file.write(str(graph_to_save))
+            print("Graph written to file.")
 
     def load_graph(self, path):
         '''

@@ -9,6 +9,9 @@ import os
 from graph import Graph
 import datetime
 import pickle
+import tkinter
+from tkinter import filedialog
+script_dir = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'key123'
 app.config['DEBUG'] = True
@@ -23,6 +26,7 @@ def root():
         :return: Renders the index template file
     '''
     print("Main UI requested. Rendering...")
+    print("Current directory is " + script_dir)
     return render_template("index.html")
 
 @socketio.on('set_graph_data')
@@ -87,6 +91,17 @@ def get_results_of_operation():
         socketio.emit("received_results_of_operation", graph.get_operation_results_as_json())
         print("Data sent to the front-end")
 
+@socketio.on("save_graph")
+def save_graph():
+    print("Save requested")
+    path="\\saved\\{date:%Y-%m-%d__%H_%M_%S}.graph".format(date=datetime.datetime.now())
+    #Ensure the filename has the correct file extension
+    if path[-6:] != ".graph":
+        path += ".graph"
+    path = script_dir + path
+    path = os.path.normpath(path)
+    graph.save_graph(path)
+
 #Start the application
 if __name__ == "__main__":
-        socketio.run(app)
+    socketio.run(app)

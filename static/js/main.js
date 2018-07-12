@@ -432,16 +432,15 @@ function sendGraphToServer(){
   var nodeData = [];
   var edgeData = [];
 
-  //TODO: Neither nodes or edges have their labels grabbed propperly, this needs to be fixed
   //Itterate over all of the graph elements and extract the data we care about
   rawNodeData.forEach(function(element){
-    nodeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
+    nodeData.push([element.id(), element.position('x'), element.position('y'), element.data('label')]);
   });
 
   rawEdgeData.forEach(function (element){
     //We only want to send edges that aren't relation edges
     if(!element.hasClass("relationEdge")){
-      edgeData.push([element.id(), element.position('x'), element.position('y'), element.label]);
+      edgeData.push([element.id(), element.position('x'), element.position('y'), element.data('label')]);
     }
   });
 
@@ -484,15 +483,16 @@ function addPairToRelationData(){
 }
 
 /*
-Save the graph to a file
+Save the graph to a file.
 */
 function saveGraph(){
-
+  socket.emit("save_graph");
 }
 
 function loadGraph(){
 
 }
+
 /*
 Shuts down the server. The server side will save all of the data that it already has as an autossave file. This will not overwrite any previously saved file
 */
