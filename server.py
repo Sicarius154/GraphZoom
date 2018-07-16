@@ -69,7 +69,7 @@ def shutdown():
     #TODO: Implement saving functionality
     os._exit(0)
 
-@socketio.on('server_save_new_relation')
+@socketio.on('server_set_new_relation')
 def save_new_relation(json):
     '''
         Set the relation data from a JSON string
@@ -114,7 +114,7 @@ def load_graph(path):
     graph.load_graph(os.path.normpath(path))
     get_graph_data() #update the front end using the pre-configured function to update the UI with a new graph
 
-@socketio.on("set_subgraph_data")
+@socketio.on("server_set_subgraph_data")
 def set_subgraph_data(json):
     graph.sub_graph.set_graph_from_json(json)
 

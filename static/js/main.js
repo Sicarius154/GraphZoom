@@ -29,6 +29,8 @@ var relationData = {nodes:[], edges:[]};
 //Used to reference other files with absolute path
 var scriptFolder = null;
 
+//Used to keep track of the sub-graph data
+var subGraphData = {nodes:[]}
 /*
 Called once the <body> of the index.html loads. Sets up the graph object and assigns
 event handlers
@@ -85,6 +87,13 @@ function start(){
         style:
         {
           "background-color" : "yellow",
+        }
+      },
+      {
+        selector: ".subgraphNode",
+        style:
+        {
+          "background-color" : "black",
         }
       }
     ]
@@ -388,18 +397,18 @@ Connects to the python server
 */
 function connectToServer(){
   socket = io.connect('http://' + document.domain + ':' + location.port);
-  socket.on('connect', function(){
+  socket.on('server_connect', function(){
     console.log("Connected to the main server");
   });
   //Now lets set all of the event handlers
-  socket.on('NewGraphData', setGraphReceivedFromServer);
+  socket.on('ui_set_graph_data', setGraphReceivedFromServer);
 }
 
 /*
 Request graph data to be sent to the client
 */
 function getGraphFromServer(){
-  socket.emit('get_graph_data');
+  socket.emit('server_get_graph_data');
   console.log("Requesting graph from the server");
 }
 
@@ -446,7 +455,7 @@ function sendGraphToServer(){
 
   //construct a JSON object and send it to the server
   var graph = {nodes: nodeData, edges: edgeData, relations: relationData};
-  socket.emit('set_graph_data', JSON.stringify(graph));
+  socket.emit('server_set_graph_data', JSON.stringify(graph));
 }
 
 /*
@@ -454,7 +463,6 @@ Sends a JSON representation of the array containing the relation pairs.
 This function first sends the graph data to the server to ensure both are up to date
 */
 function sendRelationDataToServer(){
-  sendGraphToServer(); //update the graph on the server side
   console.log("Sending relation data to the server, setting the current relation for this graph to the currently selected one")
   dataToSend = {nodes: [], edges:[]};
   relationData.forEach(function(ele){
@@ -462,7 +470,7 @@ function sendRelationDataToServer(){
     dataToSend.nodes.push(ele[1]);
     dataToSend.edges.push(ele[0]+ele[1]+"_connection", ele[0], ele[1], "");
   });
-  socket.emit('save_new_relation', JSON.stringify(relationData));
+  socket.emit('server_set_new_relation', JSON.stringify(relationData));
 }
 
 /*
@@ -479,7 +487,38 @@ function addPairToRelationData(){
 
   //Now draw an arrow between the elements
   cy.add({data:{id: selectedForPair[0] + selectedForPair[1], source: selectedForPair[0], target: selectedForPair[1]}, classes: 'relationEdge'});
-  sendGraphToServer(); //update the graph on the serverside
+  sendGraphToServer();
+  sendRelationDataToServer();
+}
+
+/*
+  Clears the relation data from the graph
+*/
+function clearRelationData(){
+  relationData = {nodes:[], edges:[]};
+  document.getElementById("relationPairsTextArea").value = "";
+  sendGraphToServer();
+  sendRelationDataToServer();
+
+}
+
+function sendSubGraphDataToServer(){
+  console.log("Sending subgraph data to server")
+  socket.emit("server_set_subgraph_data", JSON.stringify(subGraphData));
+}
+
+function addElementToSubgraph(){
+  var elements = cy.$("node:selected");
+  elements.forEach(function(element){
+    subGraphData.nodes.push(element)
+  });
+}
+
+function clearSubgraphData(){
+  subGraphData = {nodes:[]}
+  sendGraphToServer();
+  sendSubGraphDataToServer();
+  document.getElementById("subgraphElementsTextArea").value = "";
 }
 
 /*
@@ -493,7 +532,7 @@ function saveGraph(){
     console.log("Invalid filename input to save graph");
     alert("Invalid filename. Graph not saved");
   }else{
-    socket.emit("save_graph", filename);
+    socket.emit("server_save_graph", filename);
   }
 }
 
@@ -508,7 +547,7 @@ function loadGraph(){
     console.log("Invalid filename input");
     alert("Invalid filename. Graph not loaded");
   }else{
-  socket.emit("load_graph", filename);
+  socket.emit("server_load_graph", filename);
   }
 }
 
@@ -516,7 +555,7 @@ function loadGraph(){
 Shuts down the server. The server side will save all of the data that it already has as an autossave file. This will not overwrite any previously saved file
 */
 function shutdownServer(){
-  socket.emit('shutdown');
+  socket.emit('server_shutdown');
   socket.close();
   window.close(); //shut the current tab as without the server working there is no use for the tab
 }
