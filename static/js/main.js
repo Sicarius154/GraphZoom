@@ -93,7 +93,7 @@ function start(){
         selector: ".subgraphNode",
         style:
         {
-          "background-color" : "black",
+          "background-color" : "green",
         }
       }
     ]
@@ -480,10 +480,7 @@ function addPairToRelationData(){
   relationData.nodes.push(selectedForPair);
   relationData.edges.push([selectedForPair[0]+selectedForPair[1],selectedForPair[0],selectedForPair[1], ""]);//add the connection between the ordered pair
   document.getElementById("relationPairsTextArea").value += "(" + selectedForPair +"),";
-
-  //Make the node red by setting this edge as an edge that signifies a relation
-  cy.$('#'+selectedForPair[0]).addClass("relationNode");
-  cy.$('#'+selectedForPair[1]).addClass("relationNode");
+  console.log("Adding pair (" + selectedForPair + ") to relation data");
 
   //Now draw an arrow between the elements
   cy.add({data:{id: selectedForPair[0] + selectedForPair[1], source: selectedForPair[0], target: selectedForPair[1]}, classes: 'relationEdge'});
@@ -495,6 +492,7 @@ function addPairToRelationData(){
   Clears the relation data from the graph
 */
 function clearRelationData(){
+  console.log("Clearing relation data");
   relationData = {nodes:[], edges:[]};
   document.getElementById("relationPairsTextArea").value = "";
   sendGraphToServer();
@@ -508,13 +506,17 @@ function sendSubGraphDataToServer(){
 }
 
 function addElementToSubgraph(){
+  console.log("Adding element to subgraph");
   var elements = cy.$("node:selected");
   elements.forEach(function(element){
+    elements.addClass("subgraphNode");
+    document.getElementById("subgraphElementsTextArea").value += element.id() + ","
     subGraphData.nodes.push(element)
   });
 }
 
 function clearSubgraphData(){
+  console.log("Clearing subgraph data");
   subGraphData = {nodes:[]}
   sendGraphToServer();
   sendSubGraphDataToServer();
