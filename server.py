@@ -120,7 +120,7 @@ def set_subgraph_data(json):
 
 @socketio.on("server_get_subgraph_data")
 def get_subgraph_data():
-    socket.
+    socket.emit("ui_set_subgraph_data", graph.sub_graph.get_json_representation())
 #Start the application
 if __name__ == "__main__":
     socketio.run(app)
