@@ -501,7 +501,15 @@ function saveGraph(){
 Load a graph to a file.
 */
 function loadGraph(){
-  socket.emit("load_graph");
+  console.log("Loading graph");
+  //get the filename desired
+  filename = prompt("Enter a file to load. If the file does not exist a new one will be created and a new graph will start", "");
+  if(filename == ""){
+    console.log("Invalid filename input");
+    alert("Invalid filename. Graph not loaded");
+  }else{
+  socket.emit("load_graph", filename);
+  }
 }
 
 /*

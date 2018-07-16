@@ -14,7 +14,7 @@ class Graph:
         self.edges = []
         self.relations = {"nodes": [], "edges": []}
         self.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
-
+        self.sub_graph = None #this is used to store a new Graph object that represents a selected sub-graph of the main graph for use with operations
     def set_graph_from_json(self, json_string):
         ''' This method will set the entire graph from a JSON object.
             This is the representation the front-end should see.
@@ -161,9 +161,8 @@ class Graph:
             Reads the file in the directory given. Will read back as JSON and then set the graph to the graph loaded
             :param path: Path of the file to load
         '''
-        if filename[-6:] != ".graph":
+        if path[-6:] != ".graph":
             raise ValueError("Invalid filename, must end in .graph")
-            pass
 
         print("Loading graph from %s", path)
         graph_json = None
@@ -171,3 +170,31 @@ class Graph:
             graph_json = file.read()
             self.set_graph_from_json(graph_json)
         print("Graph loaded...")
+
+    def set_subgraph_from_json(self, json_string):
+        '''
+            This method is very similar to the set_graph_from_json method. It simply
+            Takes a JSON string and adds the elements to the subgraph
+        '''
+        #TODO: Split this into two seperate functions that add edges and nodes independently
+        #TODO: Perform integrity check on the relation data
+        #we need to clear the current data from the graph as they are all going to be set again
+        sub_graph = Graph()
+
+        json_string = json.loads(json_string) #convert the JSON string to a python dict
+
+        #itterate over the elements and add them to the graph
+        for node in json_string['nodes']:
+            sub_graph.add_node(node)
+
+        for edge in json_string['edges']:
+            sub_graph.add_edge(edge)
+
+        #sub_graph.relations = json_string['relation']
+        self.sub_graph = sub_graph
+
+    def get_sub_graph_as_json(self):
+        '''
+            Returns the sub-graph as JSON string
+        '''
+        return self.sub_graph.get_json_representation()

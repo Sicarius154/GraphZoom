@@ -46,7 +46,7 @@ def get_graph_data():
         It should emit the correct event. After this has been sent the UI is free to display the graph
     '''
     print("Sending requested graph data")
-    socketio.emit('NewGraphData', graph.getJSONRepresentation(), json=True)
+    socketio.emit('new_graph_data', graph.getJSONRepresentation(), json=True)
 
 @socketio.on('connect')
 def connect():
@@ -106,15 +106,15 @@ def save_graph(path):
     graph.save_graph(path)
 
 @socketio.on("load_graph")
-def load_graph():
-    import tkinter as tk
-    from tkinter import filedialog
-
-    root = tk.Tk()
-    root.withdraw()
-
-    file_path = filedialog.askopenfilename()
-    graph.load_graph(os.path.normpath(script_dir+file_path))
+def load_graph(path):
+    path = "\\saved\\" + path
+    #Ensure the filename has the correct file extension
+    if path[-6:] != ".graph":
+        path += ".graph"
+    path = script_dir + path
+    path = os.path.normpath(path)
+    graph.load_graph(os.path.normpath(path))
+    get_graph_data() #update the front end using the pre-configured function to update the UI with a new graph
 #Start the application
 if __name__ == "__main__":
     socketio.run(app)
