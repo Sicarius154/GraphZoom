@@ -13,6 +13,15 @@ function connectToServer(){
   //Now lets set all of the event handlers
   socket.on('ui_set_graph_data', setGraphReceivedFromServer);
 }
+
+/*
+  This will call all functions intending to send the current state of data to the server.
+*/
+function fullyUpdateServer(){
+  sendGraphToServer();
+  sendSubGraphDataToServer();
+  sendRelationDataToServer();
+}
 /*
 Request graph data to be sent to the client
 */

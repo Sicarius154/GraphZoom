@@ -128,10 +128,38 @@ function addNewEdge(){
 This will delete any selected element(s), edge or node.
 */
 function deleteElement(){
-  selectedNodes = []
   selectedElements = cy.$(':selected');
+
+  //we also want to remove the data the user sees in relation to this element. If the node was a part of the sub-graph, remove that, same for relations
+  selectedElements.forEach(function(ele){
+    if(ele.hasClass("relationEdge")){
+      elementPair = [ele.data("source"), ele.data("target")];
+      var newRelationData = [];
+
+      relationData.forEach(function(pair){
+        if(pair[0] == elementPair[0] && pair[1] == elementPair[1]){
+        }else{
+          newRelationData.push(pair)
+        }
+      });
+      console.log(newRelationData);
+      console.log(relationData);
+      relationData = newRelationData;
+
+      document.getElementById("relationPairsTextArea").value = "";
+      relationData.forEach(function(pair){
+        document.getElementById("relationPairsTextArea").value += "(" + pair +"),";
+      });
+
+    }else if(ele.hasClass("subgraphNode")){
+
+    }
+  });
+
   cy.remove(selectedElements);
-  sendGraphToServer(); //update the graph on the serverside
+
+  //update the server
+  fullyUpdateServer();
 }
 
 /*
@@ -191,16 +219,14 @@ Adds the 2 most recently clicked elements to relation data once the add button i
 function addPairToRelationData(){
   //if there is only one element in the variable then we want to add a loop
   if(selectedForPair[1] == undefined){
-    selectedForPair.push(selectedForPair[0])
+    selectedForPair.push(selectedForPair[0]);
   }
+
   //we need to see if this relation already exists; we need to do this ourselves as cytoscape's API for this suck
-
   selectedForPairStringified = JSON.stringify(selectedForPair);
-
   var contains = relationData.some(function(ele){
     return JSON.stringify(ele) === selectedForPairStringified;
   });
-
   if(contains){
     console.log("Error! Attempt to create duplicate ordered pair for relaion");
     selectedForPair = [];
@@ -231,7 +257,9 @@ function clearRelationData(){
   sendRelationDataToServer();
 
 }
-
+/*
+  Adds an element to the array containing ID's of subgraph nodes. Also marks the node as green and updates the server
+*/
 function addElementToSubgraph(){
   console.log("Adding element to subgraph");
   var elements = cy.$("node:selected");
@@ -244,6 +272,9 @@ function addElementToSubgraph(){
   sendSubGraphDataToServer();
 }
 
+/*
+  Clears the array containing subgraph data; also updates the server
+*/
 function clearSubgraphData(){
   console.log("Clearing subgraph data");
   subGraphData = {nodes:[]}
