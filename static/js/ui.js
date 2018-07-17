@@ -142,8 +142,7 @@ function deleteElement(){
           newRelationData.push(pair)
         }
       });
-      console.log(newRelationData);
-      console.log(relationData);
+
       relationData = newRelationData;
 
       document.getElementById("relationPairsTextArea").value = "";
@@ -152,7 +151,14 @@ function deleteElement(){
       });
 
     }else if(ele.hasClass("subgraphNode")){
+      var id = ele.data("id");
 
+      subGraphData.nodes.splice(subGraphData.nodes.indexOf(id), 1);
+
+      document.getElementById("subgraphElementsTextArea").value = "";
+      subGraphData.nodes.forEach(function(node){
+        document.getElementById("subgraphElementsTextArea").value += node+",";
+      });
     }
   });
 
