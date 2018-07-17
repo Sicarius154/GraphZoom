@@ -85,10 +85,10 @@ function sendRelationDataToServer(){
     dataToSend.nodes.push(ele[1]);
     dataToSend.edges.push(ele[0]+ele[1]+"_connection", ele[0], ele[1], "");
   });
-  socket.emit('server_set_new_relation', JSON.stringify(relationData));
+  socket.emit('server_set_new_relation', JSON.stringify(dataToSend));
 }
 function sendSubGraphDataToServer(){
-  console.log("Sending subgraph data to server")
+  console.log("Sending subgraph data to server");
   socket.emit("server_set_subgraph_data", JSON.stringify(subGraphData));
 }
   //  document.getElementById("subgraphElementsTextArea").value += element.id() + ","

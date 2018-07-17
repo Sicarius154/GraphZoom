@@ -1,9 +1,9 @@
-from poset import Poset
 import random
 import datetime
 import json
 import os
 import io
+from subgraph import SubGraph
 
 class Graph:
     '''
@@ -14,7 +14,8 @@ class Graph:
         self.edges = []
         self.relations = {"nodes": [], "edges": []}
         self.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
-        self.sub_graph = None #this is used to store a new Graph object that represents a selected sub-graph of the main graph for use with operations
+        self.sub_graph = SubGraph() #this is used to store a new Graph object that represents a selected sub-graph of the main graph for use with operations
+
     def set_graph_from_json(self, json_string):
         ''' This method will set the entire graph from a JSON object.
             This is the representation the front-end should see.
@@ -47,9 +48,11 @@ class Graph:
         self.relations = {"nodes": [], "edges": []}
 
         for element in json_vals['nodes']:
-            self.relations.add(element)
+            self.relations["nodes"].append(element)
         for element in json_vals['edges']:
-            self.relations.add(element)
+            self.relations["edges"].append(element)
+        print("The current relation is")
+
     def dilate(self):
         pass
 
@@ -114,31 +117,7 @@ class Graph:
             Returns the edges in the graph
         '''
         return self.edges
-    def add_from_poset(self, poset):
-        '''
-            self will take a poset as input. The function the adds all vertices to the
-            graph, creates vertices to represent edges and plots them, then grabs all of the
-            Vertices connected to each edge and stores them in a dictionary
-            :param poset: The partially ordered set to be converted to a graph
-         '''
-        print("Adding elements from a partially ordered set")
-        vertices = poset.get_nodes()
-        edges = poset.get_edges()
-        edgeConnections = {} #this will store the list of edges and the nodes they're connected to
 
-        for edge in edges:
-            #create the links between edgeVertices and normal vertices
-            if edgeConnections.get("e" + edge[0]) != None:
-                edgeConnections["e" + edge[0]] += edge[1]
-            else:
-                edgeConnections["e" + edge[0]] = edge[1]
-            self.add_node(("e" + edge[0], int(edge[0]) + 2, 4, edge[3]))
-        for vertexEdge in edgeConnections:
-            for connectedVertex in edgeConnections[vertexEdge]:
-                self.add_edge((vertexEdge, "n" + connectedVertex))
-
-        for vertex in vertices:
-            self.add_node(("n" + vertex[0],vertex[1], vertex[2], vertex[3]))
     def get_operation_results_as_json(self):
         '''
             Returns the results of an operation such as dilation or erosion as JSON
@@ -179,7 +158,7 @@ class Graph:
         #TODO: Split this into two seperate functions that add edges and nodes independently
         #TODO: Perform integrity check on the relation data
         #we need to clear the current data from the graph as they are all going to be set again
-        sub_graph = Graph()
+        sub_graph = SubGraph()
 
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
@@ -187,11 +166,8 @@ class Graph:
         for node in json_string['nodes']:
             sub_graph.add_node(node)
 
-        for edge in json_string['edges']:
-            sub_graph.add_edge(edge)
-
-        #sub_graph.relations = json_string['relation']
         self.sub_graph = sub_graph
+        print("The current sub-graph is:")
 
     def get_sub_graph_as_json(self):
         '''

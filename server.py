@@ -116,7 +116,7 @@ def load_graph(path):
 
 @socketio.on("server_set_subgraph_data")
 def set_subgraph_data(json):
-    graph.sub_graph.set_graph_from_json(json)
+    graph.set_subgraph_from_json(json)
 
 @socketio.on("server_get_subgraph_data")
 def get_subgraph_data():
