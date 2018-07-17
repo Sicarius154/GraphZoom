@@ -193,12 +193,21 @@ function addPairToRelationData(){
   if(selectedForPair[1] == undefined){
     selectedForPair.push(selectedForPair[0])
   }
+  //we need to see if this relation already exists; we need to do this ourselves as cytoscape's API for this suck
 
-  if(relationData.includes(selectedForPair)){
+  selectedForPairStringified = JSON.stringify(selectedForPair);
+
+  var contains = relationData.some(function(ele){
+    return JSON.stringify(ele) === selectedForPairStringified;
+  });
+
+  if(contains){
     console.log("Error! Attempt to create duplicate ordered pair for relaion");
     selectedForPair = [];
+    cy.$("node").unselect();
     return;
   }
+
   relationData.push(selectedForPair);
   document.getElementById("relationPairsTextArea").value += "(" + selectedForPair +"),";
   console.log("Adding pair (" + selectedForPair + ") to relation data");
@@ -207,6 +216,7 @@ function addPairToRelationData(){
   cy.add({data:{id: selectedForPair[0] + selectedForPair[1], source: selectedForPair[0], target: selectedForPair[1]}, classes: 'relationEdge'});
   sendGraphToServer();
   sendRelationDataToServer();
+  cy.$("node").unselect();
   selectedForPair = []; //clear the relation data
 }
 
@@ -228,7 +238,7 @@ function addElementToSubgraph(){
   elements.forEach(function(element){
     elements.addClass("subgraphNode");
     document.getElementById("subgraphElementsTextArea").value += element.id() + ","
-    subGraphData.nodes.push(element)
+    subGraphData.nodes.push(element.id());
   });
   sendGraphToServer();
   sendSubGraphDataToServer();
