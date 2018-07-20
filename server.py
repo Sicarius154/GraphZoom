@@ -23,6 +23,7 @@ def root():
         Routes a user to the correct html page
         :return: Renders the index template file
     '''
+    new_graph()
     print("Main UI requested. Rendering...")
     return render_template("index.html")
 
@@ -35,7 +36,6 @@ def set_graph_data(json):
     '''
     print("New graph data received") #log to the console
     graph.set_graph_from_json(json)
-    print("Graph data sent to the front-end")
 
 @socketio.on('server_get_graph_data')
 def get_graph_data():
@@ -44,7 +44,7 @@ def get_graph_data():
         It should emit the correct event. After this has been sent the UI is free to display the graph
     '''
     print("Sending requested graph data")
-    socketio.emit('ui_set_graph_data', graph.getJSONRepresentation(), json=True)
+    socketio.emit('ui_set_graph_data', graph.get_json_representation(), json=True)
 
 @socketio.on('server_connect')
 def connect():
@@ -121,6 +121,9 @@ def set_subgraph_data(json):
 @socketio.on("server_get_subgraph_data")
 def get_subgraph_data():
     socket.emit("ui_set_subgraph_data", graph.sub_graph.get_json_representation())
+
+def new_graph():
+    graph = Graph() #create a new graph object
 #Start the application
 if __name__ == "__main__":
     socketio.run(app)

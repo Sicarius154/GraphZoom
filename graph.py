@@ -31,27 +31,28 @@ class Graph:
         self.edges = []
         self.relations = {"nodes": [], "edges": []}
         self.operation_results = {}
+        self.sub_graph = SubGraph()
+        print(json_string)
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
-        #itterate over the elements and add them to the graph
-        for node in json_string['nodes']:
-            self.add_node(node)
+        self.nodes = json_string["nodes"]
 
-        for edge in json_string['edges']:
-            self.add_edge(edge)
+        self.edges = json_string["edges"]
 
-        #self.relations = json_string['relation']
+        self.relations = json_string["relation"]
+
+        self.sub_graph = SubGraph()
+        self.sub_graph.nodes = json_string["subgraph_nodes"]
 
     def add_relation_from_json(self, json_string):
         json_vals = json.loads(json_string)
         relation = None
         self.relations = {"nodes": [], "edges": []}
 
-        for element in json_vals['nodes']:
+        for element in json_vals["nodes"]:
             self.relations["nodes"].append(element)
-        for element in json_vals['edges']:
+        for element in json_vals["edges"]:
             self.relations["edges"].append(element)
-        print("The current relation is")
 
     def dilate(self):
         pass
@@ -65,33 +66,51 @@ class Graph:
         '''
         nodes = []
         edges = []
-
+        subgraph_nodes = []
+        relation = {"nodes":[], "edges":[]}
+        subgraphNodes = []
+        json_string = {"nodes":[], "edges":[], "relation":{}, "subgraph_nodes":[]}
         #convert all of the nodes in the graph to a json representation that the UI framework can deal with
         for node in self.nodes:
             jsonNode = {}
             data = {}
             position = {}
-            data['id'] = node[0]
-            data['label'] = node[3]
-            position['x'] = node[1]
-            position['y'] = node[2]
-            jsonNode['data'] = data
-            jsonNode['position'] = position
+            data["id"] = node[0]
+            data["label"] = node[3]
+            position["x"] = node[1]
+            position["y"] = node[2]
+            jsonNode["data"] = data
+            jsonNode["position"] = position
             jsonNode = json.dumps(jsonNode)
             nodes.append(jsonNode)
         #convert all of the edges in the graph to a json representation that the UI framework can deal with
         for edge in self.edges:
             jsonNode = {}
             data = {}
-            data['id'] = edge[0]
-            data['label'] = edge[3]
-            data['source'] = edge[1]
-            data['target'] = edge[2]
-            jsonNode['data'] = data
+            data["id"] = edge[0]
+            data["label"] = edge[3]
+            data["source"] = edge[1]
+            data["target"] = edge[2]
+            jsonNode["data"] = data
             jsonNode = json.dumps(jsonNode)
             edges.append(jsonNode)
+
+        #This itterates over all of the nodes in the subgraph and notes them; we only need to remember the ID's of the nodes
+        for node in self.sub_graph.nodes:
+            subgraph_nodes.append(node)
+        for node in self.relations["nodes"]:
+            relation["nodes"].append(node)
+        for edge in self.relations["edges"]:
+            relation["edges"].append(edge)
+        subgraph_nodes = json.dumps(subgraph_nodes)
+        relation = json.dumps(relation)
+
+        json_string["nodes"] = nodes;
+        json_string["edges"] = edges
+        json_string["relation"] = relation
+        json_string["subgraph_nodes"] = subgraph_nodes
         #returns a string of nodes and edges, Cytoscape infers which are edges and ndoes based on their data values
-        return nodes + edges
+        return json_string
 
     def add_node(self, node):
         '''
@@ -163,11 +182,10 @@ class Graph:
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
         #itterate over the elements and add them to the graph
-        for node in json_string['nodes']:
+        for node in json_string["nodes"]:
             sub_graph.add_node(node)
 
         self.sub_graph = sub_graph
-        print("The current sub-graph is:")
 
     def get_sub_graph_as_json(self):
         '''

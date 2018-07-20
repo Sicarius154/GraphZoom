@@ -125,3 +125,32 @@ Just for testing purposes
 function testFunc(){
   ShowGraphInNewWindow();
 }
+
+/*
+  This will completely wipe the graph
+*/
+function clearGraph(){
+  console.log("Clearing graph");
+  //Reset all of the data being stored about the graph
+  selectedForPair = new Array();
+  relationData = [];
+  subGraphData = {nodes:[]}
+
+  //Delete all elements
+  cy.elements().remove();
+
+  //clear any data being displayed on the UI
+  document.getElementById("subgraphElementsTextArea").value = "";
+  document.getElementById("relationPairsTextArea").value = "";
+  document.getElementById("idInputTextArea").value = "";
+  document.getElementById("labelTextInputArea").value = "";
+  document.getElementById("findElementlabelTextArea").value = "";
+  document.getElementById("findElementIdTextArea").value = "";
+}
+
+/*
+  Wipes the graph and creates a new session
+*/
+function newGraph(){
+  window.location.reload()
+}

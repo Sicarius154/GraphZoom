@@ -30,21 +30,31 @@ function getGraphFromServer(){
   console.log("Requesting graph from the server");
 }
 /*
-This is called when the server send the graph data to the client
+This is called when the server sends the graph data to the client
 //TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
 */
 function setGraphReceivedFromServer(json){
   console.log("Server has sent new graph data");
+  clearGraph();
 
-  //Delete all graph elements
-  cy.$('*').select();
-  deleteElement();
-  console.log(json);
-  //Add all of the new elements
-  for(jsonElement in json){
-    console.log("Adding " + jsonElement[0]);
-    cy.add(jsonElement);
-  }
+  json["nodes"].forEach(function(ele){
+    cy.add(ele)
+  });
+
+  json["edges"].forEach(function(ele){
+    cy.add(ele)
+  });
+
+  relationData = json["relation"];
+  subGraphData = json["sub_graph"]
+
+  relationData.forEach(function(pair){
+    addRelationPairToUi(pair);
+  });
+
+  subGraphData.forEach(function(element){
+    addSubgraphElementToUi(element)
+  });
 }
 /*
 Creates a JSON representation of the graph and sends it to the server
@@ -70,7 +80,7 @@ function sendGraphToServer(){
   });
 
   //construct a JSON object and send it to the server
-  var graph = {nodes: nodeData, edges: edgeData, relations: relationData};
+  var graph = {"nodes": nodeData, "edges": edgeData, "relation": relationData, "subgraph_nodes": subGraphData};
   socket.emit('server_set_graph_data', JSON.stringify(graph));
 }
 /*
@@ -97,6 +107,7 @@ function sendSubGraphDataToServer(){
 Save the graph to a file.
 */
 function saveGraph(){
+  fullyUpdateServer();
   console.log("Saving graph");
   //get the filename desired
   filename = prompt("Enter a name for the file. If the file already exists it WILL be over-written", "");

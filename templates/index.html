@@ -50,7 +50,7 @@
             <input id="file-input" type="file" name="name" style="display: none;" />
             <a class="dropdown-item" href="#" onclick="loadGraph();">Load graph</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#" onclick="alert("Not yet implemented!");">New graph</a>
+            <a class="dropdown-item" href="#" onclick="newGraph();">New graph</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" onclick="shutdownServer();">Quit</a>
           </div>
@@ -188,12 +188,6 @@
         <p class="text-center" style="color: white">Create A Relation</p>
 
       <!-- Used to create relations-->
-      <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroup-sizing-sm">Relation Name</span>
-        </div>
-        <input id ="relationNameTextArea" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-      </div>
       <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-sm">Pairs</span>

@@ -241,8 +241,7 @@ function addPairToRelationData(){
   }
 
   relationData.push(selectedForPair);
-  document.getElementById("relationPairsTextArea").value += "(" + selectedForPair +"),";
-  console.log("Adding pair (" + selectedForPair + ") to relation data");
+  addRelationPairToUi(selectedForPair);
 
   //Now draw an arrow between the elements
   cy.add({data:{id: selectedForPair[0] + selectedForPair[1], source: selectedForPair[0], target: selectedForPair[1]}, classes: 'relationEdge'});
@@ -250,6 +249,11 @@ function addPairToRelationData(){
   sendRelationDataToServer();
   cy.$("node").unselect();
   selectedForPair = []; //clear the relation data
+}
+
+function addRelationPairToUi(pair){
+  document.getElementById("relationPairsTextArea").value += "(" + pair +"),";
+  console.log("Adding pair (" + pair + ") to relation data");
 }
 
 /*
@@ -271,11 +275,15 @@ function addElementToSubgraph(){
   var elements = cy.$("node:selected");
   elements.forEach(function(element){
     elements.addClass("subgraphNode");
-    document.getElementById("subgraphElementsTextArea").value += element.id() + ","
+    addSubgraphElementToUi(element.id());
     subGraphData.nodes.push(element.id());
   });
   sendGraphToServer();
   sendSubGraphDataToServer();
+}
+
+function addSubgraphElementToUi(element){
+  document.getElementById("subgraphElementsTextArea").value += element + ","
 }
 
 /*
