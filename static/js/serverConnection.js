@@ -36,6 +36,10 @@ This is called when the server sends the graph data to the client
 function setGraphReceivedFromServer(json){
   console.log("Server has sent new graph data");
   clearGraph();
+  json = json.replace(/\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
+  json = json.replace(/\\\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
+  console.log(json)
+  json = JSON.parse(json);
 
   json["nodes"].forEach(function(ele){
     cy.add(ele)

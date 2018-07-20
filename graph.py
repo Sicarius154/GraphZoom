@@ -32,12 +32,13 @@ class Graph:
         self.relations = {"nodes": [], "edges": []}
         self.operation_results = {}
         self.sub_graph = SubGraph()
-        print(json_string)
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
-        self.nodes = json_string["nodes"]
+        for node in json_string["nodes"]:
+            self.add_node([node["data"]["id"], node["position"]["x"], node["position"]["y"], node["data"]["label"]])
 
-        self.edges = json_string["edges"]
+        for edge in json_string["edges"]:
+            self.add_edge([edge["data"]["id"], edge["data"]["source"], edge["data"]["target"],edge["data"]["label"]])
 
         self.relations = json_string["relation"]
 
@@ -72,43 +73,39 @@ class Graph:
         json_string = {"nodes":[], "edges":[], "relation":{}, "subgraph_nodes":[]}
         #convert all of the nodes in the graph to a json representation that the UI framework can deal with
         for node in self.nodes:
-            jsonNode = {}
-            data = {}
-            position = {}
+            data = {"id":"", "label":""}
+            position = {"x":0, "y":0}
+            jsonNode = {"data": data, "position": position}
+            print(data)
+            print(node)
             data["id"] = node[0]
             data["label"] = node[3]
             position["x"] = node[1]
             position["y"] = node[2]
             jsonNode["data"] = data
             jsonNode["position"] = position
-            jsonNode = json.dumps(jsonNode)
             nodes.append(jsonNode)
         #convert all of the edges in the graph to a json representation that the UI framework can deal with
         for edge in self.edges:
-            jsonNode = {}
-            data = {}
+            data = {"id":"", "label":"", "source":"", "target":""}
+            jsonNode = {"data": data}
             data["id"] = edge[0]
             data["label"] = edge[3]
             data["source"] = edge[1]
             data["target"] = edge[2]
             jsonNode["data"] = data
-            jsonNode = json.dumps(jsonNode)
             edges.append(jsonNode)
 
-        #This itterates over all of the nodes in the subgraph and notes them; we only need to remember the ID's of the nodes
-        for node in self.sub_graph.nodes:
-            subgraph_nodes.append(node)
-        for node in self.relations["nodes"]:
-            relation["nodes"].append(node)
-        for edge in self.relations["edges"]:
-            relation["edges"].append(edge)
-        subgraph_nodes = json.dumps(subgraph_nodes)
-        relation = json.dumps(relation)
+
+        subgraph_nodes = self.sub_graph.nodes
+        relation = self.relations
 
         json_string["nodes"] = nodes;
         json_string["edges"] = edges
         json_string["relation"] = relation
         json_string["subgraph_nodes"] = subgraph_nodes
+        json_string = json.dumps(json_string)
+
         #returns a string of nodes and edges, Cytoscape infers which are edges and ndoes based on their data values
         return json_string
 
@@ -152,7 +149,7 @@ class Graph:
         with open(path, "w") as file:
             graph_to_save = self.get_json_representation()
             file.write(str(graph_to_save))
-            print("Graph written to file. \"%s\"", path)
+            print("Graph written to file: ", path)
 
     def load_graph(self, path):
         '''
@@ -162,10 +159,12 @@ class Graph:
         if path[-6:] != ".graph":
             raise ValueError("Invalid filename, must end in .graph")
 
-        print("Loading graph from %s", path)
+        print("Loading graph from: ", path)
         graph_json = None
         with open(path, "r") as file:
             graph_json = file.read()
+            import html
+            html.unescape(graph_json)
             self.set_graph_from_json(graph_json)
         print("Graph loaded...")
 
