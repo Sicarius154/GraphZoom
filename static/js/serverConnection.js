@@ -73,13 +73,31 @@ function sendGraphToServer(){
 
   //Itterate over all of the graph elements and extract the data we care about
   rawNodeData.forEach(function(element){
-    nodeData.push([element.id(), element.position('x'), element.position('y'), element.data('label')]);
+    node = {
+      "data":{
+        "id":element.id(),
+        "label":element.position('x')
+      },
+      "position":{
+        "x":element.position('y'),
+        "y":element.data('label')
+      }
+    }
+    nodeData.push(node);
   });
 
   rawEdgeData.forEach(function (element){
     //We only want to send edges that aren't relation edges
     if(!element.hasClass("relationEdge")){
-      edgeData.push([element.id(), element.data('source'), element.data('target'), element.data('label')]);
+      edge = {
+        "data":{
+            "id": element.id(),
+            "label": element.data("label"),
+            "source": element.data("source"),
+            "target": element.data("target")
+        }
+      }
+      edgeData.push(edge);
     }
   });
 
