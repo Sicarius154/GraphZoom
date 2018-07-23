@@ -12,7 +12,7 @@ class Graph:
     def __init__(self):
         self.nodes = []
         self.edges = []
-        self.relations = []
+        self.relation = []
         self.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
         self.sub_graph = SubGraph() #this is used to store a new Graph object that represents a selected sub-graph of the main graph for use with operations
 
@@ -29,7 +29,7 @@ class Graph:
         #we need to clear the current data from the graph as they are all going to be set again
         self.nodes = []
         self.edges = []
-        self.relations = []
+        self.relation = []
         self.operation_results = {}
         self.sub_graph = SubGraph()
         json_string = json.loads(json_string) #convert the JSON string to a python dict
@@ -40,7 +40,7 @@ class Graph:
         for edge in json_string["edges"]:
             self.add_edge([edge["id"], edge["label"], edge["source"], edge["target"]])
 
-        self.relations = json_string["relation"]
+        self.relation = json_string["relation"]
 
         self.sub_graph = SubGraph()
         self.sub_graph.nodes = json_string["sub_graph"]
@@ -48,13 +48,25 @@ class Graph:
     def add_relation_from_json(self, json_string):
         json_vals = json.loads(json_string)
         relation = None
-        self.relations = []
+        self.relation = []
 
         for element in json_vals:
-            self.relations.append(element)
+            self.relation.append(element)
 
     def dilate(self):
-        pass
+        '''
+            Performs dilation on the graph G given a relation R and subset S
+            :return: Return a new graph G' such that the subset/subgraph of G' is the result of dilation on G
+        '''
+        #iterate over ordered pair in the relation
+        for relation_edge in self.relation:
+            #If the source (first element in the pair) is in the subset, add the target to the new subset
+            if relation_edge[0] in self.sub_graph.nodes:
+                self.operation_results.append(relation_edge[1])
+        new_graph = Graph()
+        new_graph.sub_graph.nodes = self.operation_results
+        return new_graph
+
 
     def erode(self):
         pass
@@ -92,7 +104,7 @@ class Graph:
 
 
         subgraph_nodes = self.sub_graph.nodes
-        relation = self.relations
+        relation = self.relation
 
         json_string["nodes"] = nodes;
         json_string["edges"] = edges

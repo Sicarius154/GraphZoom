@@ -49,6 +49,7 @@ function setGraphReceivedFromServer(json){
   });
 
   json["sub_graph"].forEach(function(node){
+    console.log(json["sub_graph"])
       subGraphData.push(node);
   });
 
