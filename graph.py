@@ -140,11 +140,13 @@ class Graph:
             Saves the current graph in its JSON representation. If the file already exists it will be overwritten
             :param path: Path in which to store the graph
         '''
-        with open(path, "w") as file:
-            graph_to_save = self.get_json_representation()
-            file.write(str(graph_to_save))
-            print("Graph written to file: ", path)
-
+        try:
+            with open(path, "w") as file:
+                graph_to_save = self.get_json_representation()
+                file.write(str(graph_to_save))
+                print("Graph written to file: ", path)
+        except FileExistsError:
+            print("File already exists and could not be overwritten!")
     def load_graph(self, path):
         '''
             Reads the file in the directory given. Will read back as JSON and then set the graph to the graph loaded
@@ -155,12 +157,15 @@ class Graph:
 
         print("Loading graph from: ", path)
         graph_json = None
-        with open(path, "r") as file:
-            graph_json = file.read()
-            import html
-            html.unescape(graph_json)
-            self.set_graph_from_json(graph_json)
-        print("Graph loaded...")
+        try:
+            with open(path, "r") as file:
+                graph_json = file.read()
+                import html
+                html.unescape(graph_json)
+                self.set_graph_from_json(graph_json)
+            print("Graph loaded...")
+        except FileNotFoundError:
+            print("File not found!")
 
     def set_subgraph_from_json(self, json_string):
         '''
