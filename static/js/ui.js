@@ -93,7 +93,7 @@ function addNewNode(){
     data:
     {
       id: "n" + nextNodeId,
-      label: ""
+      label: " "
     }
   };
   cy.add(node);
@@ -118,7 +118,7 @@ function addNewEdge(){
   }
 
   //add the edge to the graph and log this in the console; increment the next id
-  cy.add({data:{id: "e" + nextEdgeId, source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
+  cy.add({data:{id: "e" + nextEdgeId, label: " ", source: selectedNodes[0].id(), target: selectedNodes[1].id()}});
   console.log("Added edge " + 'e' + nextEdgeId + " with source: " + selectedNodes[0].id() + " and target: " + selectedNodes[1].id());
   nextEdgeId++;
   sendGraphToServer(); //update the graph on the serverside

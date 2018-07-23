@@ -76,26 +76,24 @@ function sendGraphToServer(){
     node = {
       "data":{
         "id":element.id(),
-        "label":element.position('x')
+        "label":element.data("label")
       },
       "position":{
-        "x":element.position('y'),
-        "y":element.data('label')
+        "x":element.position('x'),
+        "y":element.position('y')
       }
     }
     nodeData.push(node);
   });
 
-  rawEdgeData.forEach(function (element){
+  rawEdgeData.forEach(function(element){
     //We only want to send edges that aren't relation edges
     if(!element.hasClass("relationEdge")){
       edge = {
-        "data":{
-            "id": element.id(),
-            "label": element.data("label"),
-            "source": element.data("source"),
-            "target": element.data("target")
-        }
+        "id": element.id(),
+        "label": element.data("label"),
+        "source": element.data("source"),
+        "target": element.data("target")
       }
       edgeData.push(edge);
     }
@@ -111,7 +109,7 @@ This function first sends the graph data to the server to ensure both are up to 
 */
 function sendRelationDataToServer(){
   console.log("Sending relation data to the server");
-  dataToSend = {nodes: [], edges:[]};
+  dataToSend = [];
   relationData.forEach(function(ele){
     dataToSend.nodes.push(ele[0]);
     dataToSend.nodes.push(ele[1]);

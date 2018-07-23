@@ -35,10 +35,10 @@ class Graph:
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
         for node in json_string["nodes"]:
-            self.add_node([node["data"]["id"], node["position"]["x"], node["position"]["y"], node["data"]["label"]])
+            self.add_node([node["data"]["id"], node["data"]["label"],node["position"]["x"], node["position"]["y"]])
 
         for edge in json_string["edges"]:
-            self.add_edge([edge["data"]["id"], edge["data"]["source"], edge["data"]["target"],edge["data"]["label"]])
+            self.add_edge([edge["id"], edge["label"], edge["source"], edge["target"]])
 
         self.relations = json_string["relation"]
 
@@ -76,25 +76,21 @@ class Graph:
             data = {"id":"", "label":""}
             position = {"x":0, "y":0}
             jsonNode = {"data": data, "position": position}
-            print(data)
-            print(node)
             data["id"] = node[0]
-            data["label"] = node[3]
-            position["x"] = node[1]
-            position["y"] = node[2]
+            data["label"] = node[1]
+            position["x"] = node[2]
+            position["y"] = node[3]
             jsonNode["data"] = data
             jsonNode["position"] = position
             nodes.append(jsonNode)
         #convert all of the edges in the graph to a json representation that the UI framework can deal with
         for edge in self.edges:
-            data = {"id":"", "label":"", "source":"", "target":""}
-            jsonNode = {"data": data}
-            data["id"] = edge[0]
-            data["label"] = edge[3]
-            data["source"] = edge[1]
-            data["target"] = edge[2]
-            jsonNode["data"] = data
-            edges.append(jsonNode)
+            jsonEdge = {"id":"", "label":"", "source":"", "target":""}
+            jsonEdge["id"] = edge[0]
+            jsonEdge["label"] = edge[1]
+            jsonEdge["source"] = edge[2]
+            jsonEdge["target"] = edge[3]
+            edges.append(jsonEdge)
 
 
         subgraph_nodes = self.sub_graph.nodes
@@ -112,13 +108,13 @@ class Graph:
     def add_node(self, node):
         '''
             Add a node to the graph
-            :param vertex: takes a tuple: (id, x-cord, y-cord, lbl)
+            :param vertex: takes a tuple: (id, lbl, x-cord, y-cord)
         '''
         self.nodes.append(node)
 
     def add_edge(self, edge):
         '''Add an edge to the graph
-           :paran edge: takes a tuple: (id, endPoint1, endPoint2, lbl)
+           :param edge: takes a tuple: (id, lbl, endPoint1, endPoint2)
         '''
         self.edges.append(edge)
 
@@ -149,6 +145,7 @@ class Graph:
         with open(path, "w") as file:
             graph_to_save = self.get_json_representation()
             file.write(str(graph_to_save))
+            print(str(graph_to_save))
             print("Graph written to file: ", path)
 
     def load_graph(self, path):
@@ -166,6 +163,7 @@ class Graph:
             import html
             html.unescape(graph_json)
             self.set_graph_from_json(graph_json)
+            print(graph_json)
         print("Graph loaded...")
 
     def set_subgraph_from_json(self, json_string):
