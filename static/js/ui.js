@@ -153,10 +153,10 @@ function deleteElement(){
     }else if(ele.hasClass("subgraphNode")){
       var id = ele.data("id");
 
-      subGraphData.nodes.splice(subGraphData.nodes.indexOf(id), 1);
+      subGraphData.splice(subGraphData.indexOf(id), 1);
 
       document.getElementById("subgraphElementsTextArea").value = "";
-      subGraphData.nodes.forEach(function(node){
+      subGraphData.forEach(function(node){
         document.getElementById("subgraphElementsTextArea").value += node+",";
       });
     }
@@ -276,7 +276,7 @@ function addElementToSubgraph(){
   elements.forEach(function(element){
     elements.addClass("subgraphNode");
     addSubgraphElementToUi(element.id());
-    subGraphData.nodes.push(element.id());
+    subGraphData.push(element.id());
   });
   sendGraphToServer();
   sendSubGraphDataToServer();
@@ -291,7 +291,7 @@ function addSubgraphElementToUi(element){
 */
 function clearSubgraphData(){
   console.log("Clearing subgraph data");
-  subGraphData = {nodes:[]}
+  subGraphData = []
   sendGraphToServer();
   sendSubGraphDataToServer();
   document.getElementById("subgraphElementsTextArea").value = "";

@@ -134,7 +134,7 @@ function clearGraph(){
   //Reset all of the data being stored about the graph
   selectedForPair = new Array();
   relationData = [];
-  subGraphData = {nodes:[]}
+  subGraphData = []
 
   //Delete all elements
   cy.elements().remove();

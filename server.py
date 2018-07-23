@@ -44,7 +44,7 @@ def get_graph_data():
         It should emit the correct event. After this has been sent the UI is free to display the graph
     '''
     print("Sending requested graph data")
-    
+
     socketio.emit('ui_set_graph_data', graph.get_json_representation(), json=True)
 
 @socketio.on('server_connect')

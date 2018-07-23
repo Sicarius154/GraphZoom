@@ -38,7 +38,6 @@ function setGraphReceivedFromServer(json){
   clearGraph();
   json = json.replace(/\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
   json = json.replace(/\\\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
-  console.log(json)
   json = JSON.parse(json);
 
   json["nodes"].forEach(function(ele){
@@ -52,13 +51,16 @@ function setGraphReceivedFromServer(json){
   relationData = json["relation"];
   subGraphData = json["sub_graph"]
 
-  relationData.forEach(function(pair){
-    addRelationPairToUi(pair);
-  });
-
-  subGraphData.forEach(function(element){
-    addSubgraphElementToUi(element)
-  });
+  if(relationData != undefined){
+    relationData.forEach(function(pair){
+      addRelationPairToUi(pair);
+    });
+  }
+  if(subGraphData != undefined){
+    subGraphData.forEach(function(element){
+      addSubgraphElementToUi(element)
+    });
+  }
 }
 /*
 Creates a JSON representation of the graph and sends it to the server
@@ -111,9 +113,7 @@ function sendRelationDataToServer(){
   console.log("Sending relation data to the server");
   dataToSend = [];
   relationData.forEach(function(ele){
-    dataToSend.nodes.push(ele[0]);
-    dataToSend.nodes.push(ele[1]);
-    dataToSend.edges.push(ele[0]+ele[1]+"_connection", ele[0], ele[1], "");
+    dataToSend.push(ele);
   });
   socket.emit('server_set_new_relation', JSON.stringify(dataToSend));
 }

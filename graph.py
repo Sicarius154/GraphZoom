@@ -12,7 +12,7 @@ class Graph:
     def __init__(self):
         self.nodes = []
         self.edges = []
-        self.relations = {"nodes": [], "edges": []}
+        self.relations = []
         self.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
         self.sub_graph = SubGraph() #this is used to store a new Graph object that represents a selected sub-graph of the main graph for use with operations
 
@@ -29,7 +29,7 @@ class Graph:
         #we need to clear the current data from the graph as they are all going to be set again
         self.nodes = []
         self.edges = []
-        self.relations = {"nodes": [], "edges": []}
+        self.relations = []
         self.operation_results = {}
         self.sub_graph = SubGraph()
         json_string = json.loads(json_string) #convert the JSON string to a python dict
@@ -48,12 +48,11 @@ class Graph:
     def add_relation_from_json(self, json_string):
         json_vals = json.loads(json_string)
         relation = None
-        self.relations = {"nodes": [], "edges": []}
+        self.relations = []
 
-        for element in json_vals["nodes"]:
-            self.relations["nodes"].append(element)
-        for element in json_vals["edges"]:
-            self.relations["edges"].append(element)
+        for element in json_vals:
+            print(element)
+            self.relations.append(element)
 
     def dilate(self):
         pass
@@ -68,9 +67,9 @@ class Graph:
         nodes = []
         edges = []
         subgraph_nodes = []
-        relation = {"nodes":[], "edges":[]}
+        relation = []
         subgraphNodes = []
-        json_string = {"nodes":[], "edges":[], "relation":{}, "subgraph_nodes":[]}
+        json_string = {"nodes":[], "edges":[], "relation":[], "subgraph_nodes":[]}
         #convert all of the nodes in the graph to a json representation that the UI framework can deal with
         for node in self.nodes:
             data = {"id":"", "label":""}
