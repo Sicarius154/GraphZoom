@@ -275,15 +275,15 @@ function addElementToSubgraph(){
   console.log("Adding element to subgraph");
   var elements = cy.$("node:selected");
   elements.forEach(function(element){
-    elements.addClass("subgraphNode");
     addSubgraphElementToUi(element.id());
-    subGraphData.push(element.id());
   });
   sendGraphToServer();
   sendSubGraphDataToServer();
 }
 
 function addSubgraphElementToUi(element){
+  cy.$("#" + element).addClass("subgraphNode");
+  subGraphData.push(element);
   document.getElementById("subgraphElementsTextArea").value += element + ","
 }
 

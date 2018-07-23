@@ -48,8 +48,13 @@ function setGraphReceivedFromServer(json){
     cy.add({data:{id: ele.id, label: ele.label, source: ele.source, target: ele.target}});
   });
 
-  relationData = json["relation"];
-  subGraphData = json["sub_graph"]
+  json["sub_graph"].forEach(function(node){
+      subGraphData.push(node);
+  });
+
+  json["relation"].forEach(function(pair){
+      subGraphData.push(pair);
+  });
 
   if(relationData != undefined){
     relationData.forEach(function(pair){
@@ -102,7 +107,7 @@ function sendGraphToServer(){
   });
 
   //construct a JSON object and send it to the server
-  var graph = {"nodes": nodeData, "edges": edgeData, "relation": relationData, "subgraph_nodes": subGraphData};
+  var graph = {"nodes": nodeData, "edges": edgeData, "relation": relationData, "sub_graph": subGraphData};
   socket.emit('server_set_graph_data', JSON.stringify(graph));
 }
 /*

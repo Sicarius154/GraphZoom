@@ -29,7 +29,7 @@ var relationData = [];
 var scriptFolder = null;
 
 //Used to keep track of the sub-graph data
-var subGraphData = {nodes:[]}
+var subGraphData = [];
 /*
 Called once the <body> of the index.html loads. Sets up the graph object and assigns
 event handlers

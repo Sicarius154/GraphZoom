@@ -43,7 +43,7 @@ class Graph:
         self.relations = json_string["relation"]
 
         self.sub_graph = SubGraph()
-        self.sub_graph.nodes = json_string["subgraph_nodes"]
+        self.sub_graph.nodes = json_string["sub_graph"]
 
     def add_relation_from_json(self, json_string):
         json_vals = json.loads(json_string)
@@ -68,7 +68,7 @@ class Graph:
         subgraph_nodes = []
         relation = []
         subgraphNodes = []
-        json_string = {"nodes":[], "edges":[], "relation":[], "subgraph_nodes":[]}
+        json_string = {"nodes":[], "edges":[], "relation":[], "sub_graph":[]}
         #convert all of the nodes in the graph to a json representation that the UI framework can deal with
         for node in self.nodes:
             data = {"id":"", "label":""}
@@ -97,7 +97,7 @@ class Graph:
         json_string["nodes"] = nodes;
         json_string["edges"] = edges
         json_string["relation"] = relation
-        json_string["subgraph_nodes"] = subgraph_nodes
+        json_string["sub_graph"] = subgraph_nodes
         json_string = json.dumps(json_string)
 
         #returns a string of nodes and edges, Cytoscape infers which are edges and ndoes based on their data values
@@ -180,7 +180,7 @@ class Graph:
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
         #itterate over the elements and add them to the graph
-        for node in json_string["nodes"]:
+        for node in json_string:
             sub_graph.add_node(node)
 
         self.sub_graph = sub_graph
