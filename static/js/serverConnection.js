@@ -41,11 +41,11 @@ function setGraphReceivedFromServer(json){
   json = JSON.parse(json);
 
   json["nodes"].forEach(function(ele){
-    cy.add(ele)
+    cy.add({data:{id:ele.data.id, label:ele.data.label}, position:{x:ele.position.x, y:ele.position.y}});
   });
 
   json["edges"].forEach(function(ele){
-    cy.add(ele)
+    cy.add({data:{id: ele.id, label: ele.label, source: ele.source, target: ele.target}});
   });
 
   relationData = json["relation"];

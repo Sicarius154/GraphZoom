@@ -244,7 +244,6 @@ function addPairToRelationData(){
   addRelationPairToUi(selectedForPair);
 
   //Now draw an arrow between the elements
-  cy.add({data:{id: selectedForPair[0] + selectedForPair[1], source: selectedForPair[0], target: selectedForPair[1]}, classes: 'relationEdge'});
   sendGraphToServer();
   sendRelationDataToServer();
   cy.$("node").unselect();
@@ -252,9 +251,11 @@ function addPairToRelationData(){
 }
 
 function addRelationPairToUi(pair){
+  cy.add({data:{id: pair[0] + pair[1], source: pair[0], target: pair[1]}, classes: 'relationEdge'});
   document.getElementById("relationPairsTextArea").value += "(" + pair +"),";
   console.log("Adding pair (" + pair + ") to relation data");
 }
+
 
 /*
   Clears the relation data from the graph

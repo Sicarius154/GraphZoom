@@ -51,7 +51,6 @@ class Graph:
         self.relations = []
 
         for element in json_vals:
-            print(element)
             self.relations.append(element)
 
     def dilate(self):
@@ -144,7 +143,6 @@ class Graph:
         with open(path, "w") as file:
             graph_to_save = self.get_json_representation()
             file.write(str(graph_to_save))
-            print(str(graph_to_save))
             print("Graph written to file: ", path)
 
     def load_graph(self, path):
@@ -162,7 +160,6 @@ class Graph:
             import html
             html.unescape(graph_json)
             self.set_graph_from_json(graph_json)
-            print(graph_json)
         print("Graph loaded...")
 
     def set_subgraph_from_json(self, json_string):
