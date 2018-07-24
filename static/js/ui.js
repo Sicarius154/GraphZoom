@@ -329,6 +329,7 @@ function addSubgraphElementToUi(element){
 */
 function clearSubgraphData(){
   console.log("Clearing subgraph data");
+  cy.$(".subgraphNode").removeClass("subgraphNode");
   subGraphData = []
   sendGraphToServer();
   sendSubGraphDataToServer();
