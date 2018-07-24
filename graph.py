@@ -69,12 +69,18 @@ class Graph:
 
 
     def erode(self):
-        pass
+        '''
+            Performs erosion on the graph G given a relation R and subset S
+            :return: Return a new graph G' such that the subset/subgraph of G' is the result of erosion on G
+        '''
+        for relation_edge in self.relation:
+            if relation_edge[0] not in self.sub_graph.nodes:
+
+            else if relation_edge[0] not in self.sub_graph.nodes:
 
     def get_json_representation(self):
         '''
             Returns the graph as a JSON object, as the front-end expects it
-        '''
         nodes = []
         edges = []
         subgraph_nodes = []
