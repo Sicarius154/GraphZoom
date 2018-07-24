@@ -299,7 +299,8 @@ function addRelationPairToUi(pair){
 */
 function clearRelationData(){
   console.log("Clearing relation data");
-  relationData = {nodes:[], edges:[]};
+  cy.$(".relationEdge").remove();
+  relationData = [];
   document.getElementById("relationPairsTextArea").value = " ";
   sendGraphToServer();
   sendRelationDataToServer();
