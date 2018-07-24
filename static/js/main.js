@@ -52,8 +52,8 @@ function start(){
         {
           selector: "node",
           style :
-          {"text-valign": "center",
-          "text-halign": "center",
+          {"text-valign": "top",
+          "text-halign": "top",
           "label": "data(label)"
         }
       },
@@ -144,8 +144,6 @@ function clearGraph(){
   document.getElementById("relationPairsTextArea").value = "";
   document.getElementById("idInputTextArea").value = "";
   document.getElementById("labelTextInputArea").value = "";
-  document.getElementById("findElementlabelTextArea").value = "";
-  document.getElementById("findElementIdTextArea").value = "";
 }
 
 /*

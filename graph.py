@@ -75,12 +75,13 @@ class Graph:
         '''
         for relation_edge in self.relation:
             if relation_edge[0] not in self.sub_graph.nodes:
-
-            else if relation_edge[0] not in self.sub_graph.nodes:
-
+                pass
+            elif relation_edge[0] not in self.sub_graph.nodes:
+                pass
     def get_json_representation(self):
         '''
             Returns the graph as a JSON object, as the front-end expects it
+        '''
         nodes = []
         edges = []
         subgraph_nodes = []
