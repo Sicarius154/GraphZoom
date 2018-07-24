@@ -2,6 +2,7 @@
   This file contains all logic relating to interacting with the UI, setting text in information sections,
   searching for elements, adding elements and so forth
 */
+
 /*
 This is called when the server sends the graph data to the client
 //TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
@@ -12,6 +13,7 @@ function setGraphReceivedFromServer(json){
   json = json.replace(/\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
   json = json.replace(/\\\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
   json = JSON.parse(json);
+  setNextAvailableId(json["next_node_id"], json["next_edge_id"]);
 
   json["nodes"].forEach(function(ele){
     cy.add({data:{id:ele.data.id, label:ele.data.label}, position:{x:ele.position.x, y:ele.position.y}});
@@ -40,6 +42,7 @@ function setGraphReceivedFromServer(json){
     });
   }
 }
+
 /*
 This is called once a node has been selected. It displays the information of the most
 recently selected node
@@ -64,7 +67,7 @@ function showSelectedEdgeData(edge){
 }
 
 /*
-Changes wether labels are drawn on nodes or not depending on the user input
+Changes whether labels are drawn on nodes or not depending on the user input
 */
 function changeNodeLabelSettings(){
   if(document.getElementById("optionsShowNodeLabelsCheckbox").checked){
@@ -237,25 +240,6 @@ function ShowGraphInNewWindow(){
   var w = window.open(scriptFolder+"graphresult.html", "Graph results", "height=500, width=800");
 }
 
-
-/*
-When called from the UI this will take the ID and Label input by the user. It will then 'select' all of the elements matching said criteria.
-*/
-function searchForElements(){
-  var id  = document.getElementById("findElementIdTextArea").value;
-  var label = document.getElementById("findElementlabelTextArea").value;
-  if(id == "" || id == null) id = "*";
-  if(label == "" || label == null) label = "*";
-  console.log("Searching for elements with data:\
-  id: " + id +
-  "label: " + label);
-  cy.$id(id).filter("[label=\"" + label +"\"]").select();
-
-  //Clear up the search area
-  document.getElementById("findElementlabelTextArea").value = "";
-  document.getElementById("findElementIdTextArea").value = "";
-}
-
 /*
 Adds the 2 most recently clicked elements to relation data once the add button is clicked.
 */
@@ -301,6 +285,7 @@ function clearRelationData(){
   console.log("Clearing relation data");
   cy.$(".relationEdge").remove();
   relationData = [];
+  selectedForPair = [];
   document.getElementById("relationPairsTextArea").value = " ";
   sendGraphToServer();
   sendRelationDataToServer();

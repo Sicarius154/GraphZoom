@@ -133,21 +133,27 @@ function clearGraph(){
   console.log("Clearing graph");
   //Reset all of the data being stored about the graph
   selectedForPair = new Array();
-  relationData = [];
-  subGraphData = []
+  clearRelationData();
+  clearSubgraphData();
 
   //Delete all elements
   cy.elements().remove();
 
   //clear any data being displayed on the UI
-  document.getElementById("subgraphElementsTextArea").value = "";
-  document.getElementById("relationPairsTextArea").value = "";
   document.getElementById("idInputTextArea").value = "";
   document.getElementById("labelTextInputArea").value = "";
 }
 
 /*
-  Wipes the graph and creates a new session
+  This will set the next available ID number for both edges and nodes. This is called when a graph is loaded from a file
+*/
+function setNextAvailableId(nodeId, edgeId){
+  nextNodeId = nodeId;
+  nextEdgeId = edgeId
+}
+
+/*
+  Wipes the graph and creates a new session by simply reloading the page
 */
 function newGraph(){
   window.location.reload()

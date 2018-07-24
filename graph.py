@@ -10,6 +10,8 @@ class Graph:
         The class that will hold all edges, vertices and other information pertaining to the drawing of a graph
     '''
     def __init__(self):
+        self.next_node_id = 0 #the next id number for elements
+        self.next_edge_id = 0 #the next id number for elements
         self.nodes = []
         self.edges = []
         self.relation = []
@@ -44,6 +46,8 @@ class Graph:
 
         self.sub_graph = SubGraph()
         self.sub_graph.nodes = json_string["sub_graph"]
+        self.next_node_id = json_string["next_node_id"]
+        self.next_edge_id = json_string["next_edge_id"]
 
     def add_relation_from_json(self, json_string):
         json_vals = json.loads(json_string)
@@ -87,7 +91,7 @@ class Graph:
         subgraph_nodes = []
         relation = []
         subgraphNodes = []
-        json_string = {"nodes":[], "edges":[], "relation":[], "sub_graph":[]}
+        json_string = {"nodes":[], "edges":[], "relation":[], "sub_graph":[], "next_node_id": self.next_node_id, "next_edge_id": self.next_edge_id}
         #convert all of the nodes in the graph to a json representation that the UI framework can deal with
         for node in self.nodes:
             data = {"id":"", "label":""}

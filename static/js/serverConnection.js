@@ -70,12 +70,12 @@ function sendGraphToServer(){
   });
 
   //construct a JSON object and send it to the server
-  var graph = {"nodes": nodeData, "edges": edgeData, "relation": relationData, "sub_graph": subGraphData};
+  var graph = {"nodes": nodeData, "edges": edgeData, "relation": relationData, "sub_graph": subGraphData, "next_node_id": nextNodeId, "next_edge_id": nextEdgeId};
   socket.emit('server_set_graph_data', JSON.stringify(graph));
 }
+
 /*
 Sends a JSON representation of the array containing the relation pairs.
-This function first sends the graph data to the server to ensure both are up to date
 */
 function sendRelationDataToServer(){
   console.log("Sending relation data to the server");
@@ -89,7 +89,6 @@ function sendSubGraphDataToServer(){
   console.log("Sending subgraph data to server");
   socket.emit("server_set_subgraph_data", JSON.stringify(subGraphData));
 }
-  //  document.getElementById("subgraphElementsTextArea").value += element.id() + ","
 
 /*
 Save the graph to a file.
