@@ -53,7 +53,7 @@ function start(){
           selector: "node",
           style :
           {"text-valign": "top",
-          "text-halign": "top",
+          "text-halign": "center",
           "label": "data(label)"
         }
       },

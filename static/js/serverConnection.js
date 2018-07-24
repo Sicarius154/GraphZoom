@@ -29,45 +29,7 @@ function getGraphFromServer(){
   socket.emit('server_get_graph_data');
   console.log("Requesting graph from the server");
 }
-/*
-This is called when the server sends the graph data to the client
-//TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
-*/
-function setGraphReceivedFromServer(json){
-  console.log("Server has sent new graph data");
-  clearGraph();
-  json = json.replace(/\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
-  json = json.replace(/\\\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
-  json = JSON.parse(json);
 
-  json["nodes"].forEach(function(ele){
-    cy.add({data:{id:ele.data.id, label:ele.data.label}, position:{x:ele.position.x, y:ele.position.y}});
-  });
-
-  json["edges"].forEach(function(ele){
-    cy.add({data:{id: ele.id, label: ele.label, source: ele.source, target: ele.target}});
-  });
-
-  json["sub_graph"].forEach(function(node){
-    console.log(json["sub_graph"])
-      subGraphData.push(node);
-  });
-
-  json["relation"].forEach(function(pair){
-      subGraphData.push(pair);
-  });
-
-  if(relationData != undefined){
-    relationData.forEach(function(pair){
-      addRelationPairToUi(pair);
-    });
-  }
-  if(subGraphData != undefined){
-    subGraphData.forEach(function(element){
-      addSubgraphElementToUi(element)
-    });
-  }
-}
 /*
 Creates a JSON representation of the graph and sends it to the server
 */
