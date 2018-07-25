@@ -165,6 +165,21 @@ function addNewEdge(){
 }
 
 /*
+  Removes a relation pair from the data and the UI
+*/
+function removeRelationPairFromData(elementPair){
+    //removes the pair from the relation data array
+    relationData.forEach(function(pair){
+      if(elementPair[0]==pair[0] && elementPair[1]==pair[1]){
+        relationData.splice(relationData.indexOf(pair), "1")
+      }
+    });
+    //Replace the string value with nothing
+    document.getElementById("relationPairsTextArea").value =
+      document.getElementById("relationPairsTextArea").value.replace("(" + elementPair +")", "").replace(",,", ","); //reset the text
+
+}
+/*
 This will delete any selected element(s), edge or node.
 */
 function deleteElement(){
@@ -174,23 +189,9 @@ function deleteElement(){
   selectedElements.forEach(function(ele){
     if(ele.hasClass("relationEdge")){
       elementPair = [ele.data("source"), ele.data("target")];
-      var newRelationData = [];
+      removeRelationPairFromData(elementPair)
 
-      relationData.forEach(function(pair){
-        if(pair[0] == elementPair[0] && pair[1] == elementPair[1]){
-        }else{
-          newRelationData.push(pair)
-        }
-      });
-
-      relationData = newRelationData;
-
-      document.getElementById("relationPairsTextArea").value = "";
-      relationData.forEach(function(pair){
-        document.getElementById("relationPairsTextArea").value += "(" + pair +"),";
-      });
-
-    }else if(ele.hasClass("subgraphNode")){
+    }else if(ele.hasClass("subgraph")){
       var id = ele.data("id");
 
       subGraphData.splice(subGraphData.indexOf(id), 1);
@@ -305,7 +306,7 @@ function addElementToSubgraph(){
 }
 
 function addSubgraphElementToUi(element){
-  cy.$("#" + element).addClass("subgraphNode");
+  cy.$("#" + element).addClass("subgraph");
   subGraphData.push(element);
   document.getElementById("subgraphElementsTextArea").value += element + ","
 }
@@ -315,9 +316,20 @@ function addSubgraphElementToUi(element){
 */
 function clearSubgraphData(){
   console.log("Clearing subgraph data");
-  cy.$(".subgraphNode").removeClass("subgraphNode");
+  cy.$(".subgraph").removeClass("subgraph");
   subGraphData = []
   sendGraphToServer();
   sendSubGraphDataToServer();
   document.getElementById("subgraphElementsTextArea").value = "";
+}
+
+/*
+  This will convert the representation of the graph as a partially ordered set to a standard graph.
+  This may not be possible for all partially ordered sets!
+*/
+function posetToGraph(){
+  //Loop through every 'edge' node, ensure it has exactly two edges. If it does, create a new edge with the two nodes as endpoints
+  cy.edges().forEach(function(edge){
+
+  });
 }

@@ -75,13 +75,6 @@ function start(){
         }
       },
       {
-        selector: ".relationNode",
-        style:
-        {
-          "background-color": "red",
-        }
-      },
-      {
         selector: ".overlappingNode",
         style:
         {
@@ -89,7 +82,7 @@ function start(){
         }
       },
       {
-        selector: ".subgraphNode",
+        selector: ".subgraph",
         style:
         {
           "background-color" : "green",
