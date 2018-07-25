@@ -28,11 +28,13 @@ The back end dependencies may need to be installed using pip. The libraries list
   * This is used to allow the server to run. Flask is a micro-framework that allows for basic serving of webpages.
 - Flask Socket IO
   * This is the library that goes on top of Flask to allow for interaction with web sockets. [Link to the Github repository](https://github.com/miguelgrinberg/Flask-SocketIO)
+- Gevent
+  * An additional dependency for Flask that replaces the development server
 
 Installation
 =============
 You will require:
-- Python 3.6
+- Python 3.6 or higher
 - PIP to be fully functional
 - A modern browser such as Chrome
 
@@ -42,5 +44,6 @@ Follow these steps to install the application:
 3. Open a terminal/Powershell
 4. Type `pip install flask`
 5. Type `pip install flask_socketio`
-6. To verify the installation is complete, run the appropriate SH/.bat file for your OS title `OS_start.xx`
-7. Navigate to 127.0.0.1 in your browser. If you see the UI, the application is installed.
+6. Type `pip install gevent`
+7. To verify the installation is complete, run the appropriate SH/.bat file for your OS `OS_start.xx`
+8. Navigate to 127.0.0.1 in your browser. If you see the UI, the application is installed.
