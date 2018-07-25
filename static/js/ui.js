@@ -171,7 +171,7 @@ function removeRelationPairFromData(elementPair){
     //removes the pair from the relation data array
     relationData.forEach(function(pair){
       if(elementPair[0]==pair[0] && elementPair[1]==pair[1]){
-        relationData.splice(relationData.indexOf(pair), "1")
+        relationData.splice(relationData.indexOf(pair), 1)
       }
     });
     //Replace the string value with nothing
@@ -183,13 +183,25 @@ function removeRelationPairFromData(elementPair){
   Removes an element from the subgraph data and removes the UI references to it
 */
 function removeSubgraphElementData(ele){
+  //Delete the ele
   subGraphData.filter(function(item){
     return item !== ele;
   });
 
+  //remove it from the UI
   document.getElementById("subgraphElementsTextArea").value =
     document.getElementById("subgraphElementsTextArea").value.replace(ele+",", "");
+
+  //Now we need to see if the subgraph element was a node, and if it is we need to remove all of the
+  //relation pairs associated with it
+  relationData.forEach(function(pair){
+    if(pair[0] == ele || pair[1] == ele){
+      relationData.splice(relationData.indexOf(pair), 1)
+    }
+  });
+
 }
+
 /*
 This will delete any selected element(s), edge or node.
 */
