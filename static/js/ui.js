@@ -199,7 +199,6 @@ function removeSubgraphElementData(ele){
       relationData.splice(relationData.indexOf(pair), 1)
     }
   });
-
 }
 
 /*
