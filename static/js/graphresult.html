@@ -15,40 +15,83 @@
   <link rel="stylesheet" href="../css/bootstrap.min.css" />
 
   <!-- Load all of the scripts needed -->
-  <script src="jquery.min.js"></script> </script>
-  <script src="bootstrap.min.js"></script>
-  <script src="cytoscape.js"></script>
-  <script src="cytoscape-grid-guide.js"></script>
-  <script src="socket.io.js"></script>
+  <script src="/dependencies/jquery.min.js"></script> </script>
+  <script src="/dependencies/bootstrap.min.js"></script>
+  <script src="/dependencies/cytoscape.js"></script>
+  <script src="/dependencies/cytoscape-grid-guide.js"></script>
+  <script src="/dependencies/socket.io.js"></script>
 
   <script>
   //This will be initialized by the calling window with the graph data we need
   var resultsOfOperation = null
+  var relationData = [];
+  var subGraphData = [];
+  var selectedForPair = [];
+  var nextNodeId = 0;
+  var nextEdgeId = 0;
   function start(){
     //start the cytoscape object
     cy = cytoscape(
       {
-        container: document.getElementById('graph-result-area'),
+        container: document.getElementById('graph-area'),
         style: [
-            {
-              selector: "node",
-              style:{
-              "text-valign": "center",
-              "text-halign": "center",
-              "label": "data(label)"
-            }
-            },
           {
-            selector: "edge",
-            style:
-            {
-              "curve-style": "bezier",
-              "label": "data(label)"
-            }
+            selector: "node",
+            style :
+            {"text-valign": "top",
+            "text-halign": "center",
+            "label": "data(label)"
           }
-        ]
-      }
+        },
+        {
+          selector: "edge",
+          style:
+          {
+            "curve-style": "bezier",
+            "label": "data(label)"
+          }
+        },
+        {
+          selector: ".relationEdge",
+          style:
+          {
+            "line-color": "red",
+            "target-arrow-color": "#ccc",
+            "target-arrow-shape": "triangle",
+          }
+        },
+        {
+          selector: ".overlappingNode",
+          style:
+          {
+            "background-color" : "yellow",
+          }
+        },
+        {
+          selector: ".subgraph",
+          style:
+          {
+            "background-color" : "green",
+          }
+        }
+      ]
+    }
     );
+
+    //set up the grid layout and enable snap-to-grid plugin
+    cy.layout({
+      name: 'grid',
+      fit: true,
+      padding: 30,
+      avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+      avoidOverlapPadding: 10, // extra spacing around nodes when avoidOverlap: true
+      fit: true,
+      rows: 2
+    }).start();
+    cy.snapToGrid({strokeStyle: "white", gridSpacing: 200, lineWidth: .5, lineDash: [10, 0], rows: 2});
+    cy.snapToGrid("gridOn");
+
+
     console.log("Loaded CytoScape Object in the child window");
     console.log("Requesting the operation results from the server...");
     //Connect to the server
@@ -58,17 +101,51 @@
     });
 
     //Set an event handler to receive the JSON data from the server, this will set it to the local variable
-    socket.on("received_results_of_operation", function(data){
-      resultsOfOperation = data;
+    socket.on("ui_results_of_operation", function(data){
+
+      /*
+      This is called when the server sends the graph data to the client
+      //TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
+      */
+
+        console.log("Server has sent new graph data");
+        clearGraph();
+        json = json.replace(/\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
+        json = json.replace(/\\\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
+        json = JSON.parse(json);
+      //  setNextAvailableId(json["next_node_id"], json["next_edge_id"]);
+
+        json["nodes"].forEach(function(ele){
+          cy.add({data:{id:ele.data.id, label:ele.data.label}, position:{x:ele.position.x, y:ele.position.y}});
+        });
+
+        json["edges"].forEach(function(ele){
+          cy.add({data:{id: ele.id, label: ele.label, source: ele.source, target: ele.target}});
+        });
+
+        json["sub_graph"].forEach(function(node){
+            subGraphData.push(node);
+        });
+
+        json["relation"].forEach(function(pair){
+            relationData.push(pair);
+        });
+
+        if(relationData != undefined){
+          relationData.forEach(function(pair){
+            cy.add({data:{id: pair[0] + pair[1], source: pair[0], target: pair[1]}, classes: 'relationEdge'});
+          });
+        }
+        if(subGraphData != undefined){
+          subGraphData.forEach(function(element){
+            cy.$("#" + element).addClass("subgraph");
+          });
+        }
+
     });
 
     //Request the results
     socket.emit("get_results_of_operation");
-
-    //Will itterate over all of the nodes, then all of the edges returned and add them to the graph area.
-    resultsOfOperation.foreach(function(element){
-      cy.add(element);
-    });
 
   }
   </script>

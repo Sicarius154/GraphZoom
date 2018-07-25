@@ -15,7 +15,7 @@ class Graph:
         self.nodes = []
         self.edges = []
         self.relation = []
-        self.operation_results = [] #will represent a set of edges and nodes, with labels etc. This will be the result of an erosion, dilation etc
+        self.operation_results = None
         self.sub_graph = SubGraph() #this is used to store a new Graph object that represents a selected sub-graph of the main graph for use with operations
 
     def set_graph_from_json(self, json_string):
@@ -32,7 +32,7 @@ class Graph:
         self.nodes = []
         self.edges = []
         self.relation = []
-        self.operation_results = {}
+        self.operation_results = None
         self.sub_graph = SubGraph()
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
@@ -69,7 +69,7 @@ class Graph:
                 self.operation_results.append(relation_edge[1])
         new_graph = Graph()
         new_graph.sub_graph.nodes = self.operation_results
-        return new_graph
+        self.operation_results = new_graph
 
 
     def erode(self):

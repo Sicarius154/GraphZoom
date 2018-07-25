@@ -12,6 +12,7 @@ function connectToServer(){
   });
   //Now lets set all of the event handlers
   socket.on('ui_set_graph_data', setGraphReceivedFromServer);
+  socket.on("ui_show_operation_results", showOperationResults)
 }
 
 /*
@@ -90,6 +91,19 @@ function sendSubGraphDataToServer(){
   socket.emit("server_set_subgraph_data", JSON.stringify(subGraphData));
 }
 
+/*
+  Ask the server to dilate the graph
+*/
+function getDilatedGraphFromServer(){
+  socket.emit("server_dilate_graph");
+}
+
+/*
+  Called when the server has operation results to show
+*/
+function showOperationResults(graphAsJson){
+  ShowGraphInNewWindow(); //open a new window that will show the results
+}
 /*
 Save the graph to a file.
 */

@@ -43,6 +43,7 @@ function setGraphReceivedFromServer(json){
   }
 }
 
+
 /*
 This is called once a node has been selected. It displays the information of the most
 recently selected node
@@ -251,7 +252,7 @@ function drawPoset(nodes, edges){
   original.
   The child window will grab the graphOperationResults variable declared at the top of this script. Ensure this has been updated before calling this function
 */
-function ShowGraphInNewWindow(){
+function ShowGraphInNewWindow(cytoScapeObject){
   //create the window object, we assume a size of 800x800 is enough.
   var w = window.open(scriptFolder+"graphresult.html", "Graph results", "height=500, width=800");
 }
@@ -322,7 +323,6 @@ function addElementToSubgraph(){
 
 function addSubgraphElementToUi(element){
   cy.$("#" + element).addClass("subgraph");
-  subGraphData.push(element);
   document.getElementById("subgraphElementsTextArea").value += element + ","
 }
 

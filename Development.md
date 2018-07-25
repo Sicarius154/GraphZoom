@@ -22,6 +22,6 @@ The functions in this file are either used to send data to the server or are set
 
 __ui.js__. This file contains all of the code that adds, removes, modifies or otherwise interacts with the Cytoscape graph, interacts with the webpage (updating the node ID label area for example) or contains any other function that will alter the UI in any way.
 
-__data.js__. In here you will find any functions that alter the data being stored on the UI side in anyway. When a new ordered pair is added to a relation, the relationData variable will be altered and this should be done here. Any time an element is removed from the subgraph, the function to remove it from the array is in here.
+__data.js__. In here you will find any functions that alter the data being stored on the UI side in any way. When a new ordered pair is added to a relation, the relationData variable will be altered and this should be done here. Any time an element is removed from the subgraph, the function to remove it from the array is in here.
 
-__main.js__. In here you will find the first function that is called when the `body` has loaded which creates and styles the Cytoscap graph, all event handlers are initiated here too. All variables used throughout the program are also declared here. ID management, clearing of the graph and creating a new graph are done here too.
+__main.js__. In here you will find the first function that is called when the `body` has loaded which creates and styles the Cytoscape graph, all event handlers are initiated here too. All variables used throughout the program are also declared here. ID management, clearing of the graph and creating a new graph are also done here.

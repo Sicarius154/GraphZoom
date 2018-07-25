@@ -121,7 +121,13 @@ def set_subgraph_data(json):
 
 @socketio.on("server_get_subgraph_data")
 def get_subgraph_data():
-    socket.emit("ui_set_subgraph_data", graph.sub_graph.get_json_representation())
+    socketio.emit("ui_set_subgraph_data", graph.sub_graph.get_json_representation())
+
+@socketio.on("server_dilate_graph")
+def dilate_graph():
+    graph.operation_results = None #Reset the operation results
+    graph.dilate()
+    socketio.emit("ui_show_operation_results", graph.operation_results.get_json_representation())
 
 def new_graph():
     graph = Graph() #create a new graph object
