@@ -177,7 +177,18 @@ function removeRelationPairFromData(elementPair){
     //Replace the string value with nothing
     document.getElementById("relationPairsTextArea").value =
       document.getElementById("relationPairsTextArea").value.replace("(" + elementPair +")", "").replace(",,", ","); //reset the text
+}
 
+/*
+  Removes an element from the subgraph data and removes the UI references to it
+*/
+function removeSubgraphElementData(ele){
+  subGraphData.filter(function(item){
+    return item !== ele;
+  });
+
+  document.getElementById("subgraphElementsTextArea").value =
+    document.getElementById("subgraphElementsTextArea").value.replace(ele+",", "");
 }
 /*
 This will delete any selected element(s), edge or node.
@@ -192,14 +203,7 @@ function deleteElement(){
       removeRelationPairFromData(elementPair)
 
     }else if(ele.hasClass("subgraph")){
-      var id = ele.data("id");
-
-      subGraphData.splice(subGraphData.indexOf(id), 1);
-
-      document.getElementById("subgraphElementsTextArea").value = "";
-      subGraphData.forEach(function(node){
-        document.getElementById("subgraphElementsTextArea").value += node+",";
-      });
+      removeSubgraphElementData(ele.id());
     }
   });
 
