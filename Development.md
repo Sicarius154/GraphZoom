@@ -17,6 +17,7 @@ __events.js__. This file contains all of the JS code that is called because an e
 __serverConnection.js__. The code in this file must fulfil one of two criterion:
 - It must send a request or data to the server
 - It handles requests or data sent by the server
+
 The functions in this file are either used to send data to the server or are set as handlers for when data is incoming. The way the sockets work is that either the UI or server will emit a request, with a request name that will then be handled by a function. For example, the "ui_set_graph_data" event is called by the server and handled by the UI. (Note in the request names, the first word will be either "ui" or "server". This is the side that will handle the request). In short, any function that either sends or receives a request to the server is in here.
 
 __ui.js__. This file contains all of the code that adds, removes, modifies or otherwise interacts with the Cytoscape graph, interacts with the webpage (updating the node ID label area for example) or contains any other function that will alter the UI in any way.
