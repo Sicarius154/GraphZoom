@@ -95,7 +95,7 @@ function addNode(node){
     }
   });
   console.log("Node added with ID: " + node[0] + " Label: " + node[3] + " Position x:" + node[1] + " y:" + node[2]);
-  aphToServer(); //update the graph on the serverside
+  sendGraphToServer(); //update the graph on the serverside
 }
 
 /*
@@ -252,9 +252,10 @@ function drawPoset(nodes, edges){
   original.
   The child window will grab the graphOperationResults variable declared at the top of this script. Ensure this has been updated before calling this function
 */
-function ShowGraphInNewWindow(cytoScapeObject){
+function ShowGraphInNewWindow(graphAsJson){
   //create the window object, we assume a size of 800x800 is enough.
   var w = window.open(scriptFolder+"graphresult.html", "Graph results", "height=500, width=800");
+  w.json = graphAsJson;
 }
 
 /*
@@ -282,7 +283,6 @@ function addPairToRelationData(){
   addRelationPairToUi(selectedForPair);
 
   //Now draw an arrow between the elements
-  sendGraphToServer();
   sendRelationDataToServer();
   cy.$("node").unselect();
   selectedForPair = []; //clear the relation data
@@ -304,7 +304,6 @@ function clearRelationData(){
   relationData = [];
   selectedForPair = [];
   document.getElementById("relationPairsTextArea").value = " ";
-  sendGraphToServer();
   sendRelationDataToServer();
 
 }
@@ -316,8 +315,8 @@ function addElementToSubgraph(){
   var elements = cy.$("node:selected");
   elements.forEach(function(element){
     addSubgraphElementToUi(element.id());
+    subGraphData.push(element.id());
   });
-  sendGraphToServer();
   sendSubGraphDataToServer();
 }
 

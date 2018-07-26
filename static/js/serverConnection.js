@@ -102,7 +102,7 @@ function getDilatedGraphFromServer(){
   Called when the server has operation results to show
 */
 function showOperationResults(graphAsJson){
-  ShowGraphInNewWindow(); //open a new window that will show the results
+  ShowGraphInNewWindow(graphAsJson); //open a new window that will show the results
 }
 /*
 Save the graph to a file.

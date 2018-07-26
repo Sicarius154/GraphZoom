@@ -117,6 +117,7 @@ def load_graph(path):
 
 @socketio.on("server_set_subgraph_data")
 def set_subgraph_data(json):
+    print("New subgraph data received")
     graph.set_subgraph_from_json(json)
 
 @socketio.on("server_get_subgraph_data")
@@ -125,9 +126,10 @@ def get_subgraph_data():
 
 @socketio.on("server_dilate_graph")
 def dilate_graph():
-    graph.operation_results = None #Reset the operation results
-    graph.dilate()
-    socketio.emit("ui_show_operation_results", graph.operation_results.get_json_representation())
+    print("Dilating graph...")
+    graph.operation_results = [] #Reset the operation results
+    new_graph = graph.dilate()
+    socketio.emit("ui_show_operation_results", new_graph.get_json_representation())
 
 def new_graph():
     graph = Graph() #create a new graph object

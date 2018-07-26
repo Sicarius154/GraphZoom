@@ -49,7 +49,29 @@ class Graph:
         self.next_node_id = json_string["next_node_id"]
         self.next_edge_id = json_string["next_edge_id"]
 
+    def set_subgraph_from_json(self, json_string):
+            '''
+                This method is very similar to the set_graph_from_json method. It simply
+                Takes a JSON string and adds the elements to the subgraph
+            '''
+            #TODO: Split this into two seperate functions that add edges and nodes independently
+            #TODO: Perform integrity check on the relation data
+            #we need to clear the current data from the graph as they are all going to be set again
+            sub_graph = SubGraph()
+
+            json_string = json.loads(json_string) #convert the JSON string to a python dict
+
+            #itterate over the elements and add them to the graph
+            for node in json_string:
+                sub_graph.add_node(node)
+
+            self.sub_graph = sub_graph
+
     def add_relation_from_json(self, json_string):
+        '''
+            Adds new relation data
+            :param json_string: The JSON string representing the relation [[x1,x2]. [x3, x4]. [x1, x4]...]
+        '''
         json_vals = json.loads(json_string)
         relation = None
         self.relation = []
@@ -68,9 +90,9 @@ class Graph:
             if relation_edge[0] in self.sub_graph.nodes:
                 self.operation_results.append(relation_edge[1])
         new_graph = Graph()
+        new_graph.set_graph_from_json(self.get_json_representation())
         new_graph.sub_graph.nodes = self.operation_results
-        self.operation_results = new_graph
-
+        return new_graph
 
     def erode(self):
         '''
@@ -84,7 +106,7 @@ class Graph:
                 pass
     def get_json_representation(self):
         '''
-            Returns the graph as a JSON object, as the front-end expects it
+            Returns the graph as a JSON object
         '''
         nodes = []
         edges = []
@@ -150,13 +172,6 @@ class Graph:
             Returns the edges in the graph
         '''
         return self.edges
-
-    def get_operation_results_as_json(self):
-        '''
-            Returns the results of an operation such as dilation or erosion as JSON
-            :returns: JSON representation containing edges and nodes. {nodes: {(...),(...)}, edges:{(...),(...)}}
-        '''
-        return self.operation_results
 
     def save_graph(self, path):
         '''
