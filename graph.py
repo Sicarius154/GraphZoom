@@ -102,7 +102,7 @@ class Graph:
         for relation_edge in self.relation:
             if relation_edge[0] not in self.sub_graph.nodes:
                 pass
-            elif relation_edge[0] not in self.sub_graph.nodes:
+            elif relation_edge[1] not in self.sub_graph.nodes:
                 pass
     def open(self):
         '''
