@@ -7,7 +7,8 @@ from subgraph import SubGraph
 
 class Graph:
     '''
-        The class that will hold all edges, vertices and other information pertaining to the drawing of a graph
+        Holds all data about a graph. Contains the methods to add, remove and modify nodes, edges, relation and subgraph data.
+        Facilitates saving and loading of files, performs operations on itself.
     '''
     def __init__(self):
         self.next_node_id = 0 #the next id number for elements
@@ -25,9 +26,8 @@ class Graph:
             (id, x, y, label)
             and edges of the format:
             (id, source, target, label)
+            :param json_string: The string to set the graph from
         '''
-        #TODO: Split this into two seperate functions that add edges and nodes independently
-        #TODO: Perform integrity check on the relation data
         #we need to clear the current data from the graph as they are all going to be set again
         self.nodes = []
         self.edges = []
@@ -55,12 +55,10 @@ class Graph:
                 Takes a JSON string and adds the elements to the subgraph
                 :param json_string: The string to set the subgraph from. Should be a list
             '''
-            #TODO: Split this into two seperate functions that add edges and nodes independently
-            #TODO: Perform integrity check on the relation data
             #we need to clear the current data from the graph as they are all going to be set again
             sub_graph = SubGraph()
 
-            json_string = json.loads(json_string) #convert the JSON string to a python dict
+            json_string = json.loads(json_string) #convert the JSON string to a python list
 
             #itterate over the elements and add them to the graph
             for node in json_string:
@@ -244,9 +242,8 @@ class Graph:
         '''
             This method is very similar to the set_graph_from_json method. It simply
             Takes a JSON string and adds the elements to the subgraph
+            :param json_string: The json_string containing a list of nodes to add to the subgraph
         '''
-        #TODO: Split this into two seperate functions that add edges and nodes independently
-        #TODO: Perform integrity check on the relation data
         #we need to clear the current data from the graph as they are all going to be set again
         sub_graph = SubGraph()
 
