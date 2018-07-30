@@ -255,6 +255,7 @@ function drawPoset(nodes, edges){
 function ShowGraphInNewWindow(graphAsJson){
   //create the window object, we assume a size of 800x800 is enough.
   var w = window.open(scriptFolder+"graphresult.html", "Graph results", "height=500, width=800");
+  //sessionStorage.seItem("JSON", graphAsJson)
   w.json = graphAsJson;
 }
 

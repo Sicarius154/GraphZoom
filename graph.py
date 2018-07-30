@@ -104,6 +104,16 @@ class Graph:
                 pass
             elif relation_edge[0] not in self.sub_graph.nodes:
                 pass
+    def open(self):
+        '''
+            Performs an opening on the graph
+            :returns: A new graph on which an opening operation was performed
+        '''
+    def close(self):
+        '''
+            Performs an closing on the graph
+            :returns: A new graph on which an closing operation was performed
+        '''
     def get_json_representation(self):
         '''
             Returns the graph as a JSON object

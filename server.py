@@ -131,6 +131,26 @@ def dilate_graph():
     new_graph = graph.dilate()
     socketio.emit("ui_show_operation_results", new_graph.get_json_representation())
 
+@socketio.on("server_erode_graph")
+def erode_graph():
+    print("Eroding graph...")
+    graph.operation_results = [] #Reset the operation results
+    new_graph = graph.erode()
+    socketio.emit("ui_show_operation_results", new_graph.get_json_representation())
+
+@socketio.on("server_close_graph")
+def close_graph():
+    print("Closing graph...")
+    graph.operation_results = [] #Reset the operation results
+    new_graph = graph.close()
+    socketio.emit("ui_show_operation_results", new_graph.get_json_representation())
+
+@socketio.on("server_open_graph")
+def open_graph():
+    print("Opening graph...")
+    graph.operation_results = [] #Reset the operation results
+    new_graph = graph.open()
+    socketio.emit("ui_show_operation_results", new_graph.get_json_representation())
 def new_graph():
     graph = Graph() #create a new graph object
 #Start the application

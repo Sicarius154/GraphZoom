@@ -97,6 +97,24 @@ function sendSubGraphDataToServer(){
 function getDilatedGraphFromServer(){
   socket.emit("server_dilate_graph");
 }
+/*
+  Ask the server to dilate the graph
+*/
+function getErodedGraphFromServer(){
+  socket.emit("server_erode_graph");
+}
+/*
+  Ask the server to dilate the graph
+*/
+function getClosedGraphFromServer(){
+  socket.emit("server_close_graph");
+}
+/*
+  Ask the server to dilate the graph
+*/
+function getOpenedGraphFromServer(){
+  socket.emit("server_open_graph");
+}
 
 /*
   Called when the server has operation results to show

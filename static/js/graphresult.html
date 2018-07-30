@@ -103,7 +103,6 @@
   */
   function showGraph(){
       console.log("Server has sent new graph data");
-      console.log(json)
       window.json = window.json.replace(/\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
       window.json = window.json.replace(/\\\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
       window.json = JSON.parse(window.json);
