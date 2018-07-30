@@ -6,6 +6,8 @@ and the graph area. The menu bar contains the tools required to perform operatio
 The Graph area
 ================
 This section of the UI is where the graph is actually drawn, when you add a node it will appear in this area. The graph can be manipulated with the mouse. Below is a list of possible interactions:
+- Click on node or edge
+  * Selects element, displays element-specific data
 - Click & drag on background
   * Pans the graph
 - Click & drag on node
@@ -64,3 +66,7 @@ Once you have all of these, you can select one of the operations from the menu b
 Saving and Loading
 ==================
 All graphs are saved in the "saved" directory. This folder is located where the application is saved, in the same directory as the start scripts. There is currently no way to specify a custom path [See Feature Improvement](hhjbef). When saving or loading a file, simply enter the filename in the pop up box and press enter. All files are saved in a ".graph" file, this is simply a JSON text file. If attempting to load a file that doesn't exist a new one will be created, and when saving a file if you enter the name of a file that already exists _it will be over written_.
+
+Quitting and Shutting Down
+==========================
+In order to properly quit the application use the file->quit option. In theory, it is ok to press CTRL+C in the command line that the application was started but this does not always work.

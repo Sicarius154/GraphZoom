@@ -53,6 +53,7 @@ class Graph:
             '''
                 This method is very similar to the set_graph_from_json method. It simply
                 Takes a JSON string and adds the elements to the subgraph
+                :param json_string: The string to set the subgraph from. Should be a list
             '''
             #TODO: Split this into two seperate functions that add edges and nodes independently
             #TODO: Perform integrity check on the relation data
@@ -70,7 +71,7 @@ class Graph:
     def add_relation_from_json(self, json_string):
         '''
             Adds new relation data
-            :param json_string: The JSON string representing the relation [[x1,x2]. [x3, x4]. [x1, x4]...]
+            :param json_string: The JSON string representing the relation [[x1,x2], [x3, x4], [x1, x4]...]
         '''
         json_vals = json.loads(json_string)
         relation = None
@@ -109,11 +110,35 @@ class Graph:
             Performs an opening on the graph
             :returns: A new graph on which an opening operation was performed
         '''
+        pass
     def close(self):
         '''
             Performs an closing on the graph
             :returns: A new graph on which an closing operation was performed
         '''
+        pass
+
+    def is_stable(self):
+        '''
+            Determines if the relation is stable
+            :return: True if stable, else False
+        '''
+        edges_as_pairs = set([[edge[2], edge[3]] for edge in self.edges]) #get edges as pairs of id'
+        #Create a composition in the form H composed R composed H
+        comp = compose_sets(compose_sets(edges_as_pairs, self.relation), edges_as_pairs)
+        if set(self.relation).issubset(comp):
+            return True
+        return False
+
+    def compose_sets(self, set1, set2):
+        '''
+            This will compose two sets
+            :param set1: The first set
+            :param set2: The second set
+            :return: A new set
+        '''
+        return set([i for pair1 in set1 for pair2 in set2 if pair1[1]==pair2[0]])
+
     def get_json_representation(self):
         '''
             Returns the graph as a JSON object

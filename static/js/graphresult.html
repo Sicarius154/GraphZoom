@@ -135,9 +135,20 @@
         });
       }
   }
+
+  /*
+    Set this as the main graph and close the modal window down
+  */
+  function setAsMainGraph(){
+    
+  }
+
   </script>
 </head>
 <body style="height:100vh;" onload="start();">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="btn btn-primary" onclick="setAsMainGraph()">Set as graph</button>
+  </nav>
   <div class="container-fluid" style="height:100vh;">
     <div class="row" style="height:100vh;">
       <!-- The graph will be displayed here. once the window has loaded the graph will be set by the main window. -->
