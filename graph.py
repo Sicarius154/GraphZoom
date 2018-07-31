@@ -95,14 +95,43 @@ class Graph:
 
     def erode(self):
         '''
-            Performs erosion on the graph G given a relation R and subset S
+            Performs erosion on the graph G given a relation R and subset S. For an element to be in the erosion, it must meet one of two criteria:
+            1) it goes nowehere in the relation
+            2) it goes only to elements in the subgraph
             :return: Return a new graph G' such that the subset/subgraph of G' is the result of erosion on G
         '''
-        for relation_edge in self.relation:
-            if relation_edge[0] not in self.sub_graph.nodes:
-                pass
-            elif relation_edge[1] not in self.sub_graph.nodes:
-                pass
+        set_of_nodes = [] #This will hold all nodes in the erosion
+        set_of_excluded_nodes = [] #Because we are checking across to criteria it makes sense to have this to hold all nodes that fail one or more criteria
+        relation_source_nodes = [] # Stores all of the ndoes that go somewhere in the relation
+
+        #loop over the entire relation, for every pair see if the source node only goes to node in the subgraph
+        for pair in self.relation:
+            if pair[1] in self.sub_graph.nodes:
+                set_of_nodes.append(pair[0])
+            else:
+                set_of_excluded_nodes.append(pair[0])
+            relation_source_nodes.append(pair[0])
+
+        #now check for all for all of the nodes that go nowehere in the relation
+        for node in self.nodes:
+            if not node in relation_source_nodes:
+                set_of_nodes.append(node[0])
+
+                """
+        #remove all of the nodes that only met one of the two criteria
+        for node in set_of_excluded_nodes:
+            if node in set_of_nodes:
+                set_of_nodes.remove(node)
+                """
+        print(set_of_nodes)
+        print(set_of_excluded_nodes)
+        set_of_nodes = list(set(set_of_nodes) - set(set_of_excluded_nodes))
+        #Construct the new graph
+        new_graph = Graph()
+        new_graph.set_graph_from_json(self.get_json_representation())
+        new_graph.sub_graph.nodes = set_of_nodes
+        return new_graph
+
     def open(self):
         '''
             Performs an opening on the graph
