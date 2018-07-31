@@ -16,7 +16,7 @@ class Graph:
         self.nodes = []
         self.edges = []
         self.relation = []
-        self.operation_results = None
+        self.operation_results = []
         self.sub_graph = SubGraph() #this is used to store a new Graph object that represents a selected sub-graph of the main graph for use with operations
 
     def set_graph_from_json(self, json_string):
@@ -32,7 +32,7 @@ class Graph:
         self.nodes = []
         self.edges = []
         self.relation = []
-        self.operation_results = None
+        self.operation_results = []
         self.sub_graph = SubGraph()
         json_string = json.loads(json_string) #convert the JSON string to a python dict
 
@@ -117,33 +117,26 @@ class Graph:
             if not node in relation_source_nodes:
                 set_of_nodes.append(node[0])
 
-                """
-        #remove all of the nodes that only met one of the two criteria
-        for node in set_of_excluded_nodes:
-            if node in set_of_nodes:
-                set_of_nodes.remove(node)
-                """
-        print(set_of_nodes)
-        print(set_of_excluded_nodes)
-        set_of_nodes = list(set(set_of_nodes) - set(set_of_excluded_nodes))
+        self.operation_results = list(set(set_of_nodes) - set(set_of_excluded_nodes))
         #Construct the new graph
         new_graph = Graph()
         new_graph.set_graph_from_json(self.get_json_representation())
-        new_graph.sub_graph.nodes = set_of_nodes
+        new_graph.sub_graph.nodes = self.operation_results
         return new_graph
 
     def open(self):
         '''
-            Performs an opening on the graph
+            Performs an opening on the graph (erode->dilate)
             :returns: A new graph on which an opening operation was performed
         '''
-        pass
+        return self.erode().dilate()
+
     def close(self):
         '''
-            Performs an closing on the graph
+            Performs an closing on the graph (dilate->erode)
             :returns: A new graph on which an closing operation was performed
         '''
-        pass
+        return self.dilate().erode()
 
     def is_stable(self):
         '''
