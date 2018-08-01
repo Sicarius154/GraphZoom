@@ -148,9 +148,10 @@ class Graph:
             :return: True if stable, else False
         '''
         print(self.edges)
-        edges_as_pairs = set([[edge[2], edge[3]] for edge in self.edges]) #get edges as pairs of id'
+        print(self.edges[0][2], self.edges[0][3])
+        edges_as_pairs = set([(edge[2], edge[3]) for edge in self.edges]) #get edges as pairs of id'
         #Create a composition in the form H composed R composed H
-        comp = compose_sets(compose_sets(edges_as_pairs, self.relation), edges_as_pairs)
+        comp = self.compose_sets(self.compose_sets(edges_as_pairs, self.relation), edges_as_pairs)
         if set(self.relation).issubset(comp):
             return True
         return False

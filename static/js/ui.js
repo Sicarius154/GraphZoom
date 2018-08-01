@@ -317,6 +317,20 @@ function addElementToSubgraph(){
   elements.forEach(function(element){
     addSubgraphElementToUi(element.id());
     subGraphData.push(element.id());
+
+    if(element.position("y") == 400){
+      console.log("Node added to subgraph is on edge row. Adding other nodes...")
+      var edges = element.connectedEdges();
+      edges.forEach(function(edge){
+        if(cy.$("#" + edge.data("source")).position("y") == 100){
+          addSubgraphElementToUi(edge.data("source"));
+          subGraphData.push(edge.data("source"));
+        }else if(cy.$("#" + edge.data("target")).position("y") == 100){
+          addSubgraphElementToUi(edge.data("target"));
+          subGraphData.push(edge.data("target"));
+        }
+      });
+    }
   });
   sendSubGraphDataToServer();
 }
