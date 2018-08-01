@@ -96,7 +96,7 @@ def save_graph(path):
     '''
     #TODO: Allow for custom paths
     print("Save requested")
-    path = "\\saved\\" + path
+    path = os.path.join("/saved",path)
     #Ensure the filename has the correct file extension
     if path[-6:] != ".graph":
         path += ".graph"
@@ -106,7 +106,7 @@ def save_graph(path):
 
 @socketio.on("server_load_graph")
 def load_graph(path):
-    path = "\\saved\\" + path
+    path = os.path.join("/saved",path)
     #Ensure the filename has the correct file extension
     if path[-6:] != ".graph":
         path += ".graph"
