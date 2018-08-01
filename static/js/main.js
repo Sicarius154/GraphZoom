@@ -17,8 +17,8 @@ var cy = null;
 
 //Determines if the graph is a poset
 var isPoset = true;
-var posetNodeYCord = 100;
-var posetEdgeYCord = 400;
+var posetNodeYCord = 400;
+var posetEdgeYCord = 100;
 
 //This is used to store the 2 most recently selected elements, in the order they were selected.
 //We use this and not the inbuilt CytoScape functions as they return the selected elements, but not in the order they were selected. Which we need for relations

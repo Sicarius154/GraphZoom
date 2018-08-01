@@ -163,7 +163,7 @@ class Graph:
             :param set2: The second set
             :return: A new set
         '''
-        return set([i for pair1 in set1 for pair2 in set2 if pair1[1]==pair2[0]])
+        return set([()for pair1 in set1 for pair2 in set2 if pair1[1]==pair2[0]])
 
     def get_json_representation(self):
         '''

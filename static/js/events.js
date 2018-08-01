@@ -66,11 +66,11 @@ the Y co-ordinates
 function nodeFreeEvt(evt){
   var node = cy.$('#' + evt.target.id());
   if(isPoset == true){
-    if(node.position('y') <= posetNodeYCord){
-      cy.$('#' + node.id()).position("y", posetNodeYCord);
+    if(node.position('y') <= posetEdgeYCord){
+      cy.$('#' + node.id()).position("y", posetEdgeYCord);
     }
     else{
-      cy.$('#' + node.id()).position("y", posetEdgeYCord);
+      cy.$('#' + node.id()).position("y", posetNodeYCord);
     }
   }
   return;
