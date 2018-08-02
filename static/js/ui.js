@@ -321,14 +321,19 @@ function addElementToSubgraph(){
     if(element.position("y") == posetEdgeYCord){
       console.log("Node added to subgraph is on edge row. Adding other nodes...")
       var edges = element.connectedEdges();
+
       edges.forEach(function(edge){
+        if(edge.hasClass(".relationEdge")){
+          console.log("Edge was a relation edge, skipping...")
+          return;
+        }else{
         if(cy.$("#" + edge.data("source")).position("y") == posetNodeYCord){
           addSubgraphElementToUi(edge.data("source"));
           subGraphData.push(edge.data("source"));
         }else if(cy.$("#" + edge.data("target")).position("y") == posetNodeYCord){
           addSubgraphElementToUi(edge.data("target"));
           subGraphData.push(edge.data("target"));
-        }
+        }}
       });
     }
   });

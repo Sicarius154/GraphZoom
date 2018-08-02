@@ -12,7 +12,7 @@ import datetime
 script_dir = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'key123'
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 socketio = SocketIO(app)
 graph = Graph() #this will be the graph object for this session

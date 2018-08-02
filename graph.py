@@ -147,23 +147,30 @@ class Graph:
             Determines if the relation is stable
             :return: True if stable, else False
         '''
-        print(self.edges)
-        print(self.edges[0][2], self.edges[0][3])
         edges_as_pairs = set([(edge[2], edge[3]) for edge in self.edges]) #get edges as pairs of id'
+
         #Create a composition in the form H composed R composed H
-        comp = self.compose_sets(self.compose_sets(edges_as_pairs, self.relation), edges_as_pairs)
-        if set(self.relation).issubset(comp):
+        relation_as_set = set(tuple(pair) for pair in self.relation)
+        comp = self.compose_sets(self.compose_sets(edges_as_pairs, relation_as_set), edges_as_pairs)
+        if comp.issubset(set(relation_as_set)):
             return True
         return False
 
-    def compose_sets(self, set1, set2):
+    def compose_sets(self, R, H):
         '''
             This will compose two sets
             :param set1: The first set
             :param set2: The second set
             :return: A new set
         '''
-        return set([()for pair1 in set1 for pair2 in set2 if pair1[1]==pair2[0]])
+        new_set = []
+        for pair in R:
+            for pair2 in H:
+                if pair[1] == pair2[0]:
+                    new_set.append((pair[0], pair2[1]))
+        #return set([ something for pair1 in set1 for pair2 in set2 if pair1[1]==pair2[0]])
+        return set(new_set)
+
 
     def get_json_representation(self):
         '''
