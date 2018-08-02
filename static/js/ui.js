@@ -17,8 +17,10 @@ function setGraphReceivedFromServer(json){
 
   json["nodes"].forEach(function(ele){
     cy.add({data:{id:ele.data.id, label:ele.data.label}, position:{x:ele.position.x, y:ele.position.y}});
-  });
 
+    //This is a really weird fix that is required; see bugs in the documentation
+    cy.$("#" + ele.data.id).emit("free");
+  });
   json["edges"].forEach(function(ele){
     cy.add({data:{id: ele.id, label: ele.label, source: ele.source, target: ele.target}});
   });
