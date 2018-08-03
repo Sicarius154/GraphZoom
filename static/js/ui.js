@@ -43,6 +43,9 @@ function setGraphReceivedFromServer(json){
       addSubgraphElementToUi(element)
     });
   }
+
+  //Another odd fix, see the bugs in documentation for description
+  fullyUpdateServer();
 }
 
 
@@ -259,6 +262,7 @@ function ShowGraphInNewWindow(graphAsJson){
   var w = window.open(scriptFolder+"graphresult.html", "Graph results", "height=500, width=800");
   //sessionStorage.seItem("JSON", graphAsJson)
   w.json = graphAsJson;
+  w.socket = socket;
 }
 
 /*

@@ -24,6 +24,7 @@
   <script>
   //This will be initialized by the calling window with the graph data we need
   var cy;
+  var json;
   var resultsOfOperation = null
   var relationData = [];
   var subGraphData = [];
@@ -102,7 +103,6 @@
   //TODO: Make this more efficient, maybe modify existing elements rather than remove and redraw them?
   */
   function showGraph(){
-      console.log("Server has sent new graph data");
       window.json = window.json.replace(/\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
       window.json = window.json.replace(/\\\\/g, ""); // We had to escape all of the quotation marks on the Python sie, so remove them here
       window.json = JSON.parse(window.json);
@@ -140,7 +140,10 @@
     Set this as the main graph and close the modal window down
   */
   function setAsMainGraph(){
-    
+    socket = io.connect('http://' + document.domain + ':' + location.port);
+    window.opener.socket.emit("server_set_op_result_as_graph", JSON.stringify(window.json));
+    socket.emit("server_set_op_result_as_graph", JSON.stringify(window.json));
+    window.close();
   }
 
   </script>

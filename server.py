@@ -47,7 +47,7 @@ def get_graph_data():
 
     socketio.emit('ui_set_graph_data', graph.get_json_representation(), json=True)
 
-@socketio.on('server_connect')
+@socketio.on('connect')
 def connect():
     '''
         This shows that the client-side has now connected to the server
@@ -151,6 +151,13 @@ def open_graph():
     graph.operation_results = [] #Reset the operation results
     new_graph = graph.open()
     socketio.emit("ui_show_operation_results", new_graph.get_json_representation())
+
+@socketio.on("server_set_op_result_as_graph")
+def set_op_result_as_graph(json):
+    print("Setting the prevous operation results as the main graph")
+    graph.set_graph_from_json(json)
+    get_graph_data()
+
 def new_graph():
     graph = Graph() #create a new graph object
 #Start the application
