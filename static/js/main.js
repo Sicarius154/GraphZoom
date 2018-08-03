@@ -116,7 +116,13 @@ function start(){
 Just for testing purposes
 */
 function testFunc(){
-  ShowGraphInNewWindow();
+  var numNodes = 1000;
+  var numEdges = 1200;
+  for(var i =1; i<numNodes; i++){
+    addNode(["n"+nextNodeId, 100*i+50, posetNodeYCord, ""]);
+    nextNodeId++
+  }
+
 }
 
 /*

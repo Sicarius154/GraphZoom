@@ -25,3 +25,19 @@ __ui.js__. This file contains all of the code that adds, removes, modifies or ot
 __data.js__. In here you will find any functions that alter the data being stored on the UI side in any way. When a new ordered pair is added to a relation, the relationData variable will be altered and this should be done here. Any time an element is removed from the subgraph, the function to remove it from the array is in here.
 
 __main.js__. In here you will find the first function that is called when the `body` has loaded which creates and styles the Cytoscape graph, all event handlers are initiated here too. All variables used throughout the program are also declared here. ID management, clearing of the graph and creating a new graph are also done here.
+
+The Backend
+================
+As requested, the backend was developed in Python3. The initial plan would have been to develop the entire program in Python, but at the time I could not find a proper way to create a suitable application in the timescale given using the frameworks available.
+
+The backend is split into three different files. Each responsible for something different.
+
+__server.py__. This file is repsonible for the starting of the server, and act as the main script for the program. It contains an instance of the __graph__ class, which is used to represent the current graph. The server file consists mainly of functions that are called by the flask socketio application. Functions that act a event handlers for the socketio application are clearly seen because of the decorators used. Some of these functions are called by the python code itself, not just by the front-end.
+
+__graph.py__. This contains the class that represents the graph itself. This class contains all of the functions related to the setting and obtaining of graph data. The operations required to perform operaitons on a graph are here too.
+
+__subgraph.py__. This contains a class that is not necesarily needed. At present this class acts as a glorified wrapper for the list of subgraph nodes, but in future it it fully possible to add new functionality to the subgraph object, which may be required.
+
+Bugs and Improvements
+======================
+Due to the timescale of the project, and my lack of experience with Javascript there are some features which would benefit from some tweaking, and there are some bugs that could be addressed. These can all be found on the Github repository's _issues_ page.   

@@ -42,8 +42,6 @@ Follow these steps to install the application:
 1. Download the GitHub repository as a ZIP folder
 2. Extract the contents of the ZIP folder to a location of your choice (this is where the application will be 'installed')
 3. Open a terminal/Powershell
-4. Type `pip install flask`
-5. Type `pip install flask_socketio`
-6. Type `pip install gevent`
+4. Type `pip install flask flask_socketio gevent eventlet`
 7. To verify the installation is complete, run the appropriate SH/.bat file for your OS `OS_start.xx`
 8. Navigate to 127.0.0.1 in your browser. If you see the UI, the application is installed.
