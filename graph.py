@@ -83,7 +83,7 @@ class Graph:
             Performs dilation on the graph G given a relation R and subset S
             :return: Return a new graph G' such that the subset/subgraph of G' is the result of dilation on G
         '''
-        print("Is relation stable:", self.is_stable())
+        self.is_stable()
         #iterate over ordered pair in the relation
         for relation_edge in self.relation:
             #If the source (first element in the pair) is in the subset, add the target to the new subset
@@ -101,7 +101,7 @@ class Graph:
             2) it goes only to elements in the subgraph
             :return: Return a new graph G' such that the subset/subgraph of G' is the result of erosion on G
         '''
-        print("Is relation stable:", self.is_stable())
+        self.is_stable()
         set_of_nodes = [] #This will hold all nodes in the erosion
         set_of_excluded_nodes = [] #Because we are checking across to criteria it makes sense to have this to hold all nodes that fail one or more criteria
         relation_source_nodes = [] # Stores all of the ndoes that go somewhere in the relation
@@ -131,7 +131,6 @@ class Graph:
             Performs an opening on the graph (erode->dilate)
             :returns: A new graph on which an opening operation was performed
         '''
-        print("Is relation stable:", self.is_stable())
         return self.erode().dilate()
 
     def close(self):
@@ -139,7 +138,6 @@ class Graph:
             Performs an closing on the graph (dilate->erode)
             :returns: A new graph on which an closing operation was performed
         '''
-        print("Is relation stable:", self.is_stable())
         return self.dilate().erode()
 
     def is_stable(self):
@@ -153,7 +151,10 @@ class Graph:
         relation_as_set = set(tuple(pair) for pair in self.relation)
         comp = self.compose_sets(self.compose_sets(edges_as_pairs, relation_as_set), edges_as_pairs)
         if comp.issubset(set(relation_as_set)):
+            print("Relation is stable.")
             return True
+        print("Relation not stable. Making stable.")
+        self.relation = list(comp)
         return False
 
     def compose_sets(self, R, H):
