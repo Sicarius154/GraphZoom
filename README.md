@@ -1,3 +1,5 @@
+# This code sucks. Don't judge me, I was a fresher. 
+
 # GraphZoom
 
 # Installation
